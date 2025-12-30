@@ -201,12 +201,48 @@ localStorage に `kanji-practice-settings` キーで永続化。
 
 ## Claude Code 統合
 
-### ルールファイル
+### ディレクトリ構造
 
-AI向けの開発ルールは `.claude/rules/` に配置:
-- `general.md` - 言語、ファイル構成、インポート
-- `react.md` - コンポーネント、状態管理、A4レイアウト
-- `testing.md` - Vitest、Playwright、テスト方針
+```
+.claude/
+├── settings.json     # プロジェクト設定・Hooks
+├── commands/         # Slashコマンド
+│   ├── validate-kanji.md     # 漢字データ検証
+│   ├── check-layout.md       # PDFレイアウト検証
+│   └── evaluate-questions.md # 問題品質評価
+├── agents/           # サブエージェント
+│   └── edu-content-validator.md  # 教育コンテンツ検証
+└── rules/            # 開発ルール
+    ├── general.md            # 全般ルール
+    ├── react.md              # React基本
+    ├── testing.md            # テスト方針
+    ├── frontend/
+    │   ├── components.md     # コンポーネント設計
+    │   └── print.md          # A4印刷レイアウト
+    ├── data/
+    │   └── kanji-format.md   # 漢字データ形式
+    └── education/
+        ├── learning-theory.md    # 学習理論
+        └── content-quality.md    # コンテンツ品質基準
+```
+
+### Slashコマンド
+
+```bash
+/validate-kanji [学年]   # 漢字データの整合性チェック
+/check-layout [モード]   # PDFレイアウトの多角的検証
+/evaluate-questions      # 問題の教育的品質評価
+```
+
+### サブエージェント
+
+- **edu-content-validator**: 教育コンテンツ品質検証
+  - 漢字データ変更時に自動起動
+  - 学習理論・漢検基準に基づく評価
+
+### Hooks（自動実行）
+
+- **PostToolUse**: ファイル編集後に自動フォーマット（Biome）
 
 ### 重要コマンド
 
@@ -229,3 +265,8 @@ npx tsc --noEmit
 2. `src/utils/layout.ts` の関数を使用
 3. `npm run test:unit` で計算を検証
 4. `npm run test` でビジュアル出力を確認
+
+漢字データ追加時:
+1. `src/data/grades/gradeN.ts` にデータ追加
+2. `/validate-kanji N` で検証
+3. `/evaluate-questions --grade N` で品質確認

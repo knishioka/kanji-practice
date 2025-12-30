@@ -3,5 +3,18 @@
   "language": "ja",
   "primaryLanguages": ["typescript", "tsx"],
   "testFrameworks": ["vitest", "playwright"],
-  "formatting": "biome"
+  "formatting": "biome",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run check:fix --silent 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
 }
