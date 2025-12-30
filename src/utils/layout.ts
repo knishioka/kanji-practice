@@ -19,7 +19,9 @@ export function calculateRowsPerPage(cellSize: number, mode: PrintMode): number 
   let rowHeight: number;
   switch (mode) {
     case 'sentence':
-      rowHeight = cellSize * 2.5; // 例文写経は2行分
+      // 例文写経: お手本行(cellSize) + 練習行(cellSize) + マージン(約16mm)
+      // SentenceQuestion: mb-4 + 問題番号 + mb-1 + SentenceGrid(mb-2 + mb-4)
+      rowHeight = cellSize * 2 + 16;
       break;
     case 'homophone':
       // 同音異字: 見出し(0.7) + 最大3選択肢(0.5*3=1.5) + マージン(0.3) = 2.5
