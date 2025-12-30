@@ -117,7 +117,7 @@ export function SentenceGrid({ sentence, cellSize }: SentenceGridProps) {
   const chars = sentence.split('');
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 avoid-break">
       {/* お手本行 */}
       <div className="flex flex-wrap mb-2">
         {chars.map((char, i) => (

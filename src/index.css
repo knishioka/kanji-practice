@@ -86,6 +86,7 @@
 
   .avoid-break {
     page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   /* A4ページ - 印刷時もスクリーンと同じスタイルを維持 */
