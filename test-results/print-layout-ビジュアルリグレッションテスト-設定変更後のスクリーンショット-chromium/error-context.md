@@ -1,0 +1,228 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - text: 漢
+    - generic [ref=e6]:
+      - generic [ref=e7]: 漢
+      - generic [ref=e8]:
+        - heading "漢字練習プリント" [level=1] [ref=e9]
+        - paragraph [ref=e10]: 小学校1〜6年生（漢検10級〜5級）対応
+    - text: 字
+  - main [ref=e11]:
+    - generic [ref=e12]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]: 設
+          - heading "プリント設定" [level=2] [ref=e17]
+        - generic [ref=e18]:
+          - generic [ref=e19]: 対象級
+          - generic [ref=e20]:
+            - button "1 1年生 (10級)" [ref=e21]:
+              - generic [ref=e22]:
+                - generic [ref=e23]: "1"
+                - generic [ref=e24]: 1年生 (10級)
+            - button "2 2年生 (9級)" [ref=e25]:
+              - generic [ref=e26]:
+                - generic [ref=e27]: "2"
+                - generic [ref=e28]: 2年生 (9級)
+            - button "3 3年生 (8級)" [ref=e29]:
+              - generic [ref=e30]:
+                - generic [ref=e31]: "3"
+                - generic [ref=e32]: 3年生 (8級)
+            - button "4 4年生 (7級)" [ref=e33]:
+              - generic [ref=e34]:
+                - generic [ref=e35]: "4"
+                - generic [ref=e36]: 4年生 (7級)
+            - button "5 5年生 (6級)" [ref=e37]:
+              - generic [ref=e38]:
+                - generic [ref=e39]: "5"
+                - generic [ref=e40]: 5年生 (6級)
+            - button "6 6年生 (5級)" [ref=e41]:
+              - generic [ref=e42]:
+                - generic [ref=e43]: "6"
+                - generic [ref=e44]: 6年生 (5級)
+        - generic [ref=e45]:
+          - generic [ref=e46]: プリント種類
+          - generic [ref=e47]:
+            - button "読 読み練習 漢字を見て読み方を書く" [ref=e48]:
+              - generic [ref=e49]:
+                - generic [ref=e50]: 読
+                - generic [ref=e51]:
+                  - generic [ref=e52]: 読み練習
+                  - generic [ref=e53]: 漢字を見て読み方を書く
+            - button "書 書き練習 読み方を見て漢字を書く" [ref=e54]:
+              - generic [ref=e55]:
+                - generic [ref=e56]: 書
+                - generic [ref=e57]:
+                  - generic [ref=e58]: 書き練習
+                  - generic [ref=e59]: 読み方を見て漢字を書く
+            - button "画 画数 漢字の画数を答える" [ref=e60]:
+              - generic [ref=e61]:
+                - generic [ref=e62]: 画
+                - generic [ref=e63]:
+                  - generic [ref=e64]: 画数
+                  - generic [ref=e65]: 漢字の画数を答える
+            - button "順 書き順 書き順を見て練習する" [ref=e66]:
+              - generic [ref=e67]:
+                - generic [ref=e68]: 順
+                - generic [ref=e69]:
+                  - generic [ref=e70]: 書き順
+                  - generic [ref=e71]: 書き順を見て練習する
+            - button "文 例文写経 例文を見て書き写す" [ref=e72]:
+              - generic [ref=e73]:
+                - generic [ref=e74]: 文
+                - generic [ref=e75]:
+                  - generic [ref=e76]: 例文写経
+                  - generic [ref=e77]: 例文を見て書き写す
+            - button "音 同音異字 同じ読みで異なる漢字を区別" [ref=e78]:
+              - generic [ref=e79]:
+                - generic [ref=e80]: 音
+                - generic [ref=e81]:
+                  - generic [ref=e82]: 同音異字
+                  - generic [ref=e83]: 同じ読みで異なる漢字を区別
+            - button "部 部首 漢字の部首を答える" [ref=e84]:
+              - generic [ref=e85]:
+                - generic [ref=e86]: 部
+                - generic [ref=e87]:
+                  - generic [ref=e88]: 部首
+                  - generic [ref=e89]: 漢字の部首を答える
+            - button "送 送りがな 正しい送りがなを書く" [ref=e90]:
+              - generic [ref=e91]:
+                - generic [ref=e92]: 送
+                - generic [ref=e93]:
+                  - generic [ref=e94]: 送りがな
+                  - generic [ref=e95]: 正しい送りがなを書く
+            - button "対 対義語・類義語 反対/似た意味の漢字を答える" [ref=e96]:
+              - generic [ref=e97]:
+                - generic [ref=e98]: 対
+                - generic [ref=e99]:
+                  - generic [ref=e100]: 対義語・類義語
+                  - generic [ref=e101]: 反対/似た意味の漢字を答える
+        - generic [ref=e102]:
+          - generic [ref=e103]:
+            - generic [ref=e104]: ページ数
+            - generic [ref=e105]:
+              - slider [ref=e106] [cursor=pointer]: "1"
+              - generic [ref=e107]: 1枚
+            - generic [ref=e108]:
+              - text: 11問/ページ × 1枚 = 計
+              - strong [ref=e109]: 11問
+          - generic [ref=e110]:
+            - generic [ref=e111]: "練習マス数: 7マス"
+            - slider [ref=e112] [cursor=pointer]: "7"
+            - generic [ref=e113]:
+              - generic [ref=e114]: 3マス
+              - generic [ref=e115]: 最大 10マス
+          - generic [ref=e116]:
+            - generic [ref=e117]: "マスサイズ: 15mm"
+            - slider [ref=e118] [cursor=pointer]: "15"
+            - generic [ref=e119]:
+              - generic [ref=e120]: 12mm（小さい）
+              - generic [ref=e121]: 25mm（大きい）
+          - generic [ref=e122]:
+            - generic [ref=e123]: ガイドライン
+            - generic [ref=e124]:
+              - button "十字ガイド" [ref=e125]
+              - button "ドットガイド" [ref=e126]
+              - button "ガイドなし" [ref=e127]
+          - generic [ref=e128]:
+            - generic [ref=e129] [cursor=pointer]:
+              - checkbox "ランダム出題" [checked] [ref=e130]
+              - generic [ref=e131]: ランダム出題
+            - generic [ref=e132] [cursor=pointer]:
+              - checkbox "お手本に薄い漢字を表示" [ref=e133]
+              - generic [ref=e134]: お手本に薄い漢字を表示
+          - generic [ref=e135]:
+            - generic [ref=e136]: プリントタイトル
+            - textbox "漢字練習プリント" [ref=e137]
+      - generic [ref=e139]:
+        - heading "プレビュー" [level=2] [ref=e141]
+        - generic [ref=e142]:
+          - generic [ref=e143]:
+            - button "問題を生成" [active] [ref=e144] [cursor=pointer]:
+              - img [ref=e145]
+              - text: 問題を生成
+            - button "印刷" [ref=e147]:
+              - img [ref=e148]
+              - text: 印刷
+            - button "PDF保存" [ref=e150]:
+              - img [ref=e151]
+              - text: PDF保存
+          - generic [ref=e154]:
+            - generic [ref=e155]:
+              - generic [ref=e156]:
+                - heading "漢字練習プリント" [level=1] [ref=e157]
+                - paragraph [ref=e158]: 漢字を書きましょう
+              - generic [ref=e159]:
+                - generic [ref=e160]: 2025年12月30日
+                - generic [ref=e161]: なまえ
+            - generic [ref=e162]:
+              - generic [ref=e163]:
+                - generic [ref=e164]: "1."
+                - generic [ref=e166]:
+                  - generic [ref=e167]: ■
+                  - generic [ref=e168]: さき
+              - generic [ref=e194]:
+                - generic [ref=e195]: "2."
+                - generic [ref=e197]:
+                  - generic [ref=e198]: ■
+                  - text: 月
+                  - generic [ref=e199]: はちがつ
+              - generic [ref=e225]:
+                - generic [ref=e226]: "3."
+                - generic [ref=e228]:
+                  - generic [ref=e229]: ■
+                  - text: 人
+                  - generic [ref=e230]: ろくにん
+              - generic [ref=e256]:
+                - generic [ref=e257]: "4."
+                - generic [ref=e259]:
+                  - generic [ref=e260]: ■
+                  - generic [ref=e261]: くち
+              - generic [ref=e287]:
+                - generic [ref=e288]: "5."
+                - generic [ref=e290]:
+                  - generic [ref=e291]: ■
+                  - generic [ref=e292]: むし
+              - generic [ref=e318]:
+                - generic [ref=e319]: "6."
+                - generic [ref=e321]:
+                  - generic [ref=e322]: ■
+                  - generic [ref=e323]: つき
+              - generic [ref=e349]:
+                - generic [ref=e350]: "7."
+                - generic [ref=e352]:
+                  - generic [ref=e353]: ■
+                  - generic [ref=e354]: あめ
+              - generic [ref=e380]:
+                - generic [ref=e381]: "8."
+                - generic [ref=e383]:
+                  - generic [ref=e384]: ■
+                  - text: 円
+                  - generic [ref=e385]: ひゃくえん
+              - generic [ref=e411]:
+                - generic [ref=e412]: "9."
+                - generic [ref=e414]:
+                  - generic [ref=e415]: ■
+                  - text: 人
+                  - generic [ref=e416]: よにん
+              - generic [ref=e442]:
+                - generic [ref=e443]: "10."
+                - generic [ref=e445]:
+                  - generic [ref=e446]: ■
+                  - text: る
+                  - generic [ref=e447]: はいる
+              - generic [ref=e473]:
+                - generic [ref=e474]: "11."
+                - generic [ref=e476]:
+                  - generic [ref=e477]: ■
+                  - generic [ref=e478]: いし
+            - generic [ref=e505]: 1年生 | 1/1
+  - contentinfo [ref=e506]:
+    - generic [ref=e507]:
+      - paragraph [ref=e508]: 漢字練習プリント作成ツール
+      - paragraph [ref=e509]: A4サイズで印刷 / PDF保存に対応しています
+  - button "Debug" [ref=e510]
+```

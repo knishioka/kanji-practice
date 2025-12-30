@@ -1,0 +1,48 @@
+{
+  "name": "kanji-practice",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write .",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:unit:ui": "vitest --ui"
+  },
+  "dependencies": {
+    "@radix-ui/react-checkbox": "^1.3.3",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-slider": "^1.3.6",
+    "clsx": "^2.1.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-to-print": "^3.2.0",
+    "zustand": "^5.0.9"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.10",
+    "@playwright/test": "^1.57.0",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "@vitest/ui": "^4.0.16",
+    "tailwindcss": "^4.1.18",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4",
+    "vitest": "^4.0.16"
+  }
+}

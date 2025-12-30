@@ -1,0 +1,290 @@
+@import "tailwindcss";
+
+/* カラーパレット - 和風テーマ */
+:root {
+  /* メインカラー - 朱色・紅色系 */
+  --color-primary: #c53d43;
+  --color-primary-light: #e8838a;
+  --color-primary-dark: #9b2335;
+
+  /* アクセント - 藤色・紫系 */
+  --color-accent: #8b5cf6;
+  --color-accent-light: #a78bfa;
+
+  /* 背景 - 和紙風 */
+  --color-bg: #faf8f5;
+  --color-bg-warm: #fff9f0;
+  --color-bg-card: #ffffff;
+
+  /* テキスト */
+  --color-text: #1f1f1f;
+  --color-text-muted: #6b7280;
+
+  /* ボーダー */
+  --color-border: #e5e0d8;
+  --color-border-light: #f0ebe3;
+}
+
+/* 教科書体フォントファミリー - Print optimized */
+@font-face {
+  font-family: "Klee One";
+  src: local("Klee One"), local("KleeOne-Regular");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 教科書体フォント適用 */
+.font-textbook {
+  font-family:
+    "Klee One", "UD Digi Kyokasho N-R", "UD デジタル 教科書体 N-R", "Yu Kyokasho", "游教科書体",
+    "ヒラギノ丸ゴ Pro", "Hiragino Maru Gothic Pro", serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* A4サイズ定義 - 画面プレビュー用 */
+.a4-page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 15mm;
+  box-sizing: border-box;
+  background: white;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 印刷用スタイル */
+@media print {
+  /* @pageのmarginを0にして、.a4-pageのpaddingで余白を管理 */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  /* ページ区切り - 最後のページ以外に適用 */
+  .page-break:not(:last-child) {
+    page-break-after: always;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid;
+  }
+
+  /* A4ページ - 印刷時もスクリーンと同じスタイルを維持 */
+  .a4-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    padding: 15mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+
+  /* 最後のページはページ区切りなし */
+  .a4-page:last-child {
+    page-break-after: auto;
+  }
+
+  .font-textbook {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* 安全なコンテンツ幅 (180mm - バッファ) */
+.safe-content {
+  max-width: 175mm;
+}
+
+/* 練習マス目 */
+.practice-cell {
+  border: 1px solid #333;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ガイド線（十字線） */
+.practice-cell.with-guide {
+  background-image:
+    linear-gradient(to right, #ddd 1px, transparent 1px),
+    linear-gradient(to bottom, #ddd 1px, transparent 1px);
+  background-size: 50% 50%;
+  background-position: center center;
+}
+
+/* デバッグ用ユーティリティ */
+.debug-outline {
+  outline: 1px dashed red;
+}
+
+.debug-outline-blue {
+  outline: 1px dashed blue;
+}
+
+/* UI コンポーネント - 和風テーマ */
+.kanji-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.kanji-header {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.kanji-header::before {
+  content: "漢";
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  font-size: 180px;
+  opacity: 0.08;
+  font-weight: bold;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.kanji-header::after {
+  content: "字";
+  position: absolute;
+  right: 80px;
+  bottom: -40px;
+  font-size: 140px;
+  opacity: 0.06;
+  font-weight: bold;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ボタンスタイル */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(197, 61, 67, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(197, 61, 67, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* セレクションカード */
+.selection-card {
+  border: 2px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.selection-card:hover {
+  border-color: var(--color-primary-light);
+  background: var(--color-bg-warm);
+}
+
+.selection-card.selected {
+  border-color: var(--color-primary);
+  background: linear-gradient(135deg, rgba(197, 61, 67, 0.05) 0%, rgba(197, 61, 67, 0.1) 100%);
+}
+
+.selection-card.selected::before {
+  content: "✓";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* セクションタイトル */
+.section-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-title::before {
+  content: "";
+  width: 4px;
+  height: 1em;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+/* プレビューエリア */
+.preview-area {
+  background: linear-gradient(180deg, var(--color-bg) 0%, #f0ece4 100%);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+/* ラジオボタン・チェックボックスカスタム */
+input[type="radio"]:checked,
+input[type="checkbox"]:checked {
+  accent-color: var(--color-primary);
+}
+
+/* スライダーカスタム */
+input[type="range"] {
+  accent-color: var(--color-primary);
+}
+
+/* 装飾的な漢字背景 */
+.kanji-decoration {
+  position: absolute;
+  font-size: 120px;
+  opacity: 0.03;
+  font-weight: bold;
+  pointer-events: none;
+  user-select: none;
+}
