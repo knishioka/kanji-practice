@@ -86,6 +86,7 @@ export function StrokeOrderQuestion({
         ) : processedSvg ? (
           <div
             className="w-full h-full [&>svg]:w-full [&>svg]:h-full"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: SVG描画に必要（DOMPurifyでサニタイズ済み）
             dangerouslySetInnerHTML={{ __html: processedSvg }}
           />
         ) : (

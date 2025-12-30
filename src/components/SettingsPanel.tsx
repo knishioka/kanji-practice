@@ -76,9 +76,7 @@ export function SettingsPanel() {
     }
   }, [
     settings.grade,
-    settings.pageCount,
     settings.mode,
-    settings.cellSize,
     totalQuestions,
     settings.random,
     setQuestions,

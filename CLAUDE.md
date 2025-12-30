@@ -46,7 +46,8 @@ src/
 npm run dev         # 開発サーバー起動 (localhost:5173)
 npm run build       # プロダクションビルド
 npm run preview     # ビルド結果のプレビュー
-npm run lint        # ESLintチェック
+npm run check       # Biome lint + format チェック
+npm run check:fix   # Biome lint + format 自動修正
 npm run test        # e2eテスト (Playwright)
 npm run test:unit   # ユニットテスト (Vitest)
 npm run test:unit:watch  # ユニットテスト (ウォッチモード)
@@ -197,3 +198,34 @@ localStorage に `kanji-practice-settings` キーで永続化。
 
 1. `src/data/kanji.ts` にデータ追加
 2. ユニットテストで問題生成確認
+
+## Claude Code 統合
+
+### ルールファイル
+
+AI向けの開発ルールは `.claude/rules/` に配置:
+- `general.md` - 言語、ファイル構成、インポート
+- `react.md` - コンポーネント、状態管理、A4レイアウト
+- `testing.md` - Vitest、Playwright、テスト方針
+
+### 重要コマンド
+
+```bash
+# コミット前の確認
+npm run check:fix    # Biome lint + format
+
+# テスト実行
+npm run test:unit    # 高速フィードバック
+npm run test         # E2E（低速）
+
+# 型チェック
+npx tsc --noEmit
+```
+
+### 重要ファイル
+
+レイアウト修正時:
+1. まず `src/constants/print.ts` を確認
+2. `src/utils/layout.ts` の関数を使用
+3. `npm run test:unit` で計算を検証
+4. `npm run test` でビジュアル出力を確認

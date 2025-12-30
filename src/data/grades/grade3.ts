@@ -245,6 +245,7 @@ export const grade3: Kanji[] = [
     sentences: ['ドアを開ける。', '店が開く。'],
     okuriganaExamples: [{ stem: '開', okurigana: 'く', word: '開く', reading: 'ひらく' }],
     antonyms: ['閉'],
+    synonyms: ['始'],
   },
   {
     char: '階',
@@ -733,6 +734,7 @@ export const grade3: Kanji[] = [
     sentences: ['勉強を始める。', '授業が始まる。'],
     okuriganaExamples: [{ stem: '始', okurigana: 'める', word: '始める', reading: 'はじめる' }],
     antonyms: ['終'],
+    synonyms: ['開'],
   },
   {
     char: '指',

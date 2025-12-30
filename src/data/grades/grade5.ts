@@ -135,6 +135,7 @@ export const grade5: Kanji[] = [
       { word: '往来', reading: 'おうらい' },
     ],
     sentences: ['往復する。', '往来が激しい。'],
+    antonyms: ['復'],
   },
   {
     char: '桜',
@@ -397,6 +398,7 @@ export const grade5: Kanji[] = [
     ],
     sentences: ['失敗を許す。', '許可を取る。'],
     okuriganaExamples: [{ stem: '許', okurigana: 'す', word: '許す', reading: 'ゆるす' }],
+    antonyms: ['禁'],
   },
   {
     char: '境',
@@ -430,6 +432,7 @@ export const grade5: Kanji[] = [
       { word: '禁煙', reading: 'きんえん' },
     ],
     sentences: ['禁止する。', '禁煙席。'],
+    antonyms: ['許'],
   },
   {
     char: '句',
@@ -1123,6 +1126,7 @@ export const grade5: Kanji[] = [
       { word: '製造', reading: 'せいぞう' },
     ],
     sentences: ['製品を作る。', '日本製。'],
+    synonyms: ['造'],
   },
   {
     char: '税',
@@ -1214,6 +1218,7 @@ export const grade5: Kanji[] = [
     ],
     sentences: ['船を造る。', '構造を調べる。'],
     okuriganaExamples: [{ stem: '造', okurigana: 'る', word: '造る', reading: 'つくる' }],
+    synonyms: ['製'],
   },
   {
     char: '像',
@@ -1329,6 +1334,7 @@ export const grade5: Kanji[] = [
     ],
     sentences: ['申し出を断る。', '決断する。'],
     okuriganaExamples: [{ stem: '断', okurigana: 'る', word: '断る', reading: 'ことわる' }],
+    synonyms: ['絶'],
   },
   {
     char: '築',
@@ -1583,6 +1589,7 @@ export const grade5: Kanji[] = [
       { word: '回復', reading: 'かいふく' },
     ],
     sentences: ['復習する。', '復活する。'],
+    antonyms: ['往'],
   },
   {
     char: '複',
@@ -1995,6 +2002,7 @@ export const grade5: Kanji[] = [
     ],
     sentences: ['知識を得る。', '得意な科目。'],
     okuriganaExamples: [{ stem: '得', okurigana: 'る', word: '得る', reading: 'える' }],
+    antonyms: ['損'],
   },
   {
     char: '毒',
@@ -2124,6 +2132,7 @@ export const grade5: Kanji[] = [
       { stem: '絶', okurigana: 'える', word: '絶える', reading: 'たえる' },
       { stem: '絶', okurigana: 'つ', word: '絶つ', reading: 'たつ' },
     ],
+    synonyms: ['断'],
   },
   {
     char: '祖',

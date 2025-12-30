@@ -272,6 +272,7 @@ export const grade6: Kanji[] = [
       { word: '貴い', reading: 'とうとい' },
     ],
     sentences: ['貴重な経験だった。', '命は貴い。'],
+    synonyms: ['宝'],
   },
   {
     char: '疑',
@@ -629,6 +630,7 @@ export const grade6: Kanji[] = [
     ],
     sentences: ['困難を乗り越える。', '道に迷って困る。'],
     okuriganaExamples: [{ stem: '困', okurigana: 'る', word: '困る', reading: 'こまる' }],
+    synonyms: ['難'],
   },
   {
     char: '砂',
@@ -1335,6 +1337,7 @@ export const grade6: Kanji[] = [
       { word: '保存', reading: 'ほぞん' },
     ],
     sentences: ['存在を確認する。', 'データを保存する。'],
+    antonyms: ['亡'],
   },
   {
     char: '尊',
@@ -1607,6 +1610,7 @@ export const grade6: Kanji[] = [
     sentences: ['困難を克服する。', '難しい問題だ。'],
     okuriganaExamples: [{ stem: '難', okurigana: 'しい', word: '難しい', reading: 'むずかしい' }],
     antonyms: ['易'],
+    synonyms: ['困'],
   },
   {
     char: '乳',
@@ -1630,6 +1634,7 @@ export const grade6: Kanji[] = [
     ],
     sentences: ['才能を認める。', '事実を確認する。'],
     okuriganaExamples: [{ stem: '認', okurigana: 'める', word: '認める', reading: 'みとめる' }],
+    antonyms: ['否'],
   },
   {
     char: '納',
@@ -1747,6 +1752,7 @@ export const grade6: Kanji[] = [
       { word: '可否', reading: 'かひ' },
     ],
     sentences: ['否定的な意見だ。', '可否を問う。'],
+    antonyms: ['認'],
   },
   {
     char: '批',
@@ -1883,6 +1889,7 @@ export const grade6: Kanji[] = [
       { word: '宝石', reading: 'ほうせき' },
     ],
     sentences: ['宝物を大切にする。', '宝石が輝く。'],
+    synonyms: ['貴'],
   },
   {
     char: '訪',
@@ -1910,6 +1917,7 @@ export const grade6: Kanji[] = [
     ],
     sentences: ['事故で死亡する。', '祖母が亡くなる。'],
     okuriganaExamples: [{ stem: '亡', okurigana: 'くなる', word: '亡くなる', reading: 'なくなる' }],
+    antonyms: ['存'],
   },
   {
     char: '忘',
@@ -1996,9 +2004,9 @@ export const grade6: Kanji[] = [
     strokeCount: 11,
     examples: [
       { word: '翻訳', reading: 'ほんやく' },
-      { word: '理由', reading: 'わけ' },
+      { word: '通訳', reading: 'つうやく' },
     ],
-    sentences: ['英語を翻訳する。', '訳を説明する。'],
+    sentences: ['英語を翻訳する。', '通訳として働く。'],
   },
   {
     char: '郵',

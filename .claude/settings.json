@@ -1,0 +1,7 @@
+{
+  "projectName": "kanji-practice",
+  "language": "ja",
+  "primaryLanguages": ["typescript", "tsx"],
+  "testFrameworks": ["vitest", "playwright"],
+  "formatting": "biome"
+}

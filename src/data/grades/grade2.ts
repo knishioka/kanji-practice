@@ -437,6 +437,7 @@ export const grade2: Kanji[] = [
     ],
     sentences: ['名前を言う。', '言葉を覚える。'],
     okuriganaExamples: [{ stem: '言', okurigana: 'う', word: '言う', reading: 'いう' }],
+    synonyms: ['話'],
   },
   {
     char: '原',
@@ -827,9 +828,9 @@ export const grade2: Kanji[] = [
     strokeCount: 9,
     examples: [
       { word: '教室', reading: 'きょうしつ' },
-      { word: '部屋', reading: 'へや' },
+      { word: '室内', reading: 'しつない' },
     ],
-    sentences: ['教室に入る。', '音楽室に行く。'],
+    sentences: ['教室に入る。', '室内で遊ぶ。'],
   },
   {
     char: '社',
@@ -1826,9 +1827,9 @@ export const grade2: Kanji[] = [
     strokeCount: 7,
     examples: [
       { word: '里', reading: 'さと' },
-      { word: '故郷', reading: 'ふるさと' },
+      { word: '里山', reading: 'さとやま' },
     ],
-    sentences: ['故郷に帰る。', '里山を歩く。'],
+    sentences: ['故郷の里に帰る。', '里山を歩く。'],
   },
   {
     char: '理',
@@ -1852,5 +1853,6 @@ export const grade2: Kanji[] = [
     ],
     sentences: ['友達と話す。', '電話をかける。'],
     okuriganaExamples: [{ stem: '話', okurigana: 'す', word: '話す', reading: 'はなす' }],
+    synonyms: ['言'],
   },
 ];

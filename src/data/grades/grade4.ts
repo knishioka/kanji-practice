@@ -270,6 +270,7 @@ export const grade4: Kanji[] = [
       { word: '完全', reading: 'かんぜん' },
     ],
     sentences: ['完成する。', '完全に直る。'],
+    antonyms: ['未'],
   },
   {
     char: '官',
@@ -1007,6 +1008,7 @@ export const grade4: Kanji[] = [
     ],
     sentences: ['自信を失う。', '失敗する。'],
     okuriganaExamples: [{ stem: '失', okurigana: 'う', word: '失う', reading: 'うしなう' }],
+    antonyms: ['得'],
   },
   {
     char: '借',
@@ -1075,6 +1077,7 @@ export const grade4: Kanji[] = [
       { word: '最初', reading: 'さいしょ' },
     ],
     sentences: ['初めまして。', '初雪が降る。'],
+    antonyms: ['末'],
   },
   {
     char: '松',
@@ -1190,6 +1193,7 @@ export const grade4: Kanji[] = [
     ],
     sentences: ['成長する。', '成功をつかむ。'],
     okuriganaExamples: [{ stem: '成', okurigana: 'る', word: '成る', reading: 'なる' }],
+    antonyms: ['敗'],
   },
   {
     char: '省',
@@ -1308,6 +1312,7 @@ export const grade4: Kanji[] = [
     ],
     sentences: ['敵と戦う。', '戦争反対。'],
     okuriganaExamples: [{ stem: '戦', okurigana: 'う', word: '戦う', reading: 'たたかう' }],
+    synonyms: ['争'],
   },
   {
     char: '選',
@@ -1343,6 +1348,7 @@ export const grade4: Kanji[] = [
     ],
     sentences: ['席を争う。', '争いを避ける。'],
     okuriganaExamples: [{ stem: '争', okurigana: 'う', word: '争う', reading: 'あらそう' }],
+    synonyms: ['戦'],
   },
   {
     char: '倉',
@@ -1670,6 +1676,7 @@ export const grade4: Kanji[] = [
     ],
     sentences: ['知識を得る。', '得意な科目。'],
     okuriganaExamples: [{ stem: '得', okurigana: 'る', word: '得る', reading: 'える' }],
+    antonyms: ['失'],
   },
   {
     char: '毒',
@@ -1693,6 +1700,7 @@ export const grade4: Kanji[] = [
     ],
     sentences: ['お湯が熱い。', '熱が出る。'],
     okuriganaExamples: [{ stem: '熱', okurigana: 'い', word: '熱い', reading: 'あつい' }],
+    antonyms: ['冷'],
   },
   {
     char: '念',
@@ -1716,6 +1724,7 @@ export const grade4: Kanji[] = [
     ],
     sentences: ['試合に敗れる。', '失敗する。'],
     okuriganaExamples: [{ stem: '敗', okurigana: 'れる', word: '敗れる', reading: 'やぶれる' }],
+    antonyms: ['成'],
   },
   {
     char: '梅',
@@ -1783,6 +1792,7 @@ export const grade4: Kanji[] = [
       { word: '必要', reading: 'ひつよう' },
     ],
     sentences: ['必ず来る。', '必要なもの。'],
+    synonyms: ['要'],
   },
   {
     char: '票',
@@ -1987,6 +1997,7 @@ export const grade4: Kanji[] = [
       { word: '末', reading: 'すえ' },
     ],
     sentences: ['週末に会う。', '月末に届く。'],
+    antonyms: ['初'],
   },
   {
     char: '満',
@@ -2010,6 +2021,7 @@ export const grade4: Kanji[] = [
       { word: '未定', reading: 'みてい' },
     ],
     sentences: ['未来に希望。', '未知の世界。'],
+    antonyms: ['完'],
   },
   {
     char: '脈',
@@ -2077,6 +2089,7 @@ export const grade4: Kanji[] = [
       { word: '重要', reading: 'じゅうよう' },
     ],
     sentences: ['必要なもの。', '要点をまとめる。'],
+    synonyms: ['必'],
   },
   {
     char: '養',
@@ -2205,6 +2218,7 @@ export const grade4: Kanji[] = [
     ],
     sentences: ['水が冷たい。', '冷房をつける。'],
     okuriganaExamples: [{ stem: '冷', okurigana: 'たい', word: '冷たい', reading: 'つめたい' }],
+    antonyms: ['熱'],
   },
   {
     char: '例',

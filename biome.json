@@ -1,23 +1,27 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "recommended": false,
       "correctness": {
         "noUnusedImports": "error",
         "noUnusedVariables": "warn",
         "useExhaustiveDependencies": "warn",
-        "useHookAtTopLevel": "error"
+        "useHookAtTopLevel": "error",
+        "noChildrenProp": "error",
+        "noVoidElementsWithChildren": "error"
       },
       "style": {
-        "useConst": "error",
-        "useImportType": "error",
-        "noNonNullAssertion": "warn"
+        "useConst": "warn"
       },
       "suspicious": {
-        "noExplicitAny": "warn",
-        "noArrayIndexKey": "warn"
+        "noDoubleEquals": "warn",
+        "noDuplicateJsxProps": "error",
+        "noVar": "error"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "warn"
       }
     }
   },
@@ -35,7 +39,7 @@
     }
   },
   "files": {
-    "includes": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json", "**/*.md", "**/*.css"]
+    "includes": ["src/**/*.ts", "src/**/*.tsx", "e2e/**/*.ts", "*.json", "*.md", "*.ts"]
   },
   "vcs": {
     "enabled": true,

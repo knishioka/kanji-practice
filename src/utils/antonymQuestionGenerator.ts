@@ -96,34 +96,20 @@ export function generateAntonymQuestions(
   // シャッフルまたは順番に選択
   const orderedPairs = random ? shuffleArray(pairs) : pairs;
 
-  // 重複を避けるためのセット（同じペアを両方向から出さない）
-  const usedPairs = new Set<string>();
+  // 使用済みペアを追跡（方向を区別：遠→近 と 近→遠 は別の問題）
+  const usedDirectionalPairs = new Set<string>();
   const questions: Question[] = [];
 
+  let cycleCount = 0;
   let pairIndex = 0;
+
   while (questions.length < count) {
-    const pair = orderedPairs[pairIndex % orderedPairs.length];
+    const pair = orderedPairs[pairIndex];
+    const key = `${pair.source.char}-${pair.target.char}`;
 
-    // 双方向の重複チェック（最初の周回のみ）
-    const key1 = `${pair.source.char}-${pair.target.char}`;
-    const key2 = `${pair.target.char}-${pair.source.char}`;
-
-    if (pairIndex < orderedPairs.length) {
-      // 最初の周回では重複を避ける
-      if (!usedPairs.has(key1) && !usedPairs.has(key2)) {
-        usedPairs.add(key1);
-        questions.push({
-          kanji: pair.source,
-          reading: pair.source.readings.on[0] || pair.source.readings.kun[0] || '',
-          antonymQuestion: {
-            type: pair.type,
-            sourceKanji: pair.source.char,
-            answerKanji: pair.target.char,
-          },
-        });
-      }
-    } else {
-      // 2周目以降はそのまま追加
+    // 同じ方向の問題が未使用、または2周目以降なら追加
+    if (!usedDirectionalPairs.has(key) || cycleCount > 0) {
+      usedDirectionalPairs.add(key);
       questions.push({
         kanji: pair.source,
         reading: pair.source.readings.on[0] || pair.source.readings.kun[0] || '',
@@ -137,8 +123,20 @@ export function generateAntonymQuestions(
 
     pairIndex++;
 
-    // 無限ループ防止
-    if (pairIndex > orderedPairs.length * 10) {
+    // 1周終了時にリセット
+    if (pairIndex >= orderedPairs.length) {
+      pairIndex = 0;
+      cycleCount++;
+      usedDirectionalPairs.clear();
+      // ランダムモードなら再シャッフル
+      if (random) {
+        const reshuffled = shuffleArray(orderedPairs);
+        orderedPairs.splice(0, orderedPairs.length, ...reshuffled);
+      }
+    }
+
+    // 無限ループ防止（10周まで）
+    if (cycleCount >= 10) {
       break;
     }
   }

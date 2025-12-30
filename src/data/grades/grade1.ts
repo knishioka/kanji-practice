@@ -784,6 +784,7 @@ export const grade1: Kanji[] = [
       { word: '正月', reading: 'しょうがつ' },
     ],
     sentences: ['正しい答え。', '正月を祝う。'],
+    okuriganaExamples: [{ stem: '正', okurigana: 'しい', word: '正しい', reading: 'ただしい' }],
   },
   {
     char: '水',
@@ -920,6 +921,7 @@ export const grade1: Kanji[] = [
       { word: '赤ちゃん', reading: 'あかちゃん' },
     ],
     sentences: ['赤い花が咲く。', '赤ちゃんが泣く。'],
+    okuriganaExamples: [{ stem: '赤', okurigana: 'い', word: '赤い', reading: 'あかい' }],
   },
   {
     char: '青',
@@ -931,6 +933,7 @@ export const grade1: Kanji[] = [
       { word: '青空', reading: 'あおぞら' },
     ],
     sentences: ['青い空。', '青空が広がる。'],
+    okuriganaExamples: [{ stem: '青', okurigana: 'い', word: '青い', reading: 'あおい' }],
   },
   {
     char: '白',
@@ -942,5 +945,6 @@ export const grade1: Kanji[] = [
       { word: '白紙', reading: 'はくし' },
     ],
     sentences: ['白い雲。', '白い雪が降る。'],
+    okuriganaExamples: [{ stem: '白', okurigana: 'い', word: '白い', reading: 'しろい' }],
   },
 ];
