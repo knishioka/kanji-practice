@@ -128,6 +128,13 @@
     page-break-inside: avoid;
     background: white !important;
     border: none !important;
+    /* 印刷時はflexを解除してフッターをコンテンツ直後に配置 */
+    display: block !important;
+  }
+
+  /* flex-growを解除 */
+  .a4-page > .flex-grow {
+    flex-grow: 0 !important;
   }
 
   /* 最後のページはページ区切りなし */
