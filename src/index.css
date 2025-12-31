@@ -62,20 +62,44 @@
     margin: 0;
   }
 
-  html,
-  body {
-    margin: 0;
-    padding: 0;
+  * {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
     color-adjust: exact;
   }
 
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    width: 210mm !important;
+    height: auto !important;
+    min-height: auto !important;
+  }
+
+  /* 印刷時に非表示 */
   .no-print {
     display: none !important;
   }
 
   .print-only {
+    display: block !important;
+  }
+
+  /* 親要素の背景・レイアウトをリセット */
+  .min-h-screen,
+  .preview-area,
+  main,
+  .space-y-4,
+  .grid,
+  .lg\:col-span-2 {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    width: auto !important;
+    gap: 0 !important;
     display: block !important;
   }
 
@@ -89,11 +113,12 @@
     break-inside: avoid;
   }
 
-  /* A4ページ - 印刷時もスクリーンと同じスタイルを維持 */
+  /* A4ページ - 印刷時はシャドウ・マージンなし */
   .a4-page {
     width: 210mm !important;
     height: 297mm !important;
     min-height: 297mm !important;
+    max-height: 297mm !important;
     padding: 15mm !important;
     margin: 0 !important;
     box-shadow: none !important;
@@ -101,6 +126,8 @@
     overflow: hidden !important;
     page-break-after: always;
     page-break-inside: avoid;
+    background: white !important;
+    border: none !important;
   }
 
   /* 最後のページはページ区切りなし */
