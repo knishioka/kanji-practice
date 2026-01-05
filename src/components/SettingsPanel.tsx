@@ -26,8 +26,11 @@ export function SettingsPanel() {
   const { settings, setSettings, setQuestions, excludedKanji } = useStore();
   const [isExcludeModalOpen, setIsExcludeModalOpen] = useState(false);
 
-  // 現在の学年の除外漢字
-  const currentExcluded = excludedKanji[settings.grade] || [];
+  // 現在の学年の除外漢字（参照安定化のためメモ化）
+  const currentExcluded = useMemo(
+    () => excludedKanji[settings.grade] || [],
+    [excludedKanji, settings.grade],
+  );
 
   // 1ページあたりの問題数
   const rowsPerPage = useMemo(
