@@ -26,10 +26,10 @@ describe('layout utilities', () => {
     });
 
     it('should calculate fewer rows for sentence mode', () => {
-      // cellSize 15mm * 2.5 = 37.5mm per row
-      // 232 / 37.5 = 6.18 → 6 rows
+      // cellSize 15mm * 2 + 16mm = 46mm per row
+      // 232 / 46 = 5.04 → 5 rows
       const rows = calculateRowsPerPage(15, 'sentence');
-      expect(rows).toBe(6);
+      expect(rows).toBe(5);
     });
 
     it('should calculate rows for strokeCount mode', () => {

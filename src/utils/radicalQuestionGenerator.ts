@@ -6,7 +6,7 @@
  * 部首データを持つ漢字のみが出題対象
  */
 
-import { getKanjiByGrade } from '../data/kanji';
+import { getKanjiByGradeFiltered } from '../data/kanji';
 import type { Grade, Question } from '../types';
 import { filterKanjiWithRadical, resolveRadical } from './radicalUtils';
 
@@ -27,10 +27,16 @@ function shuffleArray<T>(array: T[]): T[] {
  * @param grade - 対象学年
  * @param count - 生成する問題数
  * @param random - ランダム出題するか
+ * @param excludedChars - 除外する漢字の配列
  * @returns 生成された問題配列
  */
-export function generateRadicalQuestions(grade: Grade, count: number, random: boolean): Question[] {
-  const kanjiPool = getKanjiByGrade([grade]);
+export function generateRadicalQuestions(
+  grade: Grade,
+  count: number,
+  random: boolean,
+  excludedChars: string[] = [],
+): Question[] {
+  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
   // 新しいユーティリティを使用して部首データを持つ漢字のみをフィルタ
   const kanjiWithRadical = filterKanjiWithRadical(kanjiPool);
 
@@ -77,10 +83,11 @@ export function generateRadicalQuestions(grade: Grade, count: number, random: bo
 /**
  * 部首問題を生成可能かチェック
  * @param grade - 対象学年
+ * @param excludedChars - 除外する漢字の配列
  * @returns 部首データを持つ漢字が存在するか
  */
-export function canGenerateRadicalQuestions(grade: Grade): boolean {
-  const kanjiPool = getKanjiByGrade([grade]);
+export function canGenerateRadicalQuestions(grade: Grade, excludedChars: string[] = []): boolean {
+  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
   const kanjiWithRadical = filterKanjiWithRadical(kanjiPool);
   return kanjiWithRadical.length > 0;
 }
@@ -88,9 +95,10 @@ export function canGenerateRadicalQuestions(grade: Grade): boolean {
 /**
  * 指定学年で部首問題に使用可能な漢字数を取得
  * @param grade - 対象学年
+ * @param excludedChars - 除外する漢字の配列
  * @returns 部首データを持つ漢字の数
  */
-export function getRadicalQuestionKanjiCount(grade: Grade): number {
-  const kanjiPool = getKanjiByGrade([grade]);
+export function getRadicalQuestionKanjiCount(grade: Grade, excludedChars: string[] = []): number {
+  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
   return filterKanjiWithRadical(kanjiPool).length;
 }

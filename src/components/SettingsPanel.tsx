@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from '../store/useStore';
 import type { Grade, PrintMode, Question } from '../types';
 import {
@@ -19,10 +19,15 @@ import {
   canGenerateRadicalQuestions,
   generateRadicalQuestions,
 } from '../utils/radicalQuestionGenerator';
+import { ExcludeKanjiModal } from './modals/ExcludeKanjiModal';
 import { GradeSelector, ModeSelector, PrintOptions } from './settings';
 
 export function SettingsPanel() {
-  const { settings, setSettings, setQuestions } = useStore();
+  const { settings, setSettings, setQuestions, excludedKanji } = useStore();
+  const [isExcludeModalOpen, setIsExcludeModalOpen] = useState(false);
+
+  // 現在の学年の除外漢字
+  const currentExcluded = excludedKanji[settings.grade] || [];
 
   // 1ページあたりの問題数
   const rowsPerPage = useMemo(
@@ -41,23 +46,29 @@ export function SettingsPanel() {
 
   // モードに応じた問題生成関数
   const generateQuestionsForMode = useCallback(
-    (grade: Grade, mode: PrintMode, count: number, random: boolean): Question[] => {
+    (
+      grade: Grade,
+      mode: PrintMode,
+      count: number,
+      random: boolean,
+      excluded: string[],
+    ): Question[] => {
       switch (mode) {
         case 'homophone':
-          if (!canGenerateHomophoneQuestions(grade)) return [];
-          return generateHomophoneQuestions(grade, count, random);
+          if (!canGenerateHomophoneQuestions(grade, excluded)) return [];
+          return generateHomophoneQuestions(grade, count, random, excluded);
         case 'radical':
-          if (!canGenerateRadicalQuestions(grade)) return [];
-          return generateRadicalQuestions(grade, count, random);
+          if (!canGenerateRadicalQuestions(grade, excluded)) return [];
+          return generateRadicalQuestions(grade, count, random, excluded);
         case 'okurigana':
-          if (!canGenerateOkuriganaQuestions(grade)) return [];
-          return generateOkuriganaQuestions(grade, count, random);
+          if (!canGenerateOkuriganaQuestions(grade, excluded)) return [];
+          return generateOkuriganaQuestions(grade, count, random, excluded);
         case 'antonym':
-          if (!canGenerateAntonymQuestions(grade)) return [];
-          return generateAntonymQuestions(grade, count, random);
+          if (!canGenerateAntonymQuestions(grade, excluded)) return [];
+          return generateAntonymQuestions(grade, count, random, excluded);
         default:
-          if (!canGenerateQuestions(grade)) return [];
-          return generateQuestions(grade, count, random);
+          if (!canGenerateQuestions(grade, excluded)) return [];
+          return generateQuestions(grade, count, random, excluded);
       }
     },
     [],
@@ -71,6 +82,7 @@ export function SettingsPanel() {
         settings.mode,
         totalQuestions,
         settings.random,
+        currentExcluded,
       );
       setQuestions(questions);
     }
@@ -79,6 +91,7 @@ export function SettingsPanel() {
     settings.mode,
     totalQuestions,
     settings.random,
+    currentExcluded,
     setQuestions,
     generateQuestionsForMode,
   ]);
@@ -103,7 +116,12 @@ export function SettingsPanel() {
         </h2>
       </div>
 
-      <GradeSelector value={settings.grade} onChange={(grade) => setSettings({ grade })} />
+      <GradeSelector
+        value={settings.grade}
+        onChange={(grade) => setSettings({ grade })}
+        excludedCount={currentExcluded.length}
+        onOpenExcludeModal={() => setIsExcludeModalOpen(true)}
+      />
 
       <ModeSelector value={settings.mode} onChange={(mode) => setSettings({ mode })} />
 
@@ -113,6 +131,12 @@ export function SettingsPanel() {
         totalQuestions={totalQuestions}
         maxPracticeColumns={maxPracticeColumns}
         onSettingsChange={setSettings}
+      />
+
+      <ExcludeKanjiModal
+        isOpen={isExcludeModalOpen}
+        onClose={() => setIsExcludeModalOpen(false)}
+        grade={settings.grade}
       />
     </div>
   );

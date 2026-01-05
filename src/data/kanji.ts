@@ -14,6 +14,14 @@ export const getKanjiByGrade = (grades: number[]): Kanji[] => {
   return allKanji.filter((k) => grades.includes(k.grade));
 };
 
+// 学年別にフィルタリング（除外漢字対応）
+export const getKanjiByGradeFiltered = (
+  grades: number[],
+  excludedChars: string[] = [],
+): Kanji[] => {
+  return allKanji.filter((k) => grades.includes(k.grade) && !excludedChars.includes(k.char));
+};
+
 // ランダムに選択（データが足りない場合は繰り返す）
 export const getRandomKanji = (kanji: Kanji[], count: number): Kanji[] => {
   if (kanji.length === 0) return [];

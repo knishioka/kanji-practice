@@ -3,7 +3,7 @@
  * 漢字問題の生成ロジックを集約
  */
 
-import { getKanjiByGrade } from '../data/kanji';
+import { getKanjiByGradeFiltered } from '../data/kanji';
 import type { Grade, Kanji, Question } from '../types';
 
 /**
@@ -94,10 +94,16 @@ function candidatesToQuestions(candidates: QuestionCandidate[]): Question[] {
  * @param grade - 対象学年
  * @param count - 生成する問題数
  * @param random - ランダム出題するか
+ * @param excludedChars - 除外する漢字の配列
  * @returns 生成された問題配列
  */
-export function generateQuestions(grade: Grade, count: number, random: boolean): Question[] {
-  const kanjiPool = getKanjiByGrade([grade]);
+export function generateQuestions(
+  grade: Grade,
+  count: number,
+  random: boolean,
+  excludedChars: string[] = [],
+): Question[] {
+  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
 
   if (kanjiPool.length === 0) {
     return [];
@@ -112,9 +118,10 @@ export function generateQuestions(grade: Grade, count: number, random: boolean):
 /**
  * 問題生成可能かチェック
  * @param grade - 対象学年
+ * @param excludedChars - 除外する漢字の配列
  * @returns 漢字データが存在するか
  */
-export function canGenerateQuestions(grade: Grade): boolean {
-  const kanjiPool = getKanjiByGrade([grade]);
+export function canGenerateQuestions(grade: Grade, excludedChars: string[] = []): boolean {
+  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
   return kanjiPool.length > 0;
 }

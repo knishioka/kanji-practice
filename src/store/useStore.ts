@@ -1,15 +1,19 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { CELL_SIZE } from '../constants/print';
-import type { Question, Settings } from '../types';
+import type { ExcludedKanjiMap, Grade, Question, Settings } from '../types';
 import { calculateMaxPracticeColumns, calculateRecommendedPracticeColumns } from '../utils/layout';
 
 interface Store {
   settings: Settings;
   questions: Question[];
+  excludedKanji: ExcludedKanjiMap;
   setSettings: (s: Partial<Settings>) => void;
   setQuestions: (q: Question[]) => void;
   resetSettings: () => void;
+  setExcludedKanji: (grade: Grade, chars: string[]) => void;
+  toggleExcludedKanji: (grade: Grade, char: string) => void;
+  clearExcludedKanji: (grade: Grade) => void;
 }
 
 // デフォルト設定（おすすめ値）
@@ -30,6 +34,7 @@ export const useStore = create<Store>()(
     (set) => ({
       settings: defaultSettings,
       questions: [],
+      excludedKanji: {},
       setSettings: (s) =>
         set((state) => {
           const newSettings = { ...state.settings, ...s };
@@ -52,12 +57,31 @@ export const useStore = create<Store>()(
         }),
       setQuestions: (questions) => set({ questions }),
       resetSettings: () => set({ settings: defaultSettings }),
+      setExcludedKanji: (grade, chars) =>
+        set((state) => ({
+          excludedKanji: { ...state.excludedKanji, [grade]: chars },
+        })),
+      toggleExcludedKanji: (grade, char) =>
+        set((state) => {
+          const current = state.excludedKanji[grade] || [];
+          const newChars = current.includes(char)
+            ? current.filter((c) => c !== char)
+            : [...current, char];
+          return { excludedKanji: { ...state.excludedKanji, [grade]: newChars } };
+        }),
+      clearExcludedKanji: (grade) =>
+        set((state) => ({
+          excludedKanji: { ...state.excludedKanji, [grade]: [] },
+        })),
     }),
     {
       name: 'kanji-practice-settings',
       // 古いデータ形式からのマイグレーション
       migrate: (persistedState: unknown) => {
-        const state = persistedState as { settings?: Record<string, unknown> };
+        const state = persistedState as {
+          settings?: Record<string, unknown>;
+          excludedKanji?: ExcludedKanjiMap;
+        };
         if (state?.settings) {
           // grades (配列) から grade (単一) へのマイグレーション
           if ('grades' in state.settings && !('grade' in state.settings)) {
@@ -71,9 +95,13 @@ export const useStore = create<Store>()(
             delete state.settings.count;
           }
         }
+        // excludedKanjiがない場合は空オブジェクトを設定
+        if (!state?.excludedKanji) {
+          state.excludedKanji = {};
+        }
         return state;
       },
-      version: 1,
+      version: 2,
     },
   ),
 );

@@ -3,7 +3,7 @@
  * 正しい送りがなを書く問題を生成
  */
 
-import { getKanjiByGrade } from '../data/kanji';
+import { getKanjiByGradeFiltered } from '../data/kanji';
 import type { Grade, Kanji, Question } from '../types';
 
 /**
@@ -42,14 +42,16 @@ function getKanjiWithOkurigana(
  * @param grade - 対象学年
  * @param count - 生成する問題数
  * @param random - ランダム出題するか
+ * @param excludedChars - 除外する漢字の配列
  * @returns 生成された問題配列
  */
 export function generateOkuriganaQuestions(
   grade: Grade,
   count: number,
   random: boolean,
+  excludedChars: string[] = [],
 ): Question[] {
-  const kanjiPool = getKanjiByGrade([grade]);
+  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
   const okuriganaData = getKanjiWithOkurigana(kanjiPool);
 
   if (okuriganaData.length === 0) {
@@ -92,10 +94,11 @@ export function generateOkuriganaQuestions(
 /**
  * 送りがな問題を生成可能かチェック
  * @param grade - 対象学年
+ * @param excludedChars - 除外する漢字の配列
  * @returns 送りがなデータを持つ漢字が存在するか
  */
-export function canGenerateOkuriganaQuestions(grade: Grade): boolean {
-  const kanjiPool = getKanjiByGrade([grade]);
+export function canGenerateOkuriganaQuestions(grade: Grade, excludedChars: string[] = []): boolean {
+  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
   const okuriganaData = getKanjiWithOkurigana(kanjiPool);
   return okuriganaData.length > 0;
 }

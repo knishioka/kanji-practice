@@ -4,9 +4,11 @@ import { grades } from './config';
 interface Props {
   value: Grade;
   onChange: (grade: Grade) => void;
+  excludedCount: number;
+  onOpenExcludeModal: () => void;
 }
 
-export function GradeSelector({ value, onChange }: Props) {
+export function GradeSelector({ value, onChange, excludedCount, onOpenExcludeModal }: Props) {
   return (
     <div>
       <label className="section-title">対象級</label>
@@ -49,6 +51,20 @@ export function GradeSelector({ value, onChange }: Props) {
           </button>
         ))}
       </div>
+
+      {/* 除外漢字設定ボタン */}
+      <button
+        type="button"
+        onClick={onOpenExcludeModal}
+        className="mt-3 w-full p-2 rounded-lg text-sm transition-colors hover:opacity-80"
+        style={{
+          border: '1px dashed var(--color-border)',
+          color: excludedCount > 0 ? 'var(--color-primary)' : 'var(--color-text-muted)',
+          backgroundColor: excludedCount > 0 ? 'rgba(197, 61, 67, 0.05)' : 'transparent',
+        }}
+      >
+        {excludedCount > 0 ? `除外漢字を設定 (${excludedCount}字を除外中)` : '除外漢字を設定'}
+      </button>
     </div>
   );
 }

@@ -49,7 +49,7 @@ describe('antonymQuestionGenerator utilities', () => {
     });
 
     it('should filter by questionType antonym', () => {
-      const questions = generateAntonymQuestions(1, 10, false, 'antonym');
+      const questions = generateAntonymQuestions(1, 10, false, [], 'antonym');
 
       for (const q of questions) {
         if (q.antonymQuestion) {
@@ -59,7 +59,7 @@ describe('antonymQuestionGenerator utilities', () => {
     });
 
     it('should filter by questionType synonym', () => {
-      const questions = generateAntonymQuestions(1, 10, false, 'synonym');
+      const questions = generateAntonymQuestions(1, 10, false, [], 'synonym');
 
       for (const q of questions) {
         if (q.antonymQuestion) {
@@ -69,7 +69,7 @@ describe('antonymQuestionGenerator utilities', () => {
     });
 
     it('should include both types when questionType is mixed', () => {
-      const questions = generateAntonymQuestions(1, 50, false, 'mixed');
+      const questions = generateAntonymQuestions(1, 50, false, [], 'mixed');
 
       if (questions.length > 0) {
         const types = new Set(questions.map((q) => q.antonymQuestion?.type));

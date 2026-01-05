@@ -3,7 +3,7 @@
  * 同じ読みで異なる漢字を区別する問題を生成
  */
 
-import { getKanjiByGrade } from '../data/kanji';
+import { getKanjiByGradeFiltered } from '../data/kanji';
 import type { Grade, Kanji, Question } from '../types';
 
 /**
@@ -94,14 +94,16 @@ function shuffleArray<T>(array: T[]): T[] {
  * @param grade - 対象学年
  * @param count - 生成する問題数
  * @param random - ランダム出題するか
+ * @param excludedChars - 除外する漢字の配列
  * @returns 生成された問題配列
  */
 export function generateHomophoneQuestions(
   grade: Grade,
   count: number,
   random: boolean,
+  excludedChars: string[] = [],
 ): Question[] {
-  const kanjiPool = getKanjiByGrade([grade]);
+  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
 
   if (kanjiPool.length === 0) {
     return [];
@@ -161,10 +163,11 @@ export function generateHomophoneQuestions(
 /**
  * 同音異字問題を生成可能かチェック
  * @param grade - 対象学年
+ * @param excludedChars - 除外する漢字の配列
  * @returns 2つ以上の漢字を持つ同音グループが存在するか
  */
-export function canGenerateHomophoneQuestions(grade: Grade): boolean {
-  const kanjiPool = getKanjiByGrade([grade]);
+export function canGenerateHomophoneQuestions(grade: Grade, excludedChars: string[] = []): boolean {
+  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
   if (kanjiPool.length === 0) {
     return false;
   }

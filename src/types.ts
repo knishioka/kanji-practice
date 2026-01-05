@@ -1,6 +1,11 @@
 // 学年（小1〜小6）
 export type Grade = 1 | 2 | 3 | 4 | 5 | 6;
 
+// 除外漢字マップ（学年ごと）
+export type ExcludedKanjiMap = {
+  [key in Grade]?: string[];
+};
+
 // 漢字データ
 export interface Kanji {
   char: string;

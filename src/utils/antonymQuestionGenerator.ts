@@ -3,7 +3,7 @@
  * 漢字の対義語または類義語を答える問題を生成
  */
 
-import { getKanjiByGrade } from '../data/kanji';
+import { getKanjiByGradeFiltered } from '../data/kanji';
 import type { Grade, Kanji, Question } from '../types';
 
 interface AntonymPair {
@@ -69,6 +69,7 @@ function extractPairs(kanjiPool: Kanji[]): AntonymPair[] {
  * @param grade - 対象学年
  * @param count - 生成する問題数
  * @param random - ランダム出題するか
+ * @param excludedChars - 除外する漢字の配列
  * @param questionType - 出題タイプ（対義語/類義語/混合）
  * @returns 生成された問題配列
  */
@@ -76,10 +77,11 @@ export function generateAntonymQuestions(
   grade: Grade,
   count: number,
   random: boolean,
+  excludedChars: string[] = [],
   questionType: 'antonym' | 'synonym' | 'mixed' = 'mixed',
 ): Question[] {
   // 学年に応じた漢字プールを取得
-  const kanjiPool = getKanjiByGrade([grade]);
+  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
 
   // ペアを抽出
   let pairs = extractPairs(kanjiPool);
@@ -147,10 +149,11 @@ export function generateAntonymQuestions(
 /**
  * 指定学年で対義語・類義語問題を生成できるかチェック
  * @param grade - 対象学年
+ * @param excludedChars - 除外する漢字の配列
  * @returns 対義語・類義語データを持つ漢字が存在するか
  */
-export function canGenerateAntonymQuestions(grade: Grade): boolean {
-  const kanjiPool = getKanjiByGrade([grade]);
+export function canGenerateAntonymQuestions(grade: Grade, excludedChars: string[] = []): boolean {
+  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
   const pairs = extractPairs(kanjiPool);
   return pairs.length > 0;
 }
