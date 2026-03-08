@@ -36,12 +36,25 @@ const allModes: PrintMode[] = [
   'reading',
   'writing',
   'strokeCount',
+  'strokeOrder',
   'sentence',
   'homophone',
   'radical',
   'okurigana',
   'antonym',
 ];
+// PrintMode に値を追加したとき、ここでコンパイルエラーになる
+const _modeCheck: Record<PrintMode, true> = {
+  reading: true,
+  writing: true,
+  strokeCount: true,
+  strokeOrder: true,
+  sentence: true,
+  homophone: true,
+  radical: true,
+  okurigana: true,
+  antonym: true,
+};
 
 // 全漢字を取得
 function getAllKanji(): Kanji[] {

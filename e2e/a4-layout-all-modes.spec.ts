@@ -1,16 +1,30 @@
 import { expect, test } from '@playwright/test';
+import type { PrintMode } from '../src/types';
+
+// PrintMode に値を追加したとき、ここでコンパイルエラーになる
+const _modeCheck: Record<PrintMode, true> = {
+  reading: true,
+  writing: true,
+  strokeCount: true,
+  strokeOrder: true,
+  sentence: true,
+  homophone: true,
+  radical: true,
+  okurigana: true,
+  antonym: true,
+};
 
 test.describe('全モードA4レイアウト確認', () => {
-  const modes = [
-    { name: '読み練習', selector: '読み練習' },
-    { name: '書き練習', selector: '書き練習' },
-    { name: '画数', selector: '画数' },
-    { name: '書き順', selector: '書き順' },
-    { name: '例文写経', selector: '例文写経' },
-    { name: '同音異字', selector: '同音異字' },
-    { name: '部首', selector: '部首' },
-    { name: '送りがな', selector: '送りがな' },
-    { name: '対義語・類義語', selector: '対義語・類義語' },
+  const modes: { name: string; selector: string; mode: PrintMode }[] = [
+    { name: '読み練習', selector: '読み練習', mode: 'reading' },
+    { name: '書き練習', selector: '書き練習', mode: 'writing' },
+    { name: '画数', selector: '画数', mode: 'strokeCount' },
+    { name: '書き順', selector: '書き順', mode: 'strokeOrder' },
+    { name: '例文写経', selector: '例文写経', mode: 'sentence' },
+    { name: '同音異字', selector: '同音異字', mode: 'homophone' },
+    { name: '部首', selector: '部首', mode: 'radical' },
+    { name: '送りがな', selector: '送りがな', mode: 'okurigana' },
+    { name: '対義語・類義語', selector: '対義語・類義語', mode: 'antonym' },
   ];
 
   test.beforeEach(async ({ page }) => {
