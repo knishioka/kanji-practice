@@ -112,7 +112,7 @@ interface SentenceGridProps {
   cellSize: number;
   columnsPerRow: number;
   targetKanji?: string;
-  furiganaMap?: Map<string, string>;
+  furiganaMap?: Map<number, string>;
   gridStyle?: GridStyle;
 }
 
@@ -134,7 +134,7 @@ export function SentenceGrid({
         style={hasFurigana ? { paddingTop: `${cellSize * 0.3}mm` } : undefined}
       >
         {chars.map((char, i) => {
-          const reading = furiganaMap?.get(char);
+          const reading = furiganaMap?.get(i);
           return (
             <div
               key={i}
