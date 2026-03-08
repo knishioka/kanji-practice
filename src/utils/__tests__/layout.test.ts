@@ -26,10 +26,10 @@ describe('layout utilities', () => {
     });
 
     it('should calculate fewer rows for sentence mode', () => {
-      // cellSize 15mm * 2 + 16mm = 46mm per row
-      // 232 / 46 = 5.04 → 5 rows
+      // cellSize 15mm * 2.3 + 16mm = 50.5mm per row (ふりがなパディング含む)
+      // 232 / 50.5 = 4.59 → 4 rows
       const rows = calculateRowsPerPage(15, 'sentence');
-      expect(rows).toBe(5);
+      expect(rows).toBe(4);
     });
 
     it('should calculate rows for strokeCount mode', () => {
@@ -222,7 +222,7 @@ describe('layout utilities', () => {
             let rowHeight: number;
             switch (mode) {
               case 'sentence':
-                rowHeight = cellSize * 2.5;
+                rowHeight = cellSize * 2.3 + 16;
                 break;
               case 'homophone':
                 rowHeight = cellSize * 2.8;
