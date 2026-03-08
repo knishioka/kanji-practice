@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState } from 'react';
+import { forwardRef, useCallback, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useStore } from '../store/useStore';
 import { generateFilename, generatePDF } from '../utils/pdf';
@@ -19,14 +19,17 @@ export const PrintPreview = forwardRef<HTMLDivElement, Props>(function PrintPrev
   const handlePrint = useReactToPrint({ contentRef });
 
   // forwardRefとローカルrefを統合するコールバック
-  const setRefs = (node: HTMLDivElement | null) => {
-    contentRef.current = node;
-    if (typeof ref === 'function') {
-      ref(node);
-    } else if (ref) {
-      ref.current = node;
-    }
-  };
+  const setRefs = useCallback(
+    (node: HTMLDivElement | null) => {
+      contentRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
 
   const handlePDFDownload = async () => {
     if (!contentRef.current) return;
