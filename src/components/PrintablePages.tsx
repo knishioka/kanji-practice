@@ -88,6 +88,7 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
             questionNumber={questionNumber}
             cellSize={settings.cellSize}
             columnsPerRow={safeColumnsPerRow}
+            gridStyle={settings.gridStyle}
           />
         );
       case 'strokeCount':

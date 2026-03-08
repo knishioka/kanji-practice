@@ -111,52 +111,110 @@ interface SentenceGridProps {
   sentence: string;
   cellSize: number;
   columnsPerRow: number;
+  targetKanji?: string;
+  furiganaMap?: Map<string, string>;
+  gridStyle?: GridStyle;
 }
 
-export function SentenceGrid({ sentence, cellSize }: SentenceGridProps) {
+export function SentenceGrid({
+  sentence,
+  cellSize,
+  targetKanji,
+  furiganaMap,
+  gridStyle = 'cross',
+}: SentenceGridProps) {
   const chars = sentence.split('');
+  const hasFurigana = furiganaMap && furiganaMap.size > 0;
 
   return (
     <div className="mb-4 avoid-break">
       {/* お手本行 */}
-      <div className="flex flex-wrap mb-2">
-        {chars.map((char, i) => (
-          <div
-            key={i}
-            className="border border-gray-300 font-textbook text-gray-700 relative"
-            style={{
-              width: `${cellSize}mm`,
-              height: `${cellSize}mm`,
-            }}
-          >
-            {/* 文字 - 絶対位置で中央配置 (html2canvas互換) */}
-            <span
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+      <div
+        className="flex flex-wrap mb-2"
+        style={hasFurigana ? { paddingTop: `${cellSize * 0.3}mm` } : undefined}
+      >
+        {chars.map((char, i) => {
+          const reading = furiganaMap?.get(char);
+          return (
+            <div
+              key={i}
+              className="border border-gray-300 font-textbook text-gray-700 relative"
               style={{
-                fontSize: `${cellSize * 0.7}mm`,
-                lineHeight: 1,
+                width: `${cellSize}mm`,
+                height: `${cellSize}mm`,
               }}
             >
-              {char}
-            </span>
-          </div>
-        ))}
+              {/* ふりがな */}
+              {reading && (
+                <span
+                  className="absolute -top-4 left-0 right-0 text-center text-gray-600"
+                  style={{ fontSize: `${cellSize * 0.25}mm` }}
+                >
+                  {reading}
+                </span>
+              )}
+              {/* 文字 - 絶対位置で中央配置 (html2canvas互換) */}
+              <span
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  fontSize: `${cellSize * 0.7}mm`,
+                  lineHeight: 1,
+                }}
+              >
+                {char}
+              </span>
+            </div>
+          );
+        })}
       </div>
       {/* 練習行 */}
       <div className="flex flex-wrap">
-        {chars.map((_, i) => (
-          <div
-            key={i}
-            className="border border-gray-800 bg-white relative"
-            style={{
-              width: `${cellSize}mm`,
-              height: `${cellSize}mm`,
-            }}
-          >
-            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gray-200 -translate-x-1/2" />
-            <div className="absolute top-1/2 left-0 right-0 h-px bg-gray-200 -translate-y-1/2" />
-          </div>
-        ))}
+        {chars.map((char, i) => {
+          const isBlank = targetKanji && char === targetKanji;
+          return (
+            <div
+              key={i}
+              className={clsx(
+                'relative font-textbook',
+                isBlank ? 'border border-gray-800 bg-white' : 'border border-gray-300',
+              )}
+              style={{
+                width: `${cellSize}mm`,
+                height: `${cellSize}mm`,
+              }}
+            >
+              {isBlank ? (
+                <>
+                  {/* 書き取り用ガイドライン */}
+                  {gridStyle === 'cross' && (
+                    <>
+                      <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gray-300 -translate-x-1/2" />
+                      <div className="absolute top-1/2 left-0 right-0 h-px bg-gray-300 -translate-y-1/2" />
+                    </>
+                  )}
+                  {gridStyle === 'dots' && (
+                    <>
+                      <div className="absolute left-1/4 top-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                      <div className="absolute right-1/4 top-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                      <div className="absolute left-1/4 bottom-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                      <div className="absolute right-1/4 bottom-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                    </>
+                  )}
+                </>
+              ) : (
+                <span
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-400"
+                  style={{
+                    fontSize: `${cellSize * 0.7}mm`,
+                    lineHeight: 1,
+                  }}
+                >
+                  {char}
+                </span>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

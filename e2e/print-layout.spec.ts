@@ -98,10 +98,14 @@ test.describe('PDF生成テスト', () => {
     await page.click('button:has-text("PDF保存")');
 
     // ボタンが生成中状態になるか確認
-    await expect(page.locator('button:has-text("PDF生成中")')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('button:has-text("PDF生成中")')).toBeVisible({
+      timeout: 10000,
+    });
 
     // 生成完了を待つ (ボタンが元に戻る)
-    await expect(page.locator('button:has-text("PDF保存")')).toBeVisible({ timeout: 60000 });
+    await expect(page.locator('button:has-text("PDF保存")')).toBeVisible({
+      timeout: 60000,
+    });
 
     // PDF生成エラーがないことを確認
     const pdfErrors = errors.filter((e) => e.includes('PDF') || e.includes('jspdf'));
