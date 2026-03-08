@@ -28,8 +28,20 @@ export function calculateRowsPerPage(cellSize: number, mode: PrintMode): number 
       // 安全マージンを含めて2.8
       rowHeight = cellSize * 2.8;
       break;
-    default:
+    case 'reading':
+    case 'writing':
+    case 'strokeCount':
+    case 'radical':
+    case 'okurigana':
+    case 'antonym':
+    case 'strokeOrder':
       rowHeight = cellSize + 6; // その他は1行 + マージン
+      break;
+    default: {
+      const _exhaustive: never = mode;
+      console.error(`未対応のモード: ${_exhaustive}`);
+      rowHeight = cellSize + 6;
+    }
   }
 
   return Math.max(1, Math.floor(availableHeight / rowHeight));
