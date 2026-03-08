@@ -107,12 +107,18 @@ export function WritingRow({
   );
 }
 
+interface FuriganaGroup {
+  start: number;
+  length: number;
+  reading: string;
+}
+
 interface SentenceGridProps {
   sentence: string;
   cellSize: number;
   columnsPerRow: number;
   targetKanji?: string;
-  furiganaMap?: Map<number, string>;
+  furiganaGroups?: FuriganaGroup[];
   gridStyle?: GridStyle;
 }
 
@@ -120,11 +126,19 @@ export function SentenceGrid({
   sentence,
   cellSize,
   targetKanji,
-  furiganaMap,
+  furiganaGroups,
   gridStyle = 'cross',
 }: SentenceGridProps) {
   const chars = Array.from(sentence);
-  const hasFurigana = furiganaMap && furiganaMap.size > 0;
+  const hasFurigana = furiganaGroups && furiganaGroups.length > 0;
+
+  // グループの開始位置を引くためのマップ
+  const groupByStart = new Map<number, FuriganaGroup>();
+  if (furiganaGroups) {
+    for (const g of furiganaGroups) {
+      groupByStart.set(g.start, g);
+    }
+  }
 
   return (
     <div className="mb-4 avoid-break">
@@ -134,7 +148,7 @@ export function SentenceGrid({
         style={hasFurigana ? { paddingTop: `${cellSize * 0.3}mm` } : undefined}
       >
         {chars.map((char, i) => {
-          const reading = furiganaMap?.get(i);
+          const group = groupByStart.get(i);
           return (
             <div
               key={i}
@@ -144,13 +158,16 @@ export function SentenceGrid({
                 height: `${cellSize}mm`,
               }}
             >
-              {/* ふりがな */}
-              {reading && (
+              {/* ふりがな（グループの開始位置にのみ表示、複数セル分の幅にまたがる） */}
+              {group && (
                 <span
-                  className="absolute bottom-full left-0 right-0 text-center text-gray-600"
-                  style={{ fontSize: `${cellSize * 0.25}mm` }}
+                  className="absolute bottom-full left-0 text-center text-gray-600 whitespace-nowrap pointer-events-none"
+                  style={{
+                    fontSize: `${cellSize * 0.25}mm`,
+                    width: `${cellSize * group.length}mm`,
+                  }}
                 >
-                  {reading}
+                  {group.reading}
                 </span>
               )}
               {/* 文字 - 絶対位置で中央配置 (html2canvas互換) */}

@@ -11,6 +11,13 @@ interface Props {
   gridStyle: GridStyle;
 }
 
+// ふりがなグループ: 開始位置・文字数・読みのセット
+export interface FuriganaGroup {
+  start: number;
+  length: number;
+  reading: string;
+}
+
 // 漢字→Kanjiデータのルックアップ（モジュールスコープで1回だけ構築）
 const kanjiLookup = new Map(allKanji.map((k) => [k.char, k]));
 
@@ -20,6 +27,14 @@ for (const kanji of allKanji) {
   for (const example of kanji.examples) {
     if (!wordReadingMap.has(example.word)) {
       wordReadingMap.set(example.word, example.reading);
+    }
+  }
+  // okuriganaExamplesも含める（例: "数える" → "かぞえる"）
+  if (kanji.okuriganaExamples) {
+    for (const oku of kanji.okuriganaExamples) {
+      if (!wordReadingMap.has(oku.word)) {
+        wordReadingMap.set(oku.word, oku.reading);
+      }
     }
   }
 }
@@ -33,36 +48,63 @@ function isKanjiChar(char: string): boolean {
 }
 
 /**
- * 例文中の各文字位置にふりがなを割り当てるマップを構築
- * 例語データを最長一致で検索し、単語単位の正しい読みを割り当てる
- * 例: "交通安全。" → {0: "こう", 1: "つう", 2: "あん", 3: "ぜん"}
+ * 単語の読みから送りがな部分を除去して漢字部分の読みだけを返す
+ * 例: "数える"("かぞえる") → "かぞ"（送りがな "える" を除去）
+ * 例: "交通"("こうつう") → "こうつう"（送りがななし）
  */
-function buildFuriganaMap(sentence: string): Map<number, string> {
+function getKanjiReading(wordChars: string[], reading: string): string {
+  // 単語末尾のひらがな部分（送りがな）を特定
+  let kanaSuffix = '';
+  for (let i = wordChars.length - 1; i >= 0; i--) {
+    if (!isKanjiChar(wordChars[i])) {
+      kanaSuffix = wordChars[i] + kanaSuffix;
+    } else {
+      break;
+    }
+  }
+  // 読みから送りがな部分を除去
+  if (kanaSuffix && reading.endsWith(kanaSuffix)) {
+    return reading.slice(0, -kanaSuffix.length);
+  }
+  return reading;
+}
+
+/**
+ * 例文中のふりがなグループを構築
+ * 例語データを最長一致で検索し、単語単位でグループ化
+ * 熟語は分割せず、複数セルにまたがるふりがなとして返す
+ */
+export function buildFuriganaGroups(sentence: string): FuriganaGroup[] {
   const chars = Array.from(sentence);
-  const map = new Map<number, string>();
+  const groups: FuriganaGroup[] = [];
   const assigned = new Set<number>();
 
-  // 1. 例語データから最長一致で単語を探してふりがなを割り当て
+  // 1. 例語データから最長一致で単語を探す
   for (const word of sortedWords) {
     const wordChars = Array.from(word);
     let searchFrom = 0;
     // biome-ignore lint/suspicious/noAssignInExpressions: indexOf loop pattern
     while ((searchFrom = sentence.indexOf(word, searchFrom)) !== -1) {
-      // 文字インデックスに変換（サロゲートペア対応）
       const charIndex = Array.from(sentence.slice(0, searchFrom)).length;
-
-      // 既に割り当て済みの位置と重複しないか確認
       const wordPositions = Array.from({ length: wordChars.length }, (_, i) => charIndex + i);
+
       if (wordPositions.some((pos) => assigned.has(pos))) {
         searchFrom += word.length;
         continue;
       }
 
-      // 単語の読みを各文字に分配
       const reading = wordReadingMap.get(word) ?? '';
-      distributeReading(wordChars, reading, charIndex, map);
-      for (const pos of wordPositions) assigned.add(pos);
+      const kanjiReading = getKanjiReading(wordChars, reading);
 
+      // 漢字部分の開始位置と長さを計算
+      const kanjiPositions = wordPositions.filter((pos) => isKanjiChar(chars[pos]));
+      if (kanjiPositions.length > 0) {
+        const start = kanjiPositions[0];
+        const length = kanjiPositions[kanjiPositions.length - 1] - start + 1;
+        groups.push({ start, length, reading: kanjiReading });
+      }
+
+      for (const pos of wordPositions) assigned.add(pos);
       searchFrom += word.length;
     }
   }
@@ -76,80 +118,11 @@ function buildFuriganaMap(sentence: string): Map<number, string> {
     if (!kanji) continue;
     const reading = kanji.readings.kun[0] ?? kanji.readings.on[0];
     if (reading) {
-      map.set(i, reading);
+      groups.push({ start: i, length: 1, reading });
     }
   }
 
-  return map;
-}
-
-/**
- * 単語の読みを各漢字に分配する
- * 送りがな（ひらがな部分）を除去して漢字部分に読みを割り当てる
- * 例: "引く"("ひく") → 引="ひ", く=skip
- * 例: "交通"("こうつう") → 交="こう", 通="つう"
- */
-function distributeReading(
-  wordChars: string[],
-  reading: string,
-  startIndex: number,
-  map: Map<number, string>,
-): void {
-  // 単語中の漢字位置を特定
-  const kanjiPositions: number[] = [];
-  for (let i = 0; i < wordChars.length; i++) {
-    if (isKanjiChar(wordChars[i])) {
-      kanjiPositions.push(i);
-    }
-  }
-
-  if (kanjiPositions.length === 0) return;
-
-  // 漢字が1文字の場合: 送りがな部分を除いた読みを割り当て
-  if (kanjiPositions.length === 1) {
-    // 単語末尾のひらがな部分（送りがな）を読みから除去
-    let kanaSuffix = '';
-    for (let i = wordChars.length - 1; i >= 0; i--) {
-      if (!isKanjiChar(wordChars[i])) {
-        kanaSuffix = wordChars[i] + kanaSuffix;
-      } else {
-        break;
-      }
-    }
-    let kanjiReading = reading;
-    if (kanaSuffix && reading.endsWith(kanaSuffix)) {
-      kanjiReading = reading.slice(0, -kanaSuffix.length);
-    }
-    map.set(startIndex + kanjiPositions[0], kanjiReading);
-    return;
-  }
-
-  // 漢字が複数の場合: 均等分割（熟語は大体均等な音節数）
-  // 送りがな部分を除去
-  let pureReading = reading;
-  let kanaEnd = '';
-  for (let i = wordChars.length - 1; i >= 0; i--) {
-    if (!isKanjiChar(wordChars[i])) {
-      kanaEnd = wordChars[i] + kanaEnd;
-    } else {
-      break;
-    }
-  }
-  if (kanaEnd && pureReading.endsWith(kanaEnd)) {
-    pureReading = pureReading.slice(0, -kanaEnd.length);
-  }
-
-  const pureReadingChars = Array.from(pureReading);
-  const chunkSize = Math.ceil(pureReadingChars.length / kanjiPositions.length);
-
-  for (let i = 0; i < kanjiPositions.length; i++) {
-    const start = i * chunkSize;
-    const end = Math.min(start + chunkSize, pureReadingChars.length);
-    const charReading = pureReadingChars.slice(start, end).join('');
-    if (charReading) {
-      map.set(startIndex + kanjiPositions[i], charReading);
-    }
-  }
+  return groups.sort((a, b) => a.start - b.start);
 }
 
 export function SentenceQuestion({
@@ -162,7 +135,7 @@ export function SentenceQuestion({
   const targetKanji = question.kanji.char;
   const sentence = question.sentence || '';
 
-  const furiganaMap = useMemo(() => buildFuriganaMap(sentence), [sentence]);
+  const furiganaGroups = useMemo(() => buildFuriganaGroups(sentence), [sentence]);
 
   return (
     <div className="mb-4 avoid-break">
@@ -172,7 +145,7 @@ export function SentenceQuestion({
         cellSize={cellSize}
         columnsPerRow={columnsPerRow}
         targetKanji={targetKanji}
-        furiganaMap={furiganaMap}
+        furiganaGroups={furiganaGroups}
         gridStyle={gridStyle}
       />
     </div>
