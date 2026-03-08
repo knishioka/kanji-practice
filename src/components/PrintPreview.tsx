@@ -1,4 +1,5 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useCallback, useRef, useState } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import { useStore } from '../store/useStore';
 import { generateFilename, generatePDF } from '../utils/pdf';
 import { PrintablePages } from './PrintablePages';
@@ -11,15 +12,31 @@ export const PrintPreview = forwardRef<HTMLDivElement, Props>(function PrintPrev
   { onGenerate },
   ref,
 ) {
+  const contentRef = useRef<HTMLDivElement>(null);
   const { settings, questions } = useStore();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
+  const handlePrint = useReactToPrint({ contentRef });
+
+  // forwardRefとローカルrefを統合するコールバック
+  const setRefs = useCallback(
+    (node: HTMLDivElement | null) => {
+      contentRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
+
   const handlePDFDownload = async () => {
-    if (!ref || !('current' in ref) || !ref.current) return;
+    if (!contentRef.current) return;
 
     setIsGeneratingPDF(true);
     try {
-      await generatePDF(ref.current, generateFilename(settings.title));
+      await generatePDF(contentRef.current, generateFilename(settings.title));
     } catch (error) {
       console.error('PDF生成エラー:', error);
       alert('PDFの生成に失敗しました');
@@ -44,7 +61,7 @@ export const PrintPreview = forwardRef<HTMLDivElement, Props>(function PrintPrev
           問題を生成
         </button>
         <button
-          onClick={() => window.print()}
+          onClick={handlePrint}
           disabled={questions.length === 0}
           className="px-5 py-2.5 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
           style={{
@@ -89,7 +106,7 @@ export const PrintPreview = forwardRef<HTMLDivElement, Props>(function PrintPrev
       </div>
 
       {/* プレビュー - PrintablePagesコンポーネントを使用 */}
-      <PrintablePages ref={ref} questions={questions} settings={settings} />
+      <PrintablePages ref={setRefs} questions={questions} settings={settings} />
     </div>
   );
 });
