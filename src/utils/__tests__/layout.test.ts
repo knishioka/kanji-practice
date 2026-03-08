@@ -79,6 +79,13 @@ describe('layout utilities', () => {
       expect(rows).toBe(11);
     });
 
+    it('should calculate rows for readingWriting mode', () => {
+      // cellSize 15mm * 2 + 12mm = 42mm per row
+      // 232 / 42 = 5.52 → 5 rows
+      const rows = calculateRowsPerPage(15, 'readingWriting');
+      expect(rows).toBe(5);
+    });
+
     it('should return at least 1 row even for large cell sizes', () => {
       const rows = calculateRowsPerPage(250, 'writing');
       expect(rows).toBeGreaterThanOrEqual(1);
@@ -227,6 +234,9 @@ describe('layout utilities', () => {
                 break;
               case 'homophone':
                 rowHeight = cellSize * 2.8;
+                break;
+              case 'readingWriting':
+                rowHeight = cellSize * 2 + 12;
                 break;
               default:
                 rowHeight = cellSize + 6;

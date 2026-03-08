@@ -29,8 +29,8 @@ export function calculateRowsPerPage(cellSize: number, mode: PrintMode): number 
       rowHeight = cellSize * 2.8;
       break;
     case 'readingWriting':
-      // 読み書き統合: 読み行(cellSize) + 書き行(cellSize * 0.5) + マージン(8mm)
-      rowHeight = cellSize * 1.5 + 8;
+      // 読み書き統合: 読み行(cellSize) + 書き行(cellSize) + マージン(12mm)
+      rowHeight = cellSize * 2 + 12;
       break;
     case 'reading':
     case 'writing':

@@ -62,7 +62,7 @@ export function ReadingWritingQuestion({
           }}
         >
           <ruby>
-            {question.example?.word.split('').map((char, ci) => (
+            {question.example?.word?.split('').map((char, ci) => (
               <span key={ci}>
                 {char === question.kanji.char ? (
                   <span className="font-bold text-[1.1em]">□</span>
