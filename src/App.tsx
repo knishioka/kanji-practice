@@ -91,7 +91,8 @@ function App() {
       case 'writing':
       case 'sentence':
       case 'strokeCount':
-      case 'strokeOrder': {
+      case 'strokeOrder':
+      case 'readingWriting': {
         if (!canGenerateQuestions(settings.grade)) {
           alert('選択した学年に漢字データがありません');
           return;

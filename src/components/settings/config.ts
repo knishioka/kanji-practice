@@ -24,7 +24,16 @@ export const modes: { value: PrintMode; label: string; desc: string }[] = [
   { value: 'homophone', label: '同音異字', desc: '同じ読みで異なる漢字を区別' },
   { value: 'radical', label: '部首', desc: '漢字の部首を答える' },
   { value: 'okurigana', label: '送りがな', desc: '正しい送りがなを書く' },
-  { value: 'antonym', label: '対義語・類義語', desc: '反対/似た意味の漢字を答える' },
+  {
+    value: 'antonym',
+    label: '対義語・類義語',
+    desc: '反対/似た意味の漢字を答える',
+  },
+  {
+    value: 'readingWriting',
+    label: '読み・書き練習',
+    desc: '読みと書きを同時に練習する',
+  },
 ];
 
 // グリッドスタイルオプション
@@ -95,6 +104,12 @@ export const modeSettings: Record<PrintMode, ModeSettingsConfig> = {
     practiceColumns: true,
     gridStyle: true,
     showHint: false,
+    cellSizeLabel: 'マスサイズ',
+  },
+  readingWriting: {
+    practiceColumns: true,
+    gridStyle: true,
+    showHint: true,
     cellSizeLabel: 'マスサイズ',
   },
 };
