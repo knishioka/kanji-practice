@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { A4 } from '../constants/print';
 import { type LayoutValidation, validateLayout } from '../utils/pdf';
+import { mmToPx } from '../utils/units';
 
 interface Props {
   targetRef: React.RefObject<HTMLElement | null>;
@@ -217,8 +218,8 @@ function DebugGuides({ targetRef }: { targetRef: React.RefObject<HTMLElement | n
 
   if (!rect) return null;
 
-  // 15mm余白を示すガイドライン (pxに変換)
-  const marginPx = (A4.MARGIN_MM / 25.4) * 96;
+  // 余白をpxに変換
+  const marginPx = mmToPx(A4.MARGIN_MM);
 
   return (
     <div

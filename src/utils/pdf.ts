@@ -1,14 +1,7 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { A4 } from '../constants/print';
-
-// CSS標準DPI
-const CSS_DPI = 96;
-
-// mm を px に変換
-function mmToPx(mm: number): number {
-  return (mm / 25.4) * CSS_DPI;
-}
+import { mmToPx, pxToMm } from './units';
 
 /**
  * oklch色をrgbに変換するヘルパー
@@ -158,9 +151,6 @@ export function validateLayout(element: HTMLElement): LayoutValidation {
 
   const rect = element.getBoundingClientRect();
   const style = window.getComputedStyle(element);
-
-  // px を mm に変換
-  const pxToMm = (px: number) => (px * 25.4) / CSS_DPI;
 
   const pageWidthMm = pxToMm(rect.width);
   const pageHeightMm = pxToMm(rect.height);
