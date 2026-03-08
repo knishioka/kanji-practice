@@ -123,7 +123,7 @@ export function SentenceGrid({
   furiganaMap,
   gridStyle = 'cross',
 }: SentenceGridProps) {
-  const chars = sentence.split('');
+  const chars = Array.from(sentence);
   const hasFurigana = furiganaMap && furiganaMap.size > 0;
 
   return (
@@ -147,7 +147,7 @@ export function SentenceGrid({
               {/* ふりがな */}
               {reading && (
                 <span
-                  className="absolute -top-4 left-0 right-0 text-center text-gray-600"
+                  className="absolute bottom-full left-0 right-0 text-center text-gray-600"
                   style={{ fontSize: `${cellSize * 0.25}mm` }}
                 >
                   {reading}
