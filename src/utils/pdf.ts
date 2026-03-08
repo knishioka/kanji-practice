@@ -1,9 +1,6 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-
-// A4サイズ定義
-const A4_WIDTH_MM = 210;
-const A4_HEIGHT_MM = 297;
+import { A4 } from '../constants/print';
 
 // CSS標準DPI
 const CSS_DPI = 96;
@@ -57,12 +54,12 @@ export async function generatePDF(element: HTMLElement, filename: string): Promi
   const pdf = new jsPDF({
     orientation: 'portrait',
     unit: 'px',
-    format: [mmToPx(A4_WIDTH_MM), mmToPx(A4_HEIGHT_MM)],
+    format: [mmToPx(A4.WIDTH_MM), mmToPx(A4.HEIGHT_MM)],
     hotfixes: ['px_scaling'],
   });
 
-  const pageWidthPx = mmToPx(A4_WIDTH_MM);
-  const pageHeightPx = mmToPx(A4_HEIGHT_MM);
+  const pageWidthPx = mmToPx(A4.WIDTH_MM);
+  const pageHeightPx = mmToPx(A4.HEIGHT_MM);
 
   for (let i = 0; i < pages.length; i++) {
     const page = pages[i] as HTMLElement;
@@ -74,18 +71,18 @@ export async function generatePDF(element: HTMLElement, filename: string): Promi
       logging: false,
       backgroundColor: '#ffffff',
       // A4サイズを明示的に指定
-      width: mmToPx(A4_WIDTH_MM),
-      height: mmToPx(A4_HEIGHT_MM),
+      width: mmToPx(A4.WIDTH_MM),
+      height: mmToPx(A4.HEIGHT_MM),
       // 印刷用のスタイルを適用
       onclone: (_clonedDoc, clonedElement) => {
         // oklch色を互換性のある形式に変換
         convertOklchColors(clonedElement);
 
         // クローンされた要素に直接スタイルを適用
-        clonedElement.style.width = `${A4_WIDTH_MM}mm`;
-        clonedElement.style.height = `${A4_HEIGHT_MM}mm`;
-        clonedElement.style.minHeight = `${A4_HEIGHT_MM}mm`;
-        clonedElement.style.padding = '15mm';
+        clonedElement.style.width = `${A4.WIDTH_MM}mm`;
+        clonedElement.style.height = `${A4.HEIGHT_MM}mm`;
+        clonedElement.style.minHeight = `${A4.HEIGHT_MM}mm`;
+        clonedElement.style.padding = `${A4.MARGIN_MM}mm`;
         clonedElement.style.margin = '0';
         clonedElement.style.boxShadow = 'none';
         clonedElement.style.boxSizing = 'border-box';
@@ -99,7 +96,7 @@ export async function generatePDF(element: HTMLElement, filename: string): Promi
 
     // 2ページ目以降は新しいページを追加
     if (i > 0) {
-      pdf.addPage([mmToPx(A4_WIDTH_MM), mmToPx(A4_HEIGHT_MM)], 'portrait');
+      pdf.addPage([mmToPx(A4.WIDTH_MM), mmToPx(A4.HEIGHT_MM)], 'portrait');
     }
 
     // キャンバスのアスペクト比を維持してPDFに追加
@@ -169,12 +166,12 @@ export function validateLayout(element: HTMLElement): LayoutValidation {
   const pageHeightMm = pxToMm(rect.height);
 
   // A4サイズチェック
-  if (Math.abs(pageWidthMm - A4_WIDTH_MM) > 5) {
-    errors.push(`幅が不正: ${pageWidthMm.toFixed(1)}mm (期待値: ${A4_WIDTH_MM}mm)`);
+  if (Math.abs(pageWidthMm - A4.WIDTH_MM) > 5) {
+    errors.push(`幅が不正: ${pageWidthMm.toFixed(1)}mm (期待値: ${A4.WIDTH_MM}mm)`);
   }
 
-  if (pageHeightMm < A4_HEIGHT_MM - 5) {
-    warnings.push(`高さが不足: ${pageHeightMm.toFixed(1)}mm (最小: ${A4_HEIGHT_MM}mm)`);
+  if (pageHeightMm < A4.HEIGHT_MM - 5) {
+    warnings.push(`高さが不足: ${pageHeightMm.toFixed(1)}mm (最小: ${A4.HEIGHT_MM}mm)`);
   }
 
   // オーバーフローチェック
@@ -188,7 +185,7 @@ export function validateLayout(element: HTMLElement): LayoutValidation {
   // パディングチェック
   const paddingTop = parseFloat(style.paddingTop);
   const paddingLeft = parseFloat(style.paddingLeft);
-  const expectedPaddingPx = mmToPx(15);
+  const expectedPaddingPx = mmToPx(A4.MARGIN_MM);
 
   if (Math.abs(paddingTop - expectedPaddingPx) > 10) {
     warnings.push(`上パディングが不正: ${pxToMm(paddingTop).toFixed(1)}mm`);
