@@ -86,7 +86,7 @@ export function StrokeOrderQuestion({
         ) : processedSvg ? (
           <div
             className="w-full h-full [&>svg]:w-full [&>svg]:h-full"
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: SVG描画に必要（信頼済みソース KanjiVG GitHub から取得）
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: SVG描画に必要（DOMPurifyでサニタイズ済み）
             dangerouslySetInnerHTML={{ __html: processedSvg }}
           />
         ) : (
@@ -105,10 +105,10 @@ export function StrokeOrderQuestion({
 
       {/* 画数・読み・例語 */}
       <div
-        className="shrink-0 flex flex-col justify-center"
+        className="shrink-0 flex flex-col justify-center text-gray-500"
         style={{ fontSize: `${cellSize * 0.3}mm`, lineHeight: 1.4 }}
       >
-        <div className="text-gray-500">
+        <div>
           ({question.kanji.strokeCount}画)
           {question.kanji.readings.on.length > 0 && (
             <span className="ml-1">音:{question.kanji.readings.on[0]}</span>
@@ -118,7 +118,7 @@ export function StrokeOrderQuestion({
           )}
         </div>
         {question.example && (
-          <div className="text-gray-500">
+          <div>
             例:
             <ruby>
               {question.example.word}
