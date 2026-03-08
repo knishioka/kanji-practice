@@ -39,7 +39,8 @@ export function calculateRowsPerPage(cellSize: number, mode: PrintMode): number 
       break;
     default: {
       const _exhaustive: never = mode;
-      throw new Error(`未対応のモード: ${_exhaustive}`);
+      console.error(`未対応のモード: ${_exhaustive}`);
+      rowHeight = cellSize + 6;
     }
   }
 

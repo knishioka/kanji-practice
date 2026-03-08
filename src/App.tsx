@@ -102,7 +102,7 @@ function App() {
       }
       default: {
         const _exhaustive: never = settings.mode;
-        throw new Error(`未対応のモード: ${_exhaustive}`);
+        console.error(`未対応のモード: ${_exhaustive}`);
       }
     }
   }, [settings.grade, settings.mode, settings.random, totalQuestions, setQuestions]);

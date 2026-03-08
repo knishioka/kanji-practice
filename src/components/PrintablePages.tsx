@@ -172,7 +172,8 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
         );
       default: {
         const _exhaustive: never = settings.mode;
-        throw new Error(`未対応のモード: ${_exhaustive}`);
+        console.error(`未対応のモード: ${_exhaustive}`);
+        return null;
       }
     }
   };
