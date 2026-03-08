@@ -192,19 +192,8 @@ describe('layout utilities', () => {
 
   // A4収まりテスト
   describe('A4 fitting tests', () => {
-    const allModes: PrintMode[] = [
-      'reading',
-      'writing',
-      'strokeCount',
-      'strokeOrder',
-      'sentence',
-      'homophone',
-      'radical',
-      'okurigana',
-      'antonym',
-    ];
-    // PrintMode に値を追加したとき、ここでコンパイルエラーになる
-    void ({
+    // PrintMode に値を追加したとき、ここでコンパイルエラーになる（単一の定義源）
+    const modeCheck: Record<PrintMode, true> = {
       reading: true,
       writing: true,
       strokeCount: true,
@@ -214,7 +203,8 @@ describe('layout utilities', () => {
       radical: true,
       okurigana: true,
       antonym: true,
-    } satisfies Record<PrintMode, true>);
+    };
+    const allModes = Object.keys(modeCheck) as PrintMode[];
     const cellSizes = [CELL_SIZE.MIN, CELL_SIZE.DEFAULT, CELL_SIZE.MAX]; // 12, 15, 25
 
     describe('高さ方向 - 全モードがA4に収まる', () => {
