@@ -84,49 +84,28 @@ describe('buildFuriganaGroups', () => {
   });
 
   describe('品質チェック（再発防止）', () => {
-    it('全例文でふりがなにカタカナが含まれない', () => {
+    it('全例文でふりがなが正しく生成される', () => {
       const katakanaIssues: string[] = [];
-      for (const kanji of allKanji) {
-        for (const sentence of kanji.sentences) {
-          const groups = buildFuriganaGroups(sentence);
-          for (const g of groups) {
-            if (/[\u30A0-\u30FF]/.test(g.reading)) {
-              katakanaIssues.push(
-                `${sentence}: 「${Array.from(sentence)
-                  .slice(g.start, g.start + g.length)
-                  .join('')}」→「${g.reading}」`,
-              );
-            }
-          }
-        }
-      }
-      expect(katakanaIssues).toEqual([]);
-    });
-
-    it('全例文でふりがなスパンに非漢字が含まれない', () => {
       const nonKanjiIssues: string[] = [];
+      const emptyIssues: string[] = [];
+
       for (const kanji of allKanji) {
         for (const sentence of kanji.sentences) {
           const chars = Array.from(sentence);
           const groups = buildFuriganaGroups(sentence);
           for (const g of groups) {
+            // カタカナが含まれないか
+            if (/[\u30A0-\u30FF]/.test(g.reading)) {
+              katakanaIssues.push(
+                `${sentence}: 「${chars.slice(g.start, g.start + g.length).join('')}」→「${g.reading}」`,
+              );
+            }
+            // スパンに非漢字が含まれないか
             const span = chars.slice(g.start, g.start + g.length);
             if (span.some((c) => !isKanjiChar(c))) {
               nonKanjiIssues.push(`${sentence}: 「${span.join('')}」→「${g.reading}」`);
             }
-          }
-        }
-      }
-      expect(nonKanjiIssues).toEqual([]);
-    });
-
-    it('全例文でふりがなの読みが空でない', () => {
-      const emptyIssues: string[] = [];
-      for (const kanji of allKanji) {
-        for (const sentence of kanji.sentences) {
-          const chars = Array.from(sentence);
-          const groups = buildFuriganaGroups(sentence);
-          for (const g of groups) {
+            // 読みが空でないか
             if (!g.reading) {
               emptyIssues.push(
                 `${sentence}: 「${chars.slice(g.start, g.start + g.length).join('')}」に空の読み`,
@@ -135,7 +114,10 @@ describe('buildFuriganaGroups', () => {
           }
         }
       }
-      expect(emptyIssues).toEqual([]);
+
+      expect(katakanaIssues, 'ふりがなにカタカナが含まれていました').toEqual([]);
+      expect(nonKanjiIssues, 'ふりがなスパンに非漢字が含まれていました').toEqual([]);
+      expect(emptyIssues, 'ふりがなの読みが空のケースがありました').toEqual([]);
     });
   });
 });

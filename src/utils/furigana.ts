@@ -103,21 +103,22 @@ function splitReadingForNonContiguous(
   while (endIdx >= 0 && !isKanjiChar(wordChars[endIdx])) endIdx--;
 
   const segments: Segment[] = [];
-  for (let i = startIdx; i <= endIdx; i++) {
+  let i = startIdx;
+  while (i <= endIdx) {
     if (isKanjiChar(wordChars[i])) {
-      const last = segments[segments.length - 1];
-      if (last && last.type === 'kanji') {
-        last.indices.push(i);
-      } else {
-        segments.push({ type: 'kanji', indices: [i] });
+      const indices: number[] = [];
+      while (i <= endIdx && isKanjiChar(wordChars[i])) {
+        indices.push(i);
+        i++;
       }
+      segments.push({ type: 'kanji', indices });
     } else {
-      const last = segments[segments.length - 1];
-      if (last && last.type === 'kana') {
-        last.chars += wordChars[i];
-      } else {
-        segments.push({ type: 'kana', chars: wordChars[i] });
+      let chars = '';
+      while (i <= endIdx && !isKanjiChar(wordChars[i])) {
+        chars += wordChars[i];
+        i++;
       }
+      segments.push({ type: 'kana', chars });
     }
   }
 
