@@ -170,6 +170,10 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
             gridStyle={settings.gridStyle}
           />
         );
+      default: {
+        const _exhaustive: never = settings.mode;
+        throw new Error(`未対応のモード: ${_exhaustive}`);
+      }
     }
   };
 

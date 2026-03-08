@@ -87,13 +87,22 @@ function App() {
         setQuestions(questions);
         break;
       }
-      default: {
+      case 'reading':
+      case 'writing':
+      case 'sentence':
+      case 'strokeCount':
+      case 'strokeOrder': {
         if (!canGenerateQuestions(settings.grade)) {
           alert('選択した学年に漢字データがありません');
           return;
         }
         const questions = generateQuestionsUtil(settings.grade, totalQuestions, settings.random);
         setQuestions(questions);
+        break;
+      }
+      default: {
+        const _exhaustive: never = settings.mode;
+        throw new Error(`未対応のモード: ${_exhaustive}`);
       }
     }
   }, [settings.grade, settings.mode, settings.random, totalQuestions, setQuestions]);
@@ -138,7 +147,10 @@ function App() {
       {/* フッター */}
       <footer
         className="border-t mt-8 no-print"
-        style={{ borderColor: 'var(--color-border)', background: 'var(--color-bg-card)' }}
+        style={{
+          borderColor: 'var(--color-border)',
+          background: 'var(--color-bg-card)',
+        }}
       >
         <div className="max-w-7xl mx-auto px-4 py-5 text-center">
           <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
