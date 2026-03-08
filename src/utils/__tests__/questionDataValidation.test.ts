@@ -32,16 +32,19 @@ import { filterKanjiWithRadical } from '../radicalUtils';
 
 const grades: Grade[] = [1, 2, 3, 4, 5, 6];
 const basicModes: PrintMode[] = ['reading', 'writing', 'strokeCount', 'sentence'];
-const allModes: PrintMode[] = [
-  'reading',
-  'writing',
-  'strokeCount',
-  'sentence',
-  'homophone',
-  'radical',
-  'okurigana',
-  'antonym',
-];
+// PrintMode に値を追加したとき、ここでコンパイルエラーになる（単一の定義源）
+const modeCheck: Record<PrintMode, true> = {
+  reading: true,
+  writing: true,
+  strokeCount: true,
+  strokeOrder: true,
+  sentence: true,
+  homophone: true,
+  radical: true,
+  okurigana: true,
+  antonym: true,
+};
+const allModes = Object.keys(modeCheck) as PrintMode[];
 
 // 全漢字を取得
 function getAllKanji(): Kanji[] {
