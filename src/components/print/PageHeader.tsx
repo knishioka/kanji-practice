@@ -17,6 +17,7 @@ const modeDescriptions: Record<PrintMode, string> = {
   radical: '漢字の部首を答えましょう',
   okurigana: '正しい送りがなを書きましょう',
   antonym: '対義語・類義語を答えましょう',
+  readingWriting: '漢字の読み方と書き方を練習しましょう',
 };
 
 export function PageHeader({ title, mode, date, isFirstPage }: Props) {

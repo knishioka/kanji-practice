@@ -14,6 +14,7 @@ import {
   PageHeader,
   RadicalQuestion,
   ReadingQuestion,
+  ReadingWritingQuestion,
   SentenceQuestion,
   StrokeCountQuestion,
   StrokeOrderQuestion,
@@ -168,6 +169,18 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
             cellSize={settings.cellSize}
             practiceCount={safePracticeCount}
             gridStyle={settings.gridStyle}
+          />
+        );
+      case 'readingWriting':
+        return (
+          <ReadingWritingQuestion
+            key={index}
+            question={question}
+            questionNumber={questionNumber}
+            cellSize={settings.cellSize}
+            practiceCount={safePracticeCount}
+            gridStyle={settings.gridStyle}
+            showHint={settings.showHint}
           />
         );
       default: {

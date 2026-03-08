@@ -5,6 +5,7 @@ export { PageFooter } from './PageFooter';
 export { PageHeader } from './PageHeader';
 export { RadicalQuestion } from './RadicalQuestion';
 export { ReadingQuestion } from './ReadingQuestion';
+export { ReadingWritingQuestion } from './ReadingWritingQuestion';
 export { SentenceQuestion } from './SentenceQuestion';
 export { StrokeCountQuestion } from './StrokeCountQuestion';
 export { StrokeOrderQuestion } from './StrokeOrderQuestion';

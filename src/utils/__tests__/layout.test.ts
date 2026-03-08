@@ -203,6 +203,7 @@ describe('layout utilities', () => {
       radical: true,
       okurigana: true,
       antonym: true,
+      readingWriting: true,
     };
     const allModes = Object.keys(modeCheck) as PrintMode[];
     const cellSizes = [CELL_SIZE.MIN, CELL_SIZE.DEFAULT, CELL_SIZE.MAX]; // 12, 15, 25
