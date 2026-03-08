@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import type { GridStyle } from '../types';
+import type { FuriganaGroup } from '../utils/furigana';
 
 interface Props {
   char?: string;
@@ -105,12 +106,6 @@ export function WritingRow({
       ))}
     </div>
   );
-}
-
-interface FuriganaGroup {
-  start: number;
-  length: number;
-  reading: string;
 }
 
 interface SentenceGridProps {

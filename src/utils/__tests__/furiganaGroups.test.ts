@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { buildFuriganaGroups } from '../../components/print/SentenceQuestion';
 import { allKanji } from '../../data/kanji';
+import { buildFuriganaGroups, isKanjiChar } from '../furigana';
 
 // テストヘルパー: ふりがなグループを「漢字(読み)」形式の文字列に変換
 function formatGroups(sentence: string) {
@@ -10,11 +10,6 @@ function formatGroups(sentence: string) {
     const span = chars.slice(g.start, g.start + g.length).join('');
     return `${span}(${g.reading})`;
   });
-}
-
-function isKanjiChar(char: string): boolean {
-  const code = char.codePointAt(0) ?? 0;
-  return (code >= 0x4e00 && code <= 0x9fff) || (code >= 0x3400 && code <= 0x4dbf);
 }
 
 describe('buildFuriganaGroups', () => {
