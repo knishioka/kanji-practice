@@ -12,6 +12,7 @@ const modeDetails: Record<PrintMode, { name: string; selector: string }> = {
   radical: { name: '部首', selector: '部首' },
   okurigana: { name: '送りがな', selector: '送りがな' },
   antonym: { name: '対義語・類義語', selector: '対義語・類義語' },
+  readingWriting: { name: '読み・書き練習', selector: '読み・書き練習' },
 };
 
 test.describe('全モードA4レイアウト確認', () => {

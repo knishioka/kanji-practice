@@ -43,6 +43,7 @@ const modeCheck: Record<PrintMode, true> = {
   radical: true,
   okurigana: true,
   antonym: true,
+  readingWriting: true,
 };
 const allModes = Object.keys(modeCheck) as PrintMode[];
 
@@ -61,6 +62,8 @@ function checkModeAvailability(
     case 'writing':
     case 'strokeCount':
     case 'sentence':
+    case 'strokeOrder':
+    case 'readingWriting':
       return {
         available: canGenerateQuestions(grade),
         count: getKanjiByGrade([grade]).length,
