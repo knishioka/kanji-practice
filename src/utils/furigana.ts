@@ -13,17 +13,9 @@ const kanjiLookup = new Map(allKanji.map((k) => [k.char, k]));
 // 全例語から単語→読みマップを構築（例: "交通" → "こうつう"）
 const wordReadingMap = new Map<string, string>();
 for (const kanji of allKanji) {
-  for (const example of kanji.examples) {
-    if (!wordReadingMap.has(example.word)) {
-      wordReadingMap.set(example.word, example.reading);
-    }
-  }
-  // okuriganaExamplesも含める（例: "数える" → "かぞえる"）
-  if (kanji.okuriganaExamples) {
-    for (const oku of kanji.okuriganaExamples) {
-      if (!wordReadingMap.has(oku.word)) {
-        wordReadingMap.set(oku.word, oku.reading);
-      }
+  for (const ex of [...kanji.examples, ...(kanji.okuriganaExamples ?? [])]) {
+    if (!wordReadingMap.has(ex.word)) {
+      wordReadingMap.set(ex.word, ex.reading);
     }
   }
 }
