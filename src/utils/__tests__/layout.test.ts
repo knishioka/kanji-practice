@@ -204,7 +204,7 @@ describe('layout utilities', () => {
       'antonym',
     ];
     // PrintMode に値を追加したとき、ここでコンパイルエラーになる
-    const _modeCheck: Record<PrintMode, true> = {
+    void ({
       reading: true,
       writing: true,
       strokeCount: true,
@@ -214,7 +214,7 @@ describe('layout utilities', () => {
       radical: true,
       okurigana: true,
       antonym: true,
-    };
+    } satisfies Record<PrintMode, true>);
     const cellSizes = [CELL_SIZE.MIN, CELL_SIZE.DEFAULT, CELL_SIZE.MAX]; // 12, 15, 25
 
     describe('高さ方向 - 全モードがA4に収まる', () => {

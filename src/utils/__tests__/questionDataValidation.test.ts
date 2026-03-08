@@ -44,7 +44,7 @@ const allModes: PrintMode[] = [
   'antonym',
 ];
 // PrintMode に値を追加したとき、ここでコンパイルエラーになる
-const _modeCheck: Record<PrintMode, true> = {
+void ({
   reading: true,
   writing: true,
   strokeCount: true,
@@ -54,7 +54,7 @@ const _modeCheck: Record<PrintMode, true> = {
   radical: true,
   okurigana: true,
   antonym: true,
-};
+} satisfies Record<PrintMode, true>);
 
 // 全漢字を取得
 function getAllKanji(): Kanji[] {

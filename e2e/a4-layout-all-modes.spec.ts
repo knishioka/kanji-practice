@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import type { PrintMode } from '../src/types';
 
 // PrintMode に値を追加したとき、ここでコンパイルエラーになる
-const _modeCheck: Record<PrintMode, true> = {
+void ({
   reading: true,
   writing: true,
   strokeCount: true,
@@ -12,7 +12,7 @@ const _modeCheck: Record<PrintMode, true> = {
   radical: true,
   okurigana: true,
   antonym: true,
-};
+} satisfies Record<PrintMode, true>);
 
 test.describe('全モードA4レイアウト確認', () => {
   const modes: { name: string; selector: string; mode: PrintMode }[] = [
