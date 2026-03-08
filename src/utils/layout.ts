@@ -28,6 +28,10 @@ export function calculateRowsPerPage(cellSize: number, mode: PrintMode): number 
       // 安全マージンを含めて2.8
       rowHeight = cellSize * 2.8;
       break;
+    case 'readingWriting':
+      // 読み書き統合: 読み行(cellSize) + 書き行(cellSize) + マージン(12mm)
+      rowHeight = cellSize * 2 + 12;
+      break;
     case 'reading':
     case 'writing':
     case 'strokeCount':

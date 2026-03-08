@@ -40,7 +40,8 @@ export type PrintMode =
   | 'radical'
   | 'okurigana'
   | 'antonym'
-  | 'strokeOrder';
+  | 'strokeOrder'
+  | 'readingWriting';
 
 // グリッド種類
 export type GridStyle = 'cross' | 'dots' | 'none';
