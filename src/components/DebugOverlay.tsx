@@ -1,15 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
+import { A4 } from '../constants/print';
 import { type LayoutValidation, validateLayout } from '../utils/pdf';
+import { mmToPx } from '../utils/units';
 
 interface Props {
   targetRef: React.RefObject<HTMLElement | null>;
   enabled?: boolean;
 }
-
-// A4サイズ定義 (mm)
-const A4_WIDTH_MM = 210;
-const A4_HEIGHT_MM = 297;
-const MARGIN_MM = 15;
 
 export function DebugOverlay({ targetRef, enabled = false }: Props) {
   const [isVisible, setIsVisible] = useState(enabled);
@@ -122,7 +119,7 @@ export function DebugOverlay({ targetRef, enabled = false }: Props) {
                 <span>ページ幅:</span>
                 <span
                   className={
-                    Math.abs(validation.measurements.pageWidth - A4_WIDTH_MM) > 5
+                    Math.abs(validation.measurements.pageWidth - A4.WIDTH_MM) > 5
                       ? 'text-red-600'
                       : ''
                   }
@@ -134,7 +131,7 @@ export function DebugOverlay({ targetRef, enabled = false }: Props) {
                 <span>コンテンツ幅:</span>
                 <span
                   className={
-                    validation.measurements.contentWidth > A4_WIDTH_MM - MARGIN_MM * 2
+                    validation.measurements.contentWidth > A4.WIDTH_MM - A4.MARGIN_MM * 2
                       ? 'text-red-600'
                       : ''
                   }
@@ -152,13 +149,13 @@ export function DebugOverlay({ targetRef, enabled = false }: Props) {
               <div className="grid grid-cols-2 gap-1 pl-2">
                 <span>用紙サイズ:</span>
                 <span>
-                  {A4_WIDTH_MM}mm × {A4_HEIGHT_MM}mm
+                  {A4.WIDTH_MM}mm × {A4.HEIGHT_MM}mm
                 </span>
                 <span>余白:</span>
-                <span>{MARGIN_MM}mm</span>
+                <span>{A4.MARGIN_MM}mm</span>
                 <span>印刷可能領域:</span>
                 <span>
-                  {A4_WIDTH_MM - MARGIN_MM * 2}mm × {A4_HEIGHT_MM - MARGIN_MM * 2}mm
+                  {A4.WIDTH_MM - A4.MARGIN_MM * 2}mm × {A4.HEIGHT_MM - A4.MARGIN_MM * 2}mm
                 </span>
               </div>
             </div>
@@ -221,8 +218,8 @@ function DebugGuides({ targetRef }: { targetRef: React.RefObject<HTMLElement | n
 
   if (!rect) return null;
 
-  // 15mm余白を示すガイドライン (pxに変換)
-  const marginPx = (MARGIN_MM / 25.4) * 96;
+  // 余白をpxに変換
+  const marginPx = mmToPx(A4.MARGIN_MM);
 
   return (
     <div
