@@ -6,6 +6,8 @@
  * https://creativecommons.org/licenses/by-sa/3.0/
  */
 
+import DOMPurify from 'dompurify';
+
 const KANJIVG_BASE_URL = 'https://raw.githubusercontent.com/KanjiVG/kanjivg/master/kanji';
 
 // SVGキャッシュ
@@ -48,8 +50,11 @@ export async function fetchKanjiVGSvg(kanji: string): Promise<string | null> {
     }
 
     const svgText = await response.text();
-    svgCache.set(cacheKey, svgText);
-    return svgText;
+    const sanitized = DOMPurify.sanitize(svgText, {
+      USE_PROFILES: { svg: true, svgFilters: true },
+    });
+    svgCache.set(cacheKey, sanitized);
+    return sanitized;
   } catch (error) {
     console.error(`Error fetching KanjiVG SVG for ${kanji}:`, error);
     return null;

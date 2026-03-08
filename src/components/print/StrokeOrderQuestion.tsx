@@ -103,9 +103,31 @@ export function StrokeOrderQuestion({
         )}
       </div>
 
-      {/* 画数表示 */}
-      <div className="text-gray-500 shrink-0" style={{ fontSize: `${cellSize * 0.35}mm` }}>
-        ({question.kanji.strokeCount}画)
+      {/* 画数・読み・例語 */}
+      <div
+        className="shrink-0 flex flex-col justify-center text-gray-500"
+        style={{ fontSize: `${cellSize * 0.3}mm`, lineHeight: 1.4 }}
+      >
+        <div>
+          ({question.kanji.strokeCount}画)
+          {question.kanji.readings.on.length > 0 && (
+            <span className="ml-1">音:{question.kanji.readings.on[0]}</span>
+          )}
+          {question.kanji.readings.kun.length > 0 && (
+            <span className="ml-1">訓:{question.kanji.readings.kun[0]}</span>
+          )}
+        </div>
+        {question.example && (
+          <div>
+            例:
+            <ruby>
+              {question.example.word}
+              <rp>(</rp>
+              <rt style={{ fontSize: `${cellSize * 0.2}mm` }}>{question.example.reading}</rt>
+              <rp>)</rp>
+            </ruby>
+          </div>
+        )}
       </div>
 
       {/* 練習マス */}
