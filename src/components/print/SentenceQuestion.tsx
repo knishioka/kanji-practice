@@ -24,7 +24,7 @@ export function SentenceQuestion({
   const furiganaGroups = useMemo(() => buildFuriganaGroups(sentence), [sentence]);
 
   return (
-    <div className="mb-4 avoid-break">
+    <div className="mb-2 avoid-break">
       <div className="text-sm text-gray-600 mb-1">{questionNumber}.</div>
       <SentenceGrid
         sentence={sentence}

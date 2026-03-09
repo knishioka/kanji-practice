@@ -136,10 +136,10 @@ export function SentenceGrid({
   }
 
   return (
-    <div className="mb-4 avoid-break">
+    <div className="mb-2 avoid-break">
       {/* お手本行 */}
       <div
-        className="flex flex-wrap mb-2"
+        className="flex flex-wrap mb-1"
         style={hasFurigana ? { paddingTop: `${cellSize * 0.3}mm` } : undefined}
       >
         {chars.map((char, i) => {
