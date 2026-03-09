@@ -23,7 +23,7 @@ export function ReadingWritingQuestion({
   const optimalPracticeCount = calculateOptimalPracticeCount(cellSize, practiceCount);
 
   return (
-    <div className="mb-3 avoid-break">
+    <div className="mb-1.5 avoid-break">
       {/* 上段: 読み問題 */}
       <div className="flex items-end gap-4 mb-1">
         <div className="w-5 text-sm text-gray-600 shrink-0 text-right">{questionNumber}.</div>

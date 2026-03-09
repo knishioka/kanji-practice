@@ -26,10 +26,10 @@ describe('layout utilities', () => {
     });
 
     it('should calculate fewer rows for sentence mode', () => {
-      // cellSize 15mm * 2.3 + 16mm = 50.5mm per row (ふりがなパディング含む)
-      // 232 / 50.5 = 4.59 → 4 rows
+      // cellSize 15mm * 2.3 + 8mm = 42.5mm per row (ふりがなパディング含む)
+      // 232 / 42.5 = 5.45 → 5 rows
       const rows = calculateRowsPerPage(15, 'sentence');
-      expect(rows).toBe(4);
+      expect(rows).toBe(5);
     });
 
     it('should calculate rows for strokeCount mode', () => {
@@ -38,22 +38,22 @@ describe('layout utilities', () => {
     });
 
     it('should calculate rows for homophone mode', () => {
-      // cellSize 15mm * 2.8 = 42mm per row
-      // 232 / 42 = 5.52 → 5 rows
+      // cellSize 15mm * 2.4 = 36mm per row
+      // 232 / 36 = 6.44 → 6 rows
       const rows = calculateRowsPerPage(15, 'homophone');
-      expect(rows).toBe(5);
-    });
-
-    it('should calculate more rows for smaller cells in homophone mode', () => {
-      // cellSize 12mm * 2.8 = 33.6mm per row
-      // 232 / 33.6 = 6.9 → 6 rows
-      const rows = calculateRowsPerPage(12, 'homophone');
       expect(rows).toBe(6);
     });
 
+    it('should calculate more rows for smaller cells in homophone mode', () => {
+      // cellSize 12mm * 2.4 = 28.8mm per row
+      // 232 / 28.8 = 8.05 → 8 rows
+      const rows = calculateRowsPerPage(12, 'homophone');
+      expect(rows).toBe(8);
+    });
+
     it('should calculate fewer rows for larger cells in homophone mode', () => {
-      // cellSize 20mm * 2.8 = 56mm per row
-      // 232 / 56 = 4.14 → 4 rows
+      // cellSize 20mm * 2.4 = 48mm per row
+      // 232 / 48 = 4.83 → 4 rows
       const rows = calculateRowsPerPage(20, 'homophone');
       expect(rows).toBe(4);
     });
@@ -80,10 +80,10 @@ describe('layout utilities', () => {
     });
 
     it('should calculate rows for readingWriting mode', () => {
-      // cellSize 15mm * 2 + 12mm = 42mm per row
-      // 232 / 42 = 5.52 → 5 rows
+      // cellSize 15mm * 2 + 6mm = 36mm per row
+      // 232 / 36 = 6.44 → 6 rows
       const rows = calculateRowsPerPage(15, 'readingWriting');
-      expect(rows).toBe(5);
+      expect(rows).toBe(6);
     });
 
     it('should return at least 1 row even for large cell sizes', () => {
@@ -230,13 +230,13 @@ describe('layout utilities', () => {
             let rowHeight: number;
             switch (mode) {
               case 'sentence':
-                rowHeight = cellSize * 2.3 + 16;
+                rowHeight = cellSize * 2.3 + 8;
                 break;
               case 'homophone':
-                rowHeight = cellSize * 2.8;
+                rowHeight = cellSize * 2.4;
                 break;
               case 'readingWriting':
-                rowHeight = cellSize * 2 + 12;
+                rowHeight = cellSize * 2 + 6;
                 break;
               default:
                 rowHeight = cellSize + 6;

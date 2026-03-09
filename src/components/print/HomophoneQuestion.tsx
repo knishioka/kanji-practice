@@ -17,7 +17,7 @@ export function HomophoneQuestion({ question, questionNumber, cellSize }: Props)
   const scale = cellSize / 15; // 基準サイズ15mmでscale=1
 
   return (
-    <div className="avoid-break" style={{ marginBottom: `${cellSize * 0.3}mm` }}>
+    <div className="avoid-break" style={{ marginBottom: `${cellSize * 0.15}mm` }}>
       {/* 読み見出し */}
       <div
         className="flex items-center"

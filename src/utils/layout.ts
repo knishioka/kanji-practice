@@ -19,18 +19,17 @@ export function calculateRowsPerPage(cellSize: number, mode: PrintMode): number 
   let rowHeight: number;
   switch (mode) {
     case 'sentence':
-      // 例文写経: ふりがなパディング(cellSize*0.3) + お手本行(cellSize) + 練習行(cellSize) + マージン(約16mm)
-      // SentenceQuestion: mb-4 + 問題番号 + mb-1 + SentenceGrid(paddingTop + mb-2 + mb-4)
-      rowHeight = cellSize * 2.3 + 16;
+      // 例文写経: ふりがなパディング(cellSize*0.3) + お手本行(cellSize) + 練習行(cellSize) + マージン(約8mm)
+      // SentenceQuestion: mb-2 + 問題番号 + mb-1 + SentenceGrid(paddingTop + mb-1 + mb-2)
+      rowHeight = cellSize * 2.3 + 8;
       break;
     case 'homophone':
-      // 同音異字: 見出し(0.7) + 最大3選択肢(0.5*3=1.5) + マージン(0.3) = 2.5
-      // 安全マージンを含めて2.8
-      rowHeight = cellSize * 2.8;
+      // 同音異字: 見出し(0.7) + 最大3選択肢(0.5*3=1.5) + マージン(0.2) = 2.4
+      rowHeight = cellSize * 2.4;
       break;
     case 'readingWriting':
-      // 読み書き統合: 読み行(cellSize) + 書き行(cellSize) + マージン(12mm)
-      rowHeight = cellSize * 2 + 12;
+      // 読み書き統合: 読み行(cellSize) + 書き行(cellSize) + マージン(6mm)
+      rowHeight = cellSize * 2 + 6;
       break;
     case 'reading':
     case 'writing':
