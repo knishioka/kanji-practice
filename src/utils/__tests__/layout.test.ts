@@ -8,6 +8,7 @@ import {
   calculateRecommendedPracticeColumns,
   calculateRowsPerPage,
   calculateSafePracticeCount,
+  getRowHeight,
 } from '../layout';
 
 describe('layout utilities', () => {
@@ -38,17 +39,17 @@ describe('layout utilities', () => {
     });
 
     it('should calculate rows for homophone mode', () => {
-      // cellSize 15mm * 2.4 = 36mm per row
-      // 232 / 36 = 6.44 → 6 rows
+      // cellSize 15mm * 2.6 = 39mm per row
+      // 232 / 39 = 5.94 → 5 rows
       const rows = calculateRowsPerPage(15, 'homophone');
-      expect(rows).toBe(6);
+      expect(rows).toBe(5);
     });
 
     it('should calculate more rows for smaller cells in homophone mode', () => {
-      // cellSize 12mm * 2.4 = 28.8mm per row
-      // 232 / 28.8 = 8.05 → 8 rows
+      // cellSize 12mm * 2.6 = 31.2mm per row
+      // 232 / 31.2 = 7.43 → 7 rows
       const rows = calculateRowsPerPage(12, 'homophone');
-      expect(rows).toBe(8);
+      expect(rows).toBe(7);
     });
 
     it('should calculate fewer rows for larger cells in homophone mode', () => {
@@ -226,24 +227,8 @@ describe('layout utilities', () => {
             // 1行以上入ることを確認
             expect(rowsPerPage).toBeGreaterThanOrEqual(1);
 
-            // 実際の行高さを計算
-            let rowHeight: number;
-            switch (mode) {
-              case 'sentence':
-                rowHeight = cellSize * 2.3 + 8;
-                break;
-              case 'homophone':
-                rowHeight = cellSize * 2.4;
-                break;
-              case 'readingWriting':
-                rowHeight = cellSize * 2 + 6;
-                break;
-              default:
-                rowHeight = cellSize + 6;
-            }
-
             // rowsPerPage * rowHeight がavailableHeightを超えないことを確認
-            const totalHeight = rowsPerPage * rowHeight;
+            const totalHeight = rowsPerPage * getRowHeight(cellSize, mode);
             expect(totalHeight).toBeLessThanOrEqual(availableHeight);
           });
         }

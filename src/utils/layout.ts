@@ -7,30 +7,28 @@ import { A4, PRACTICE_COLUMNS, WRITING_MODE_SAFE_WIDTH_MM } from '../constants/p
 import type { PrintMode } from '../types';
 
 /**
- * 1ページあたりの問題数を計算
+ * モード別の1問あたりの推定行高さ(mm)を返す
+ *
+ * 注意: これらの値はCSSマージンの単純合計ではなく、
+ * 実際のブラウザレンダリング結果を元にチューニングした経験値。
+ * フォントのline-height、flex配置、ブラウザ固有のマージン折り畳み等を
+ * 考慮しているため、コンポーネント側のmargin値と一致しない場合がある。
+ *
  * @param cellSize - マスサイズ (mm)
  * @param mode - プリントモード
- * @returns 1ページに収まる問題数
+ * @returns 推定行高さ (mm)
  */
-export function calculateRowsPerPage(cellSize: number, mode: PrintMode): number {
-  const availableHeight = A4.SAFE_CONTENT_HEIGHT_MM - A4.HEADER_HEIGHT_MM - A4.FOOTER_HEIGHT_MM;
-
-  // モードによって行の高さが異なる
-  let rowHeight: number;
+export function getRowHeight(cellSize: number, mode: PrintMode): number {
   switch (mode) {
     case 'sentence':
-      // 例文写経: ふりがなパディング(cellSize*0.3) + お手本行(cellSize) + 練習行(cellSize) + マージン(約8mm)
-      // SentenceQuestion: mb-2 + 問題番号 + mb-1 + SentenceGrid(paddingTop + mb-1 + mb-2)
-      rowHeight = cellSize * 2.3 + 8;
-      break;
+      // 例文写経: ふりがなパディング + お手本行 + 練習行 + 問題間マージン
+      return cellSize * 2.3 + 8;
     case 'homophone':
-      // 同音異字: 見出し(0.7) + 最大3選択肢(0.5*3=1.5) + マージン(0.2) = 2.4
-      rowHeight = cellSize * 2.4;
-      break;
+      // 同音異字: 読み見出し + 最大3選択肢 + マージン（経験値）
+      return cellSize * 2.6;
     case 'readingWriting':
-      // 読み書き統合: 読み行(cellSize) + 書き行(cellSize) + マージン(6mm)
-      rowHeight = cellSize * 2 + 6;
-      break;
+      // 読み書き統合: 読み行 + 書き行 + 問題間マージン（経験値）
+      return cellSize * 2 + 6;
     case 'reading':
     case 'writing':
     case 'strokeCount':
@@ -38,16 +36,24 @@ export function calculateRowsPerPage(cellSize: number, mode: PrintMode): number 
     case 'okurigana':
     case 'antonym':
     case 'strokeOrder':
-      rowHeight = cellSize + 6; // その他は1行 + マージン
-      break;
+      return cellSize + 6;
     default: {
       const _exhaustive: never = mode;
       console.error(`未対応のモード: ${_exhaustive}`);
-      rowHeight = cellSize + 6;
+      return cellSize + 6;
     }
   }
+}
 
-  return Math.max(1, Math.floor(availableHeight / rowHeight));
+/**
+ * 1ページあたりの問題数を計算
+ * @param cellSize - マスサイズ (mm)
+ * @param mode - プリントモード
+ * @returns 1ページに収まる問題数
+ */
+export function calculateRowsPerPage(cellSize: number, mode: PrintMode): number {
+  const availableHeight = A4.SAFE_CONTENT_HEIGHT_MM - A4.HEADER_HEIGHT_MM - A4.FOOTER_HEIGHT_MM;
+  return Math.max(1, Math.floor(availableHeight / getRowHeight(cellSize, mode)));
 }
 
 /**
