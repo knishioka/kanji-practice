@@ -240,8 +240,10 @@ export function buildFuriganaGroups(sentence: string): FuriganaGroup[] {
       // 送りがなデータがある場合: 語幹の読みを使用
       const afterStr = chars.slice(i + 1, i + 10).join('');
 
-      // 送りがなが後続文字と完全一致するパターンを探す
-      for (const oku of kanji.okuriganaExamples) {
+      // 送りがなが後続文字と完全一致するパターンを探す（長い送りがなから優先マッチ）
+      for (const oku of [...kanji.okuriganaExamples].sort(
+        (a, b) => b.okurigana.length - a.okurigana.length,
+      )) {
         if (oku.okurigana && afterStr.startsWith(oku.okurigana)) {
           const stem = oku.reading.slice(0, -oku.okurigana.length);
           if (stem) {
