@@ -535,7 +535,10 @@ export const grade4: Kanji[] = [
   {
     char: '極',
     grade: 4,
-    readings: { on: ['キョク', 'ゴク'], kun: ['きわめる', 'きわまる', 'きわみ'] },
+    readings: {
+      on: ['キョク', 'ゴク'],
+      kun: ['きわめる', 'きわまる', 'きわみ'],
+    },
     strokeCount: 12,
     examples: [
       { word: '北極', reading: 'ほっきょく' },
@@ -958,6 +961,7 @@ export const grade4: Kanji[] = [
     examples: [
       { word: '試す', reading: 'ためす' },
       { word: '試験', reading: 'しけん' },
+      { word: '試合', reading: 'しあい' },
     ],
     sentences: ['新しい方法を試す。', '試験を受ける。'],
     okuriganaExamples: [{ stem: '試', okurigana: 'す', word: '試す', reading: 'ためす' }],
@@ -976,7 +980,10 @@ export const grade4: Kanji[] = [
   {
     char: '治',
     grade: 4,
-    readings: { on: ['ジ', 'チ'], kun: ['おさめる', 'おさまる', 'なおる', 'なおす'] },
+    readings: {
+      on: ['ジ', 'チ'],
+      kun: ['おさめる', 'おさまる', 'なおる', 'なおす'],
+    },
     strokeCount: 8,
     examples: [
       { word: '治る', reading: 'なおる' },
@@ -1070,7 +1077,10 @@ export const grade4: Kanji[] = [
   {
     char: '初',
     grade: 4,
-    readings: { on: ['ショ'], kun: ['はじめ', 'はじめて', 'はつ', 'うい', 'そめる'] },
+    readings: {
+      on: ['ショ'],
+      kun: ['はじめ', 'はじめて', 'はつ', 'うい', 'そめる'],
+    },
     strokeCount: 7,
     examples: [
       { word: '初め', reading: 'はじめ' },
@@ -1209,7 +1219,10 @@ export const grade4: Kanji[] = [
   {
     char: '清',
     grade: 4,
-    readings: { on: ['セイ', 'ショウ'], kun: ['きよい', 'きよまる', 'きよめる'] },
+    readings: {
+      on: ['セイ', 'ショウ'],
+      kun: ['きよい', 'きよまる', 'きよめる'],
+    },
     strokeCount: 11,
     examples: [
       { word: '清い', reading: 'きよい' },
@@ -1221,7 +1234,10 @@ export const grade4: Kanji[] = [
   {
     char: '静',
     grade: 4,
-    readings: { on: ['セイ', 'ジョウ'], kun: ['しずか', 'しずまる', 'しずめる'] },
+    readings: {
+      on: ['セイ', 'ジョウ'],
+      kun: ['しずか', 'しずまる', 'しずめる'],
+    },
     strokeCount: 14,
     examples: [
       { word: '静か', reading: 'しずか' },
