@@ -138,7 +138,10 @@ export const grade1: Kanji[] = [
   {
     char: '上',
     grade: 1,
-    readings: { on: ['ジョウ', 'ショウ'], kun: ['うえ', 'うわ', 'あげる', 'あがる', 'のぼる'] },
+    readings: {
+      on: ['ジョウ', 'ショウ'],
+      kun: ['うえ', 'うわ', 'あげる', 'あがる', 'のぼる'],
+    },
     strokeCount: 3,
     examples: [
       { word: '上手', reading: 'じょうず' },
@@ -355,6 +358,7 @@ export const grade1: Kanji[] = [
     examples: [
       { word: '田んぼ', reading: 'たんぼ' },
       { word: '水田', reading: 'すいでん' },
+      { word: '田植え', reading: 'たうえ' },
     ],
     sentences: ['田んぼに水を入れる。', '田植えをする。'],
   },
@@ -372,7 +376,10 @@ export const grade1: Kanji[] = [
   {
     char: '生',
     grade: 1,
-    readings: { on: ['セイ', 'ショウ'], kun: ['いきる', 'うまれる', 'はえる', 'なま'] },
+    readings: {
+      on: ['セイ', 'ショウ'],
+      kun: ['いきる', 'うまれる', 'はえる', 'なま'],
+    },
     strokeCount: 5,
     examples: [
       { word: '生きる', reading: 'いきる' },
@@ -381,7 +388,12 @@ export const grade1: Kanji[] = [
     sentences: ['生きる力。', '先生に会う。'],
     okuriganaExamples: [
       { stem: '生', okurigana: 'きる', word: '生きる', reading: 'いきる' },
-      { stem: '生', okurigana: 'まれる', word: '生まれる', reading: 'うまれる' },
+      {
+        stem: '生',
+        okurigana: 'まれる',
+        word: '生まれる',
+        reading: 'うまれる',
+      },
     ],
   },
   {

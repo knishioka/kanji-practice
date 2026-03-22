@@ -799,6 +799,7 @@ export const grade3: Kanji[] = [
     examples: [
       { word: '持つ', reading: 'もつ' },
       { word: '持参', reading: 'じさん' },
+      { word: '気持ち', reading: 'きもち' },
     ],
     sentences: ['本を持つ。', '気持ちがいい。'],
     okuriganaExamples: [{ stem: '持', okurigana: 'つ', word: '持つ', reading: 'もつ' }],
@@ -981,7 +982,10 @@ export const grade3: Kanji[] = [
   {
     char: '重',
     grade: 3,
-    readings: { on: ['ジュウ', 'チョウ'], kun: ['おもい', 'かさねる', 'かさなる'] },
+    readings: {
+      on: ['ジュウ', 'チョウ'],
+      kun: ['おもい', 'かさねる', 'かさなる'],
+    },
     strokeCount: 9,
     examples: [
       { word: '重い', reading: 'おもい' },
@@ -1417,7 +1421,10 @@ export const grade3: Kanji[] = [
   {
     char: '着',
     grade: 3,
-    readings: { on: ['チャク', 'ジャク'], kun: ['きる', 'きせる', 'つく', 'つける'] },
+    readings: {
+      on: ['チャク', 'ジャク'],
+      kun: ['きる', 'きせる', 'つく', 'つける'],
+    },
     strokeCount: 12,
     examples: [
       { word: '着る', reading: 'きる' },
@@ -1497,7 +1504,10 @@ export const grade3: Kanji[] = [
   {
     char: '定',
     grade: 3,
-    readings: { on: ['テイ', 'ジョウ'], kun: ['さだめる', 'さだまる', 'さだか'] },
+    readings: {
+      on: ['テイ', 'ジョウ'],
+      kun: ['さだめる', 'さだまる', 'さだか'],
+    },
     strokeCount: 8,
     examples: [
       { word: '決定', reading: 'けってい' },
@@ -1541,7 +1551,10 @@ export const grade3: Kanji[] = [
   {
     char: '転',
     grade: 3,
-    readings: { on: ['テン'], kun: ['ころがる', 'ころげる', 'ころがす', 'ころぶ'] },
+    readings: {
+      on: ['テン'],
+      kun: ['ころがる', 'ころげる', 'ころがす', 'ころぶ'],
+    },
     strokeCount: 11,
     examples: [
       { word: '転ぶ', reading: 'ころぶ' },
@@ -2270,7 +2283,10 @@ export const grade3: Kanji[] = [
   {
     char: '和',
     grade: 3,
-    readings: { on: ['ワ', 'オ'], kun: ['やわらぐ', 'やわらげる', 'なごむ', 'なごやか'] },
+    readings: {
+      on: ['ワ', 'オ'],
+      kun: ['やわらぐ', 'やわらげる', 'なごむ', 'なごやか'],
+    },
     strokeCount: 8,
     examples: [
       { word: '平和', reading: 'へいわ' },

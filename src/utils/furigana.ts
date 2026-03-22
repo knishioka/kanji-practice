@@ -218,19 +218,68 @@ export function buildFuriganaGroups(sentence: string): FuriganaGroup[] {
     }
   }
 
-  // 2. 未割り当ての漢字は個別の代表読みでフォールバック
+  // 2. 未割り当ての漢字はコンテキストに応じた読みでフォールバック
   for (let i = 0; i < chars.length; i++) {
     if (assigned.has(i)) continue;
     const char = chars[i];
     if (!isKanjiChar(char)) continue;
     const kanji = kanjiLookup.get(char);
     if (!kanji) continue;
-    const reading = kanji.readings.kun[0] ?? kanji.readings.on[0];
+
+    // 隣接する未割り当て漢字があるか（未マッチ熟語コンテキスト）
+    const adjacentKanji =
+      (i > 0 && isKanjiChar(chars[i - 1]) && !assigned.has(i - 1)) ||
+      (i + 1 < chars.length && isKanjiChar(chars[i + 1]) && !assigned.has(i + 1));
+
+    let reading: string | undefined;
+
+    if (adjacentKanji && kanji.readings.on.length > 0) {
+      // 熟語コンテキスト: 音読みを優先
+      reading = katakanaToHiragana(kanji.readings.on[0]);
+    } else if (kanji.okuriganaExamples && kanji.okuriganaExamples.length > 0) {
+      // 送りがなデータがある場合: 語幹の読みを使用
+      const afterStr = chars.slice(i + 1, i + 10).join('');
+
+      // 送りがなが後続文字と完全一致するパターンを探す
+      for (const oku of kanji.okuriganaExamples) {
+        if (oku.okurigana && afterStr.startsWith(oku.okurigana)) {
+          const stem = oku.reading.slice(0, -oku.okurigana.length);
+          if (stem) {
+            reading = stem;
+            break;
+          }
+        }
+      }
+
+      if (!reading) {
+        // 活用形で一致しない場合: kun[0]に対応する送りがなの語幹を使用
+        const kunReading = kanji.readings.kun[0];
+        if (kunReading) {
+          const kunHira = katakanaToHiragana(kunReading);
+          const matchingOku = kanji.okuriganaExamples.find((o) => o.reading === kunHira);
+          if (matchingOku?.okurigana) {
+            // kun[0]に対応するokuriganaエントリがある → 語幹を使用
+            const stem = kunHira.slice(0, -matchingOku.okurigana.length);
+            if (stem) reading = stem;
+          } else {
+            // kun[0]はokuriganaに対応しない独立した読み → そのまま使用
+            reading = kunHira;
+          }
+        }
+      }
+    }
+
+    if (!reading) {
+      // 送りがなデータがない場合のフォールバック
+      const r = kanji.readings.kun[0] ?? kanji.readings.on[0];
+      if (r) reading = katakanaToHiragana(r);
+    }
+
     if (reading) {
       groups.push({
         start: i,
         length: 1,
-        reading: katakanaToHiragana(reading),
+        reading,
       });
     }
   }

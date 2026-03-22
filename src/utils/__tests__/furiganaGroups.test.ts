@@ -83,6 +83,41 @@ describe('buildFuriganaGroups', () => {
     });
   });
 
+  describe('送りがな活用形のフォールバック', () => {
+    it('活用形でも送りがなが除去された語幹が返る', () => {
+      // 速く走る → 速(はや) not 速(はやい)
+      expect(formatGroups('速く走る。')).toContain('速(はや)');
+      // 朝早く起きる → 早(はや) not 早(はやい)
+      expect(formatGroups('朝早く起きる。')).toContain('早(はや)');
+      // 日曜日は休み → 休(やす) not 休(やすむ)
+      expect(formatGroups('日曜日は休み。')).toContain('休(やす)');
+      // 帰り道 → 帰(かえ) not 帰(かえる)
+      expect(formatGroups('帰り道。')).toContain('帰(かえ)');
+      // 少し待って → 待(ま) not 待(まつ)
+      expect(formatGroups('少し待って。')).toContain('待(ま)');
+    });
+
+    it('辞書形の送りがなが一致する場合も語幹が返る', () => {
+      // 足が速い → 速(はや) — 辞書形の送りがな「い」が一致
+      expect(formatGroups('足が速い。')).toContain('速(はや)');
+    });
+  });
+
+  describe('熟語コンテキスト（隣接漢字）のフォールバック', () => {
+    it('例語に追加された熟語は正しくマッチする', () => {
+      // 試合 → 例語マッチで正しい読み
+      const groups = formatGroups('試合が中止。');
+      expect(groups).toContain('試合(しあい)');
+    });
+
+    it('隣接する未マッチ漢字同士は音読みが使われる', () => {
+      // 作業 → 両方未マッチ → 音読み
+      const groups = formatGroups('細かい作業。');
+      expect(groups).toContain('作(さく)');
+      expect(groups).toContain('業(ぎょう)');
+    });
+  });
+
   describe('品質チェック（再発防止）', () => {
     it('全例文でふりがなが正しく生成される', () => {
       const katakanaIssues: string[] = [];
