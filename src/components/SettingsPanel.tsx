@@ -23,7 +23,7 @@ import { ExcludeKanjiModal } from './modals/ExcludeKanjiModal';
 import { GradeSelector, ModeSelector, PrintOptions } from './settings';
 
 export function SettingsPanel() {
-  const { settings, setSettings, setQuestions, excludedKanji } = useStore();
+  const { settings, setSettings, setQuestions, excludedKanji, generationCounter } = useStore();
   const [isExcludeModalOpen, setIsExcludeModalOpen] = useState(false);
 
   // 現在の学年の除外漢字（参照安定化のためメモ化）
@@ -77,7 +77,8 @@ export function SettingsPanel() {
     [],
   );
 
-  // 初期ロード時と設定変更時に問題を生成
+  // 初期ロード時・設定変更時・再生成トリガー時に問題を生成
+  // biome-ignore lint/correctness/useExhaustiveDependencies: generationCounter is an intentional trigger for re-generation
   useEffect(() => {
     if (settings.grade) {
       const questions = generateQuestionsForMode(
@@ -95,6 +96,7 @@ export function SettingsPanel() {
     totalQuestions,
     settings.random,
     currentExcluded,
+    generationCounter,
     setQuestions,
     generateQuestionsForMode,
   ]);

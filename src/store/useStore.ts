@@ -8,8 +8,12 @@ interface Store {
   settings: Settings;
   questions: Question[];
   excludedKanji: ExcludedKanjiMap;
+  /** 問題再生成トリガー（インクリメントで再生成を要求） */
+  generationCounter: number;
   setSettings: (s: Partial<Settings>) => void;
   setQuestions: (q: Question[]) => void;
+  /** 問題再生成をトリガー（ランダム問題の再生成等） */
+  regenerate: () => void;
   resetSettings: () => void;
   setExcludedKanji: (grade: Grade, chars: string[]) => void;
   toggleExcludedKanji: (grade: Grade, char: string) => void;
@@ -35,6 +39,8 @@ export const useStore = create<Store>()(
       settings: defaultSettings,
       questions: [],
       excludedKanji: {},
+      generationCounter: 0,
+      regenerate: () => set((state) => ({ generationCounter: state.generationCounter + 1 })),
       setSettings: (s) =>
         set((state) => {
           const newSettings = { ...state.settings, ...s };
@@ -67,7 +73,9 @@ export const useStore = create<Store>()(
           const newChars = current.includes(char)
             ? current.filter((c) => c !== char)
             : [...current, char];
-          return { excludedKanji: { ...state.excludedKanji, [grade]: newChars } };
+          return {
+            excludedKanji: { ...state.excludedKanji, [grade]: newChars },
+          };
         }),
       clearExcludedKanji: (grade) =>
         set((state) => ({
@@ -76,6 +84,11 @@ export const useStore = create<Store>()(
     }),
     {
       name: 'kanji-practice-settings',
+      // 一時的な値と再生成可能なデータは永続化しない
+      partialize: (state) => ({
+        settings: state.settings,
+        excludedKanji: state.excludedKanji,
+      }),
       // 古いデータ形式からのマイグレーション
       migrate: (persistedState: unknown) => {
         const state = persistedState as {

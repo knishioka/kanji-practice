@@ -1,112 +1,12 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useRef } from 'react';
 import { DebugOverlay } from './components/DebugOverlay';
 import { PrintPreview } from './components/PrintPreview';
 import { SettingsPanel } from './components/SettingsPanel';
 import { useStore } from './store/useStore';
-import {
-  canGenerateAntonymQuestions,
-  generateAntonymQuestions,
-} from './utils/antonymQuestionGenerator';
-import {
-  canGenerateHomophoneQuestions,
-  generateHomophoneQuestions,
-} from './utils/homophoneQuestionGenerator';
-import { calculateRowsPerPage } from './utils/layout';
-import {
-  canGenerateOkuriganaQuestions,
-  generateOkuriganaQuestions,
-} from './utils/okuriganaQuestionGenerator';
-import {
-  canGenerateQuestions,
-  generateQuestions as generateQuestionsUtil,
-} from './utils/questionGenerator';
-import {
-  canGenerateRadicalQuestions,
-  generateRadicalQuestions,
-} from './utils/radicalQuestionGenerator';
 
 function App() {
-  const { settings, setQuestions } = useStore();
+  const { regenerate } = useStore();
   const printRef = useRef<HTMLDivElement>(null);
-
-  const rowsPerPage = useMemo(
-    () => calculateRowsPerPage(settings.cellSize, settings.mode),
-    [settings.cellSize, settings.mode],
-  );
-
-  const totalQuestions = settings.pageCount * rowsPerPage;
-
-  const handleGenerateQuestions = useCallback(() => {
-    // モードに応じた問題生成
-    switch (settings.mode) {
-      case 'homophone': {
-        if (!canGenerateHomophoneQuestions(settings.grade)) {
-          alert('選択した学年に同音異字のデータがありません');
-          return;
-        }
-        const questions = generateHomophoneQuestions(
-          settings.grade,
-          totalQuestions,
-          settings.random,
-        );
-        setQuestions(questions);
-        break;
-      }
-      case 'radical': {
-        if (!canGenerateRadicalQuestions(settings.grade)) {
-          alert('選択した学年に部首データがありません。漢字データに部首情報を追加してください。');
-          return;
-        }
-        const questions = generateRadicalQuestions(settings.grade, totalQuestions, settings.random);
-        setQuestions(questions);
-        break;
-      }
-      case 'okurigana': {
-        if (!canGenerateOkuriganaQuestions(settings.grade)) {
-          alert(
-            '選択した学年に送りがなデータがありません。漢字データに送りがな情報を追加してください。',
-          );
-          return;
-        }
-        const questions = generateOkuriganaQuestions(
-          settings.grade,
-          totalQuestions,
-          settings.random,
-        );
-        setQuestions(questions);
-        break;
-      }
-      case 'antonym': {
-        if (!canGenerateAntonymQuestions(settings.grade)) {
-          alert(
-            '選択した学年に対義語・類義語データがありません。漢字データに対義語・類義語情報を追加してください。',
-          );
-          return;
-        }
-        const questions = generateAntonymQuestions(settings.grade, totalQuestions, settings.random);
-        setQuestions(questions);
-        break;
-      }
-      case 'reading':
-      case 'writing':
-      case 'sentence':
-      case 'strokeCount':
-      case 'strokeOrder':
-      case 'readingWriting': {
-        if (!canGenerateQuestions(settings.grade)) {
-          alert('選択した学年に漢字データがありません');
-          return;
-        }
-        const questions = generateQuestionsUtil(settings.grade, totalQuestions, settings.random);
-        setQuestions(questions);
-        break;
-      }
-      default: {
-        const _exhaustive: never = settings.mode;
-        console.error(`未対応のモード: ${_exhaustive}`);
-      }
-    }
-  }, [settings.grade, settings.mode, settings.random, totalQuestions, setQuestions]);
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--color-bg)' }}>
@@ -139,7 +39,7 @@ function App() {
               <div className="flex items-center justify-between mb-4 no-print">
                 <h2 className="section-title text-lg">プレビュー</h2>
               </div>
-              <PrintPreview ref={printRef} onGenerate={handleGenerateQuestions} />
+              <PrintPreview ref={printRef} onGenerate={regenerate} />
             </div>
           </div>
         </div>
