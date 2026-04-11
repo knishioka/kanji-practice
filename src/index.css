@@ -37,8 +37,9 @@
 /* 教科書体フォント適用 */
 .font-textbook {
   font-family:
-    "Klee One", "UD Digi Kyokasho N-R", "UD デジタル 教科書体 N-R", "Yu Kyokasho", "游教科書体",
-    "ヒラギノ丸ゴ Pro", "Hiragino Maru Gothic Pro", serif;
+    "Klee One", "UD Digi Kyokasho N-R", "UD デジタル 教科書体 N-R",
+    "Yu Kyokasho", "游教科書体", "ヒラギノ丸ゴ Pro", "Hiragino Maru Gothic Pro",
+    serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -189,7 +190,11 @@
 }
 
 .kanji-header {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  );
   color: white;
   position: relative;
   overflow: hidden;
@@ -221,7 +226,11 @@
 
 /* ボタンスタイル */
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  );
   color: white;
   border: none;
   border-radius: 0.75rem;
@@ -258,7 +267,11 @@
 
 .selection-card.selected {
   border-color: var(--color-primary);
-  background: linear-gradient(135deg, rgba(197, 61, 67, 0.05) 0%, rgba(197, 61, 67, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(197, 61, 67, 0.05) 0%,
+    rgba(197, 61, 67, 0.1) 100%
+  );
 }
 
 .selection-card.selected::before {
@@ -312,6 +325,28 @@ input[type="checkbox"]:checked {
 /* スライダーカスタム */
 input[type="range"] {
   accent-color: var(--color-primary);
+}
+
+/* Skip link - キーボードナビゲーション用 */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--color-primary-dark);
+  outline-offset: 2px;
 }
 
 /* 装飾的な漢字背景 */

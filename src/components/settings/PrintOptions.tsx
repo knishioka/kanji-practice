@@ -33,6 +33,7 @@ export function PrintOptions({
             onChange={(e) => onSettingsChange({ pageCount: Number(e.target.value) })}
             className="flex-1 h-2 rounded-lg cursor-pointer"
             style={{ background: 'var(--color-border)' }}
+            aria-label="ページ数"
           />
           <div
             className="px-3 py-1 rounded-lg text-sm font-bold min-w-[80px] text-center"
@@ -58,6 +59,7 @@ export function PrintOptions({
             onChange={(e) => onSettingsChange({ practiceColumns: Number(e.target.value) })}
             className="w-full h-2 rounded-lg cursor-pointer"
             style={{ background: 'var(--color-border)' }}
+            aria-label="練習マス数"
           />
           <div
             className="flex justify-between text-xs mt-1"
@@ -82,6 +84,7 @@ export function PrintOptions({
           onChange={(e) => onSettingsChange({ cellSize: Number(e.target.value) })}
           className="w-full h-2 rounded-lg cursor-pointer"
           style={{ background: 'var(--color-border)' }}
+          aria-label={`${currentModeSettings.cellSizeLabel}`}
         />
         <div
           className="flex justify-between text-xs mt-1"
@@ -102,6 +105,7 @@ export function PrintOptions({
                 key={value}
                 type="button"
                 onClick={() => onSettingsChange({ gridStyle: value as GridStyle })}
+                aria-pressed={settings.gridStyle === value}
                 className="p-2 rounded-lg text-sm font-medium transition-all"
                 style={{
                   background: settings.gridStyle === value ? 'var(--color-primary)' : 'white',

@@ -110,6 +110,14 @@ function App() {
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--color-bg)' }}>
+      {/* Skip links */}
+      <a href="#settings" className="skip-link no-print">
+        設定へスキップ
+      </a>
+      <a href="#preview" className="skip-link no-print">
+        プレビューへスキップ
+      </a>
+
       {/* ヘッダー */}
       <header className="kanji-header no-print">
         <div className="max-w-7xl mx-auto px-6 py-6 relative z-10">
@@ -129,12 +137,12 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* 設定パネル */}
-          <div className="no-print">
+          <div id="settings" tabIndex={-1} className="no-print">
             <SettingsPanel />
           </div>
 
           {/* プレビュー */}
-          <div className="lg:col-span-2">
+          <div id="preview" tabIndex={-1} className="lg:col-span-2">
             <div className="preview-area">
               <div className="flex items-center justify-between mb-4 no-print">
                 <h2 className="section-title text-lg">プレビュー</h2>

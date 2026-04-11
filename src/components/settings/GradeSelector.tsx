@@ -18,6 +18,7 @@ export function GradeSelector({ value, onChange, excludedCount, onOpenExcludeMod
             key={gradeValue}
             type="button"
             onClick={() => onChange(gradeValue)}
+            aria-pressed={value === gradeValue}
             className={`relative p-3 rounded-xl text-left transition-all duration-200 ${
               value === gradeValue ? 'shadow-md' : 'hover:shadow-sm'
             }`}
