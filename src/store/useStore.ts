@@ -84,12 +84,6 @@ export const useStore = create<Store>()(
     }),
     {
       name: 'kanji-practice-settings',
-      // 一時的な値と再生成可能なデータは永続化しない
-      partialize: (state) =>
-        ({
-          settings: state.settings,
-          excludedKanji: state.excludedKanji,
-        }) as unknown as Store,
       // 古いデータ形式からのマイグレーション
       migrate: (persistedState: unknown) => {
         const state = persistedState as {
