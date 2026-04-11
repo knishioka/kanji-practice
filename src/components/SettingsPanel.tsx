@@ -88,6 +88,9 @@ export function SettingsPanel() {
         settings.random,
         currentExcluded,
       );
+      if (questions.length === 0) {
+        alert('選択した学年・モードに対応するデータがありません。設定を変更してください。');
+      }
       setQuestions(questions);
     }
   }, [
