@@ -137,12 +137,12 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* 設定パネル */}
-          <div id="settings" className="no-print">
+          <div id="settings" tabIndex={-1} className="no-print">
             <SettingsPanel />
           </div>
 
           {/* プレビュー */}
-          <div id="preview" className="lg:col-span-2">
+          <div id="preview" tabIndex={-1} className="lg:col-span-2">
             <div className="preview-area">
               <div className="flex items-center justify-between mb-4 no-print">
                 <h2 className="section-title text-lg">プレビュー</h2>
