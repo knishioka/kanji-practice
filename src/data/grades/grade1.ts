@@ -11,7 +11,7 @@ export const grade1: Kanji[] = [
       { word: '一人', reading: 'ひとり' },
       { word: '一日', reading: 'いちにち' },
     ],
-    sentences: ['一人で歩く。', '一日が始まる。'],
+    sentences: ['{一人|ひとり}で{歩|ある}く。', '{一日|いちにち}が{始|はじ}まる。'],
     radical: { char: '一', name: 'いち' },
   },
   {
@@ -23,7 +23,7 @@ export const grade1: Kanji[] = [
       { word: '二人', reading: 'ふたり' },
       { word: '二月', reading: 'にがつ' },
     ],
-    sentences: ['二人で遊ぶ。', '二月は寒い。'],
+    sentences: ['{二人|ふたり}で{遊|あそ}ぶ。', '{二月|にがつ}は{寒|さむ}い。'],
   },
   {
     char: '三',
@@ -34,7 +34,7 @@ export const grade1: Kanji[] = [
       { word: '三人', reading: 'さんにん' },
       { word: '三月', reading: 'さんがつ' },
     ],
-    sentences: ['三人で話す。', '三月に花が咲く。'],
+    sentences: ['{三人|さんにん}で{話|はな}す。', '{三月|さんがつ}に{花|はな}が{咲|さ}く。'],
   },
   {
     char: '四',
@@ -45,7 +45,7 @@ export const grade1: Kanji[] = [
       { word: '四人', reading: 'よにん' },
       { word: '四月', reading: 'しがつ' },
     ],
-    sentences: ['四人家族です。', '四月は春です。'],
+    sentences: ['{四人|よにん}{家族|かぞく}です。', '{四月|しがつ}は{春|はる}です。'],
   },
   {
     char: '五',
@@ -56,7 +56,7 @@ export const grade1: Kanji[] = [
       { word: '五人', reading: 'ごにん' },
       { word: '五月', reading: 'ごがつ' },
     ],
-    sentences: ['五人で遊ぶ。', '五月は気持ちがいい。'],
+    sentences: ['{五人|ごにん}で{遊|あそ}ぶ。', '{五月|ごがつ}は{気持|きも}ちがいい。'],
   },
   {
     char: '六',
@@ -67,7 +67,7 @@ export const grade1: Kanji[] = [
       { word: '六人', reading: 'ろくにん' },
       { word: '六月', reading: 'ろくがつ' },
     ],
-    sentences: ['六人のグループ。', '六月は雨が多い。'],
+    sentences: ['{六人|ろくにん}のグループ。', '{六月|ろくがつ}は{雨|あめ}が{多|おお}い。'],
   },
   {
     char: '七',
@@ -78,7 +78,7 @@ export const grade1: Kanji[] = [
       { word: '七人', reading: 'しちにん' },
       { word: '七月', reading: 'しちがつ' },
     ],
-    sentences: ['七人の侍。', '七月は暑い。'],
+    sentences: ['{七人|しちにん}の{侍|さむらい}。', '{七月|しちがつ}は{暑|あつ}い。'],
   },
   {
     char: '八',
@@ -89,7 +89,7 @@ export const grade1: Kanji[] = [
       { word: '八人', reading: 'はちにん' },
       { word: '八月', reading: 'はちがつ' },
     ],
-    sentences: ['八人で集まる。', '八月は夏休み。'],
+    sentences: ['{八人|はちにん}で{集|あつ}まる。', '{八月|はちがつ}は{夏休|なつやす}み。'],
   },
   {
     char: '九',
@@ -100,7 +100,7 @@ export const grade1: Kanji[] = [
       { word: '九人', reading: 'きゅうにん' },
       { word: '九月', reading: 'くがつ' },
     ],
-    sentences: ['九人のチーム。', '九月は涼しくなる。'],
+    sentences: ['{九人|きゅうにん}のチーム。', '{九月|くがつ}は{涼|すず}しくなる。'],
   },
   {
     char: '十',
@@ -111,7 +111,7 @@ export const grade1: Kanji[] = [
       { word: '十人', reading: 'じゅうにん' },
       { word: '十月', reading: 'じゅうがつ' },
     ],
-    sentences: ['十人で遊んだ。', '十月は秋です。'],
+    sentences: ['{十人|じゅうにん}で{遊|あそ}んだ。', '{十月|じゅうがつ}は{秋|あき}です。'],
   },
   {
     char: '百',
@@ -122,7 +122,10 @@ export const grade1: Kanji[] = [
       { word: '百円', reading: 'ひゃくえん' },
       { word: '百人', reading: 'ひゃくにん' },
     ],
-    sentences: ['百円玉を拾った。', '百人が集まった。'],
+    sentences: [
+      '{百円|ひゃくえん}{玉|たま}を{拾|ひろ}った。',
+      '{百人|ひゃくにん}が{集|あつ}まった。',
+    ],
   },
   {
     char: '千',
@@ -133,7 +136,7 @@ export const grade1: Kanji[] = [
       { word: '千円', reading: 'せんえん' },
       { word: '千人', reading: 'せんにん' },
     ],
-    sentences: ['千円で買える。', '千人もいた。'],
+    sentences: ['{千円|せんえん}で{買|か}える。', '{千人|せんにん}もいた。'],
   },
   {
     char: '上',
@@ -147,7 +150,7 @@ export const grade1: Kanji[] = [
       { word: '上手', reading: 'じょうず' },
       { word: '上げる', reading: 'あげる' },
     ],
-    sentences: ['上手に書けた。', '手を上げる。'],
+    sentences: ['{上手|じょうず}に{書|か}けた。', '{手|て}を{上|あ}げる。'],
     okuriganaExamples: [
       { stem: '上', okurigana: 'げる', word: '上げる', reading: 'あげる' },
       { stem: '上', okurigana: 'がる', word: '上がる', reading: 'あがる' },
@@ -166,7 +169,7 @@ export const grade1: Kanji[] = [
       { word: '下手', reading: 'へた' },
       { word: '下りる', reading: 'おりる' },
     ],
-    sentences: ['階段を下りる。', '下を見る。'],
+    sentences: ['{階段|かいだん}を{下|お}りる。', '{下|した}を{見|み}る。'],
     okuriganaExamples: [
       { stem: '下', okurigana: 'げる', word: '下げる', reading: 'さげる' },
       { stem: '下', okurigana: 'りる', word: '下りる', reading: 'おりる' },
@@ -182,7 +185,7 @@ export const grade1: Kanji[] = [
       { word: '左手', reading: 'ひだりて' },
       { word: '左右', reading: 'さゆう' },
     ],
-    sentences: ['左に曲がる。', '左手で書く。'],
+    sentences: ['{左|ひだり}に{曲|ま}がる。', '{左手|ひだりて}で{書|か}く。'],
     antonyms: ['右'],
   },
   {
@@ -194,7 +197,7 @@ export const grade1: Kanji[] = [
       { word: '右手', reading: 'みぎて' },
       { word: '右側', reading: 'みぎがわ' },
     ],
-    sentences: ['右に進む。', '右手を上げる。'],
+    sentences: ['{右|みぎ}に{進|すす}む。', '{右手|みぎて}を{上|あ}げる。'],
     antonyms: ['左'],
   },
   {
@@ -206,7 +209,7 @@ export const grade1: Kanji[] = [
       { word: '中心', reading: 'ちゅうしん' },
       { word: '中', reading: 'なか' },
     ],
-    sentences: ['箱の中を見る。', '中心に立つ。'],
+    sentences: ['{箱|はこ}の{中|なか}を{見|み}る。', '{中心|ちゅうしん}に{立|た}つ。'],
   },
   {
     char: '大',
@@ -217,7 +220,7 @@ export const grade1: Kanji[] = [
       { word: '大きい', reading: 'おおきい' },
       { word: '大人', reading: 'おとな' },
     ],
-    sentences: ['大きい犬がいる。', '大人になりたい。'],
+    sentences: ['{大|おお}きい{犬|いぬ}がいる。', '{大人|おとな}になりたい。'],
     okuriganaExamples: [{ stem: '大', okurigana: 'きい', word: '大きい', reading: 'おおきい' }],
     antonyms: ['小'],
   },
@@ -230,7 +233,7 @@ export const grade1: Kanji[] = [
       { word: '小さい', reading: 'ちいさい' },
       { word: '小学校', reading: 'しょうがっこう' },
     ],
-    sentences: ['小さい花が咲いた。', '小学校に通う。'],
+    sentences: ['{小|ちい}さい{花|はな}が{咲|さ}いた。', '{小学校|しょうがっこう}に{通|とお}う。'],
     okuriganaExamples: [{ stem: '小', okurigana: 'さい', word: '小さい', reading: 'ちいさい' }],
     antonyms: ['大'],
   },
@@ -243,7 +246,7 @@ export const grade1: Kanji[] = [
       { word: '月曜日', reading: 'げつようび' },
       { word: '月', reading: 'つき' },
     ],
-    sentences: ['月がきれいだ。', '月曜日は学校。'],
+    sentences: ['{月|つき}がきれいだ。', '{月曜日|げつようび}は{学校|がっこう}。'],
     radical: { char: '月', name: 'つき' },
   },
   {
@@ -255,7 +258,7 @@ export const grade1: Kanji[] = [
       { word: '日曜日', reading: 'にちようび' },
       { word: '今日', reading: 'きょう' },
     ],
-    sentences: ['日曜日は休み。', '今日は晴れ。'],
+    sentences: ['{日曜日|にちようび}は{休|やす}み。', '{今日|きょう}は{晴|は}れ。'],
     radical: { char: '日', name: 'ひ' },
   },
   {
@@ -267,7 +270,7 @@ export const grade1: Kanji[] = [
       { word: '一年', reading: 'いちねん' },
       { word: '去年', reading: 'きょねん' },
     ],
-    sentences: ['一年が過ぎた。', '去年の夏。'],
+    sentences: ['{一年|いちねん}が{過|す}ぎた。', '{去年|きょねん}の{夏|なつ}。'],
   },
   {
     char: '早',
@@ -278,7 +281,10 @@ export const grade1: Kanji[] = [
       { word: '早い', reading: 'はやい' },
       { word: '早起き', reading: 'はやおき' },
     ],
-    sentences: ['朝早く起きる。', '早起きは三文の徳。'],
+    sentences: [
+      '{朝|あさ}{早|はや}く{起|お}きる。',
+      '{早起|はやお}きは{三文|さんもん}の{徳|とく}。',
+    ],
     okuriganaExamples: [{ stem: '早', okurigana: 'い', word: '早い', reading: 'はやい' }],
   },
   {
@@ -290,7 +296,7 @@ export const grade1: Kanji[] = [
       { word: '木', reading: 'き' },
       { word: '木曜日', reading: 'もくようび' },
     ],
-    sentences: ['大きな木がある。', '木曜日に会う。'],
+    sentences: ['{大|おお}きな{木|き}がある。', '{木曜日|もくようび}に{会|あ}う。'],
     radical: { char: '木', name: 'き' },
   },
   {
@@ -302,7 +308,7 @@ export const grade1: Kanji[] = [
       { word: '林', reading: 'はやし' },
       { word: '森林', reading: 'しんりん' },
     ],
-    sentences: ['林の中を歩く。', '森林を守る。'],
+    sentences: ['{林|はやし}の{中|なか}を{歩|ある}く。', '{森林|しんりん}を{守|まも}る。'],
     radical: { char: '木', name: 'き', position: 'left' },
   },
   {
@@ -314,7 +320,7 @@ export const grade1: Kanji[] = [
       { word: '山', reading: 'やま' },
       { word: '富士山', reading: 'ふじさん' },
     ],
-    sentences: ['山に登る。', '富士山が見える。'],
+    sentences: ['{山|やま}に{登|のぼ}る。', '{富士山|ふじさん}が{見|み}える。'],
     radical: { char: '山', name: 'やま' },
   },
   {
@@ -326,7 +332,7 @@ export const grade1: Kanji[] = [
       { word: '川', reading: 'かわ' },
       { word: '河川', reading: 'かせん' },
     ],
-    sentences: ['川で泳ぐ。', '川の水がきれい。'],
+    sentences: ['{川|かわ}で{泳|およ}ぐ。', '{川|かわ}の{水|みず}がきれい。'],
   },
   {
     char: '土',
@@ -337,7 +343,7 @@ export const grade1: Kanji[] = [
       { word: '土', reading: 'つち' },
       { word: '土曜日', reading: 'どようび' },
     ],
-    sentences: ['土を掘る。', '土曜日に遊ぶ。'],
+    sentences: ['{土|つち}を{掘|ほ}る。', '{土曜日|どようび}に{遊|あそ}ぶ。'],
   },
   {
     char: '空',
@@ -348,7 +354,7 @@ export const grade1: Kanji[] = [
       { word: '空', reading: 'そら' },
       { word: '空気', reading: 'くうき' },
     ],
-    sentences: ['空が青い。', '空気がおいしい。'],
+    sentences: ['{空|そら}が{青|あお}い。', '{空気|くうき}がおいしい。'],
   },
   {
     char: '田',
@@ -360,7 +366,7 @@ export const grade1: Kanji[] = [
       { word: '水田', reading: 'すいでん' },
       { word: '田植え', reading: 'たうえ' },
     ],
-    sentences: ['田んぼに水を入れる。', '田植えをする。'],
+    sentences: ['{田|た}んぼに{水|みず}を{入|い}れる。', '{田植|たう}えをする。'],
   },
   {
     char: '天',
@@ -371,7 +377,7 @@ export const grade1: Kanji[] = [
       { word: '天気', reading: 'てんき' },
       { word: '天国', reading: 'てんごく' },
     ],
-    sentences: ['天気がいい。', '天の川を見る。'],
+    sentences: ['{天気|てんき}がいい。', '{天|あめ}の{川|かわ}を{見|み}る。'],
   },
   {
     char: '生',
@@ -385,7 +391,7 @@ export const grade1: Kanji[] = [
       { word: '生きる', reading: 'いきる' },
       { word: '先生', reading: 'せんせい' },
     ],
-    sentences: ['生きる力。', '先生に会う。'],
+    sentences: ['{生|い}きる{力|ちから}。', '{先生|せんせい}に{会|あ}う。'],
     okuriganaExamples: [
       { stem: '生', okurigana: 'きる', word: '生きる', reading: 'いきる' },
       {
@@ -405,7 +411,7 @@ export const grade1: Kanji[] = [
       { word: '花', reading: 'はな' },
       { word: '花火', reading: 'はなび' },
     ],
-    sentences: ['花が咲く。', '花火を見る。'],
+    sentences: ['{花|はな}が{咲|さ}く。', '{花火|はなび}を{見|み}る。'],
   },
   {
     char: '草',
@@ -416,7 +422,7 @@ export const grade1: Kanji[] = [
       { word: '草', reading: 'くさ' },
       { word: '草原', reading: 'そうげん' },
     ],
-    sentences: ['草が生える。', '草原を走る。'],
+    sentences: ['{草|くさ}が{生|い}える。', '{草原|そうげん}を{走|はし}る。'],
   },
   {
     char: '虫',
@@ -427,7 +433,7 @@ export const grade1: Kanji[] = [
       { word: '虫', reading: 'むし' },
       { word: '昆虫', reading: 'こんちゅう' },
     ],
-    sentences: ['虫を捕まえる。', '昆虫が好き。'],
+    sentences: ['{虫|むし}を{捕|つか}まえる。', '{昆虫|こんちゅう}が{好|す}き。'],
   },
   {
     char: '犬',
@@ -438,7 +444,7 @@ export const grade1: Kanji[] = [
       { word: '犬', reading: 'いぬ' },
       { word: '子犬', reading: 'こいぬ' },
     ],
-    sentences: ['犬を飼う。', '子犬がかわいい。'],
+    sentences: ['{犬|いぬ}を{飼|か}う。', '{子犬|こいぬ}がかわいい。'],
   },
   {
     char: '人',
@@ -449,7 +455,7 @@ export const grade1: Kanji[] = [
       { word: '人', reading: 'ひと' },
       { word: '日本人', reading: 'にほんじん' },
     ],
-    sentences: ['人が多い。', '日本人です。'],
+    sentences: ['{人|ひと}が{多|おお}い。', '{日本人|にほんじん}です。'],
     radical: { char: '人', name: 'ひと' },
   },
   {
@@ -461,7 +467,7 @@ export const grade1: Kanji[] = [
       { word: '名前', reading: 'なまえ' },
       { word: '有名', reading: 'ゆうめい' },
     ],
-    sentences: ['名前を書く。', '有名な人。'],
+    sentences: ['{名前|なまえ}を{書|か}く。', '{有名|ゆうめい}な{人|ひと}。'],
   },
   {
     char: '女',
@@ -472,7 +478,7 @@ export const grade1: Kanji[] = [
       { word: '女の子', reading: 'おんなのこ' },
       { word: '女性', reading: 'じょせい' },
     ],
-    sentences: ['女の子が遊ぶ。', '女性が話す。'],
+    sentences: ['{女|おんな}の{子|こ}が{遊|あそ}ぶ。', '{女性|じょせい}が{話|はな}す。'],
     antonyms: ['男'],
   },
   {
@@ -484,7 +490,7 @@ export const grade1: Kanji[] = [
       { word: '男の子', reading: 'おとこのこ' },
       { word: '男性', reading: 'だんせい' },
     ],
-    sentences: ['男の子が走る。', '男性が歩く。'],
+    sentences: ['{男|おとこ}の{子|こ}が{走|はし}る。', '{男性|だんせい}が{歩|ある}く。'],
     antonyms: ['女'],
   },
   {
@@ -496,7 +502,7 @@ export const grade1: Kanji[] = [
       { word: '子ども', reading: 'こども' },
       { word: '女子', reading: 'じょし' },
     ],
-    sentences: ['子どもが遊ぶ。', '子犬を抱く。'],
+    sentences: ['{子|こ}どもが{遊|あそ}ぶ。', '{子犬|こいぬ}を{抱|だ}く。'],
   },
   {
     char: '目',
@@ -507,7 +513,7 @@ export const grade1: Kanji[] = [
       { word: '目', reading: 'め' },
       { word: '目的', reading: 'もくてき' },
     ],
-    sentences: ['目を閉じる。', '目的を持つ。'],
+    sentences: ['{目|め}を{閉|と}じる。', '{目的|もくてき}を{持|も}つ。'],
     radical: { char: '目', name: 'め' },
   },
   {
@@ -519,7 +525,7 @@ export const grade1: Kanji[] = [
       { word: '耳', reading: 'みみ' },
       { word: '耳鳴り', reading: 'みみなり' },
     ],
-    sentences: ['耳を澄ます。', '耳が痛い。'],
+    sentences: ['{耳|みみ}を{澄|す}ます。', '{耳|みみ}が{痛|いた}い。'],
     radical: { char: '耳', name: 'みみ' },
   },
   {
@@ -531,7 +537,7 @@ export const grade1: Kanji[] = [
       { word: '口', reading: 'くち' },
       { word: '入口', reading: 'いりぐち' },
     ],
-    sentences: ['口を開ける。', '入口で待つ。'],
+    sentences: ['{口|くち}を{開|ひら}ける。', '{入口|いりぐち}で{待|ま}つ。'],
     radical: { char: '口', name: 'くち' },
   },
   {
@@ -543,7 +549,7 @@ export const grade1: Kanji[] = [
       { word: '手', reading: 'て' },
       { word: '上手', reading: 'じょうず' },
     ],
-    sentences: ['手を洗う。', '上手に描く。'],
+    sentences: ['{手|て}を{洗|あら}う。', '{上手|じょうず}に{描|か}く。'],
     radical: { char: '手', name: 'て' },
   },
   {
@@ -555,7 +561,7 @@ export const grade1: Kanji[] = [
       { word: '足', reading: 'あし' },
       { word: '足りる', reading: 'たりる' },
     ],
-    sentences: ['足が速い。', 'お金が足りる。'],
+    sentences: ['{足|あし}が{速|はや}い。', 'お{金|かね}が{足|た}りる。'],
     radical: { char: '足', name: 'あし' },
   },
   {
@@ -567,7 +573,7 @@ export const grade1: Kanji[] = [
       { word: '見る', reading: 'みる' },
       { word: '見学', reading: 'けんがく' },
     ],
-    sentences: ['映画を見る。', '工場を見学する。'],
+    sentences: ['{映画|えいが}を{見|み}る。', '{工場|こうじょう}を{見学|けんがく}する。'],
     okuriganaExamples: [
       { stem: '見', okurigana: 'る', word: '見る', reading: 'みる' },
       { stem: '見', okurigana: 'える', word: '見える', reading: 'みえる' },
@@ -582,7 +588,7 @@ export const grade1: Kanji[] = [
       { word: '音', reading: 'おと' },
       { word: '音楽', reading: 'おんがく' },
     ],
-    sentences: ['音が聞こえる。', '音楽を聴く。'],
+    sentences: ['{音|おと}が{聞|き}こえる。', '{音楽|おんがく}を{聴|き}く。'],
   },
   {
     char: '力',
@@ -593,7 +599,7 @@ export const grade1: Kanji[] = [
       { word: '力', reading: 'ちから' },
       { word: '努力', reading: 'どりょく' },
     ],
-    sentences: ['力を入れる。', '努力する。'],
+    sentences: ['{力|ちから}を{入|い}れる。', '{努力|どりょく}する。'],
   },
   {
     char: '気',
@@ -604,7 +610,7 @@ export const grade1: Kanji[] = [
       { word: '天気', reading: 'てんき' },
       { word: '元気', reading: 'げんき' },
     ],
-    sentences: ['天気がいい。', '元気ですか。'],
+    sentences: ['{天気|てんき}がいい。', '{元気|げんき}ですか。'],
   },
   {
     char: '円',
@@ -615,7 +621,7 @@ export const grade1: Kanji[] = [
       { word: '円', reading: 'えん' },
       { word: '百円', reading: 'ひゃくえん' },
     ],
-    sentences: ['百円です。', '円を描く。'],
+    sentences: ['{百円|ひゃくえん}です。', '{円|えん}を{描|か}く。'],
   },
   {
     char: '入',
@@ -626,7 +632,7 @@ export const grade1: Kanji[] = [
       { word: '入る', reading: 'はいる' },
       { word: '入学', reading: 'にゅうがく' },
     ],
-    sentences: ['部屋に入る。', '入学する。'],
+    sentences: ['{部屋|へや}に{入|はい}る。', '{入学|にゅうがく}する。'],
     okuriganaExamples: [
       { stem: '入', okurigana: 'る', word: '入る', reading: 'はいる' },
       { stem: '入', okurigana: 'れる', word: '入れる', reading: 'いれる' },
@@ -642,7 +648,7 @@ export const grade1: Kanji[] = [
       { word: '出る', reading: 'でる' },
       { word: '出口', reading: 'でぐち' },
     ],
-    sentences: ['外に出る。', '出口を探す。'],
+    sentences: ['{外|そと}に{出|で}る。', '{出口|でぐち}を{探|さが}す。'],
     okuriganaExamples: [
       { stem: '出', okurigana: 'る', word: '出る', reading: 'でる' },
       { stem: '出', okurigana: 'す', word: '出す', reading: 'だす' },
@@ -658,7 +664,7 @@ export const grade1: Kanji[] = [
       { word: '立つ', reading: 'たつ' },
       { word: '立派', reading: 'りっぱ' },
     ],
-    sentences: ['席を立つ。', '立派な人。'],
+    sentences: ['{席|せき}を{立|た}つ。', '{立派|りっぱ}な{人|ひと}。'],
     okuriganaExamples: [
       { stem: '立', okurigana: 'つ', word: '立つ', reading: 'たつ' },
       { stem: '立', okurigana: 'てる', word: '立てる', reading: 'たてる' },
@@ -673,7 +679,7 @@ export const grade1: Kanji[] = [
       { word: '休む', reading: 'やすむ' },
       { word: '休日', reading: 'きゅうじつ' },
     ],
-    sentences: ['今日は休む。', '休日に遊ぶ。'],
+    sentences: ['{今日|きょう}は{休|やす}む。', '{休日|きゅうじつ}に{遊|あそ}ぶ。'],
     okuriganaExamples: [{ stem: '休', okurigana: 'む', word: '休む', reading: 'やすむ' }],
   },
   {
@@ -685,7 +691,7 @@ export const grade1: Kanji[] = [
       { word: '先生', reading: 'せんせい' },
       { word: '先', reading: 'さき' },
     ],
-    sentences: ['先生に聞く。', '先に行く。'],
+    sentences: ['{先生|せんせい}に{聞|き}く。', '{先|さき}に{行|い}く。'],
   },
   {
     char: '夕',
@@ -696,7 +702,7 @@ export const grade1: Kanji[] = [
       { word: '夕方', reading: 'ゆうがた' },
       { word: '夕日', reading: 'ゆうひ' },
     ],
-    sentences: ['夕方に帰る。', '夕日がきれい。'],
+    sentences: ['{夕方|ゆうがた}に{帰|かえ}る。', '{夕日|ゆうひ}がきれい。'],
   },
   {
     char: '本',
@@ -707,7 +713,7 @@ export const grade1: Kanji[] = [
       { word: '本', reading: 'ほん' },
       { word: '日本', reading: 'にほん' },
     ],
-    sentences: ['本を読む。', '日本に住む。'],
+    sentences: ['{本|ほん}を{読|よ}む。', '{日本|にほん}に{住|す}む。'],
   },
   {
     char: '文',
@@ -718,7 +724,7 @@ export const grade1: Kanji[] = [
       { word: '文字', reading: 'もじ' },
       { word: '作文', reading: 'さくぶん' },
     ],
-    sentences: ['文字を書く。', '作文を書く。'],
+    sentences: ['{文字|もじ}を{書|か}く。', '{作文|さくぶん}を{書|か}く。'],
   },
   {
     char: '字',
@@ -729,7 +735,7 @@ export const grade1: Kanji[] = [
       { word: '文字', reading: 'もじ' },
       { word: '漢字', reading: 'かんじ' },
     ],
-    sentences: ['字を習う。', '漢字を覚える。'],
+    sentences: ['{字|あざ}を{習|なら}う。', '{漢字|かんじ}を{覚|おぼ}える。'],
   },
   {
     char: '学',
@@ -740,7 +746,7 @@ export const grade1: Kanji[] = [
       { word: '学校', reading: 'がっこう' },
       { word: '学ぶ', reading: 'まなぶ' },
     ],
-    sentences: ['学校に行く。', '英語を学ぶ。'],
+    sentences: ['{学校|がっこう}に{行|い}く。', '{英語|えいご}を{学|まな}ぶ。'],
   },
   {
     char: '校',
@@ -751,7 +757,10 @@ export const grade1: Kanji[] = [
       { word: '学校', reading: 'がっこう' },
       { word: '校長', reading: 'こうちょう' },
     ],
-    sentences: ['学校で勉強する。', '校長先生に会う。'],
+    sentences: [
+      '{学校|がっこう}で{勉強|べんきょう}する。',
+      '{校長|こうちょう}{先生|せんせい}に{会|あ}う。',
+    ],
   },
   {
     char: '村',
@@ -762,7 +771,7 @@ export const grade1: Kanji[] = [
       { word: '村', reading: 'むら' },
       { word: '村人', reading: 'むらびと' },
     ],
-    sentences: ['村に住む。', '小さな村。'],
+    sentences: ['{村|むら}に{住|す}む。', '{小|ちい}さな{村|むら}。'],
   },
   {
     char: '町',
@@ -773,7 +782,7 @@ export const grade1: Kanji[] = [
       { word: '町', reading: 'まち' },
       { word: '町内', reading: 'ちょうない' },
     ],
-    sentences: ['町を歩く。', '町内会に入る。'],
+    sentences: ['{町|まち}を{歩|ある}く。', '{町内会|ちょうないかい}に{入|はい}る。'],
   },
   {
     char: '森',
@@ -784,7 +793,7 @@ export const grade1: Kanji[] = [
       { word: '森', reading: 'もり' },
       { word: '森林', reading: 'しんりん' },
     ],
-    sentences: ['森の中を歩く。', '深い森。'],
+    sentences: ['{森|もり}の{中|なか}を{歩|ある}く。', '{深|ふか}い{森|もり}。'],
   },
   {
     char: '正',
@@ -795,7 +804,7 @@ export const grade1: Kanji[] = [
       { word: '正しい', reading: 'ただしい' },
       { word: '正月', reading: 'しょうがつ' },
     ],
-    sentences: ['正しい答え。', '正月を祝う。'],
+    sentences: ['{正|ただ}しい{答|こた}え。', '{正月|しょうがつ}を{祝|いわ}う。'],
     okuriganaExamples: [{ stem: '正', okurigana: 'しい', word: '正しい', reading: 'ただしい' }],
   },
   {
@@ -807,7 +816,7 @@ export const grade1: Kanji[] = [
       { word: '水', reading: 'みず' },
       { word: '水曜日', reading: 'すいようび' },
     ],
-    sentences: ['水を飲む。', '水曜日に会う。'],
+    sentences: ['{水|みず}を{飲|の}む。', '{水曜日|すいようび}に{会|あ}う。'],
     radical: { char: '水', name: 'みず' },
     antonyms: ['火'],
   },
@@ -820,7 +829,7 @@ export const grade1: Kanji[] = [
       { word: '火', reading: 'ひ' },
       { word: '火曜日', reading: 'かようび' },
     ],
-    sentences: ['火を使う。', '火曜日は忙しい。'],
+    sentences: ['{火|ひ}を{使|つか}う。', '{火曜日|かようび}は{忙|いそが}しい。'],
     radical: { char: '火', name: 'ひ' },
     antonyms: ['水'],
   },
@@ -833,7 +842,7 @@ export const grade1: Kanji[] = [
       { word: '玉', reading: 'たま' },
       { word: '目玉', reading: 'めだま' },
     ],
-    sentences: ['玉を転がす。', '宝の玉。'],
+    sentences: ['{玉|たま}を{転|ころ}がす。', '{宝|たから}の{玉|たま}。'],
   },
   {
     char: '王',
@@ -844,7 +853,7 @@ export const grade1: Kanji[] = [
       { word: '王様', reading: 'おうさま' },
       { word: '女王', reading: 'じょおう' },
     ],
-    sentences: ['王様がいる。', '王国を治める。'],
+    sentences: ['{王様|おうさま}がいる。', '{王国|おうこく}を{治|おさ}める。'],
   },
   {
     char: '石',
@@ -855,7 +864,7 @@ export const grade1: Kanji[] = [
       { word: '石', reading: 'いし' },
       { word: '石橋', reading: 'いしばし' },
     ],
-    sentences: ['石を投げる。', '石で遊ぶ。'],
+    sentences: ['{石|いし}を{投|な}げる。', '{石|いし}で{遊|あそ}ぶ。'],
   },
   {
     char: '竹',
@@ -866,7 +875,7 @@ export const grade1: Kanji[] = [
       { word: '竹', reading: 'たけ' },
       { word: '竹林', reading: 'ちくりん' },
     ],
-    sentences: ['竹が伸びる。', '竹で作る。'],
+    sentences: ['{竹|たけ}が{伸|の}びる。', '{竹|たけ}で{作|つく}る。'],
   },
   {
     char: '糸',
@@ -877,7 +886,7 @@ export const grade1: Kanji[] = [
       { word: '糸', reading: 'いと' },
       { word: '毛糸', reading: 'けいと' },
     ],
-    sentences: ['糸を結ぶ。', '糸で縫う。'],
+    sentences: ['{糸|いと}を{結|むす}ぶ。', '{糸|いと}で{縫|ぬ}う。'],
   },
   {
     char: '貝',
@@ -888,7 +897,7 @@ export const grade1: Kanji[] = [
       { word: '貝', reading: 'かい' },
       { word: '貝殻', reading: 'かいがら' },
     ],
-    sentences: ['貝を拾う。', '貝殻を集める。'],
+    sentences: ['{貝|かい}を{拾|ひろ}う。', '{貝殻|かいがら}を{集|あつ}める。'],
   },
   {
     char: '車',
@@ -899,7 +908,7 @@ export const grade1: Kanji[] = [
       { word: '車', reading: 'くるま' },
       { word: '電車', reading: 'でんしゃ' },
     ],
-    sentences: ['車に乗る。', '電車で行く。'],
+    sentences: ['{車|くるま}に{乗|の}る。', '{電車|でんしゃ}で{行|い}く。'],
   },
   {
     char: '金',
@@ -910,7 +919,7 @@ export const grade1: Kanji[] = [
       { word: 'お金', reading: 'おかね' },
       { word: '金曜日', reading: 'きんようび' },
     ],
-    sentences: ['お金を払う。', '金曜日は楽しい。'],
+    sentences: ['お{金|かね}を{払|はら}う。', '{金曜日|きんようび}は{楽|たの}しい。'],
   },
   {
     char: '雨',
@@ -921,7 +930,7 @@ export const grade1: Kanji[] = [
       { word: '雨', reading: 'あめ' },
       { word: '大雨', reading: 'おおあめ' },
     ],
-    sentences: ['雨が降る。', '雨の日は家にいる。'],
+    sentences: ['{雨|あめ}が{降|ふ}る。', '{雨|あめ}の{日|ひ}は{家|いえ}にいる。'],
   },
   {
     char: '赤',
@@ -932,7 +941,7 @@ export const grade1: Kanji[] = [
       { word: '赤い', reading: 'あかい' },
       { word: '赤ちゃん', reading: 'あかちゃん' },
     ],
-    sentences: ['赤い花が咲く。', '赤ちゃんが泣く。'],
+    sentences: ['{赤|あか}い{花|はな}が{咲|さ}く。', '{赤|あか}ちゃんが{泣|な}く。'],
     okuriganaExamples: [{ stem: '赤', okurigana: 'い', word: '赤い', reading: 'あかい' }],
   },
   {
@@ -944,7 +953,7 @@ export const grade1: Kanji[] = [
       { word: '青い', reading: 'あおい' },
       { word: '青空', reading: 'あおぞら' },
     ],
-    sentences: ['青い空。', '青空が広がる。'],
+    sentences: ['{青|あお}い{空|そら}。', '{青空|あおぞら}が{広|ひろ}がる。'],
     okuriganaExamples: [{ stem: '青', okurigana: 'い', word: '青い', reading: 'あおい' }],
   },
   {
@@ -956,7 +965,7 @@ export const grade1: Kanji[] = [
       { word: '白い', reading: 'しろい' },
       { word: '白紙', reading: 'はくし' },
     ],
-    sentences: ['白い雲。', '白い雪が降る。'],
+    sentences: ['{白|しろ}い{雲|くも}。', '{白|しろ}い{雪|ゆき}が{降|ふ}る。'],
     okuriganaExamples: [{ stem: '白', okurigana: 'い', word: '白い', reading: 'しろい' }],
   },
 ];

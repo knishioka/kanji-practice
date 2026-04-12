@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import type { GridStyle, Question } from '../../types';
 import { buildFuriganaGroups } from '../../utils/furigana';
+import { getSentencePlainText } from '../../utils/sentenceRuby';
 import { SentenceGrid } from '../WritingGrid';
 
 interface Props {
@@ -19,9 +20,10 @@ export function SentenceQuestion({
   gridStyle,
 }: Props) {
   const targetKanji = question.kanji.char;
-  const sentence = question.sentence || '';
+  const rawSentence = question.sentence || '';
 
-  const furiganaGroups = useMemo(() => buildFuriganaGroups(sentence), [sentence]);
+  const furiganaGroups = useMemo(() => buildFuriganaGroups(rawSentence), [rawSentence]);
+  const sentence = useMemo(() => getSentencePlainText(rawSentence), [rawSentence]);
 
   return (
     <div className="mb-2 avoid-break">

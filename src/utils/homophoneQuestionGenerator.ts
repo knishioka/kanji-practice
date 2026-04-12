@@ -5,6 +5,7 @@
 
 import { getKanjiByGradeFiltered } from '../data/kanji';
 import type { Grade, Kanji, Question } from '../types';
+import { getSentencePlainText } from './sentenceRuby';
 
 /**
  * 同音異字のグループ
@@ -27,7 +28,10 @@ export function buildHomophoneIndex(
     // 音読みをインデックスに追加
     for (const onReading of kanji.readings.on) {
       // 例文から文脈を取得
-      const context = kanji.sentences[0] || kanji.examples[0]?.word || kanji.char;
+      const context =
+        (kanji.sentences[0] && getSentencePlainText(kanji.sentences[0])) ||
+        kanji.examples[0]?.word ||
+        kanji.char;
 
       if (!index.has(onReading)) {
         index.set(onReading, []);
@@ -39,7 +43,10 @@ export function buildHomophoneIndex(
     for (const kunReading of kanji.readings.kun) {
       // 送りがな（.以降）を除去
       const baseReading = kunReading.split('.')[0] || kunReading;
-      const context = kanji.sentences[0] || kanji.examples[0]?.word || kanji.char;
+      const context =
+        (kanji.sentences[0] && getSentencePlainText(kanji.sentences[0])) ||
+        kanji.examples[0]?.word ||
+        kanji.char;
 
       if (!index.has(baseReading)) {
         index.set(baseReading, []);

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { allKanji } from '../../data/kanji';
 import { buildFuriganaGroups, isKanjiChar } from '../furigana';
+import { parseRubySentence } from '../sentenceRuby';
 
 // テストヘルパー: ふりがなグループを「漢字(読み)」形式の文字列に変換
 function formatGroups(sentence: string) {
@@ -126,7 +127,9 @@ describe('buildFuriganaGroups', () => {
 
       for (const kanji of allKanji) {
         for (const sentence of kanji.sentences) {
-          const chars = Array.from(sentence);
+          // ルビ注釈済みなら plain を、未注釈なら原文を基準にスパンを検査
+          const plain = parseRubySentence(sentence)?.plain ?? sentence;
+          const chars = Array.from(plain);
           const groups = buildFuriganaGroups(sentence);
           for (const g of groups) {
             // カタカナが含まれないか
