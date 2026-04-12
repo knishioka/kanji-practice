@@ -1,11 +1,7 @@
 import { allKanji } from '../data/kanji';
+import { type FuriganaGroup, parseRubySentence } from './sentenceRuby';
 
-// ふりがなグループ: 開始位置・文字数・読みのセット
-export interface FuriganaGroup {
-  start: number;
-  length: number;
-  reading: string;
-}
+export type { FuriganaGroup };
 
 // 漢字→Kanjiデータのルックアップ（モジュールスコープで1回だけ構築）
 const kanjiLookup = new Map(allKanji.map((k) => [k.char, k]));
@@ -25,6 +21,8 @@ const sortedWords = [...wordReadingMap.keys()].sort((a, b) => b.length - a.lengt
 // 漢字かどうか判定（CJK統合漢字）
 export function isKanjiChar(char: string): boolean {
   const code = char.codePointAt(0) ?? 0;
+  // 々 (U+3005) も漢字扱い（繰り返し記号）
+  if (code === 0x3005) return true;
   return (code >= 0x4e00 && code <= 0x9fff) || (code >= 0x3400 && code <= 0x4dbf);
 }
 
@@ -164,6 +162,10 @@ function splitReadingForNonContiguous(
  * 熟語は分割せず、複数セルにまたがるふりがなとして返す
  */
 export function buildFuriganaGroups(sentence: string): FuriganaGroup[] {
+  // ルビ記法 `{漢字|よみ}` で注釈済みの例文は注釈をそのままグループ化
+  const ruby = parseRubySentence(sentence);
+  if (ruby) return ruby.groups;
+
   const chars = Array.from(sentence);
   const groups: FuriganaGroup[] = [];
   const assigned = new Set<number>();
@@ -287,4 +289,66 @@ export function buildFuriganaGroups(sentence: string): FuriganaGroup[] {
   }
 
   return groups.sort((a, b) => a.start - b.start);
+}
+
+/**
+ * 注釈化スクリプト用: 各グループが「例語マッチ由来」か「フォールバック由来」かを返す。
+ * ルビ記法済み例文は ruby 由来として扱う。
+ */
+export function buildFuriganaGroupsWithSource(sentence: string): {
+  groups: FuriganaGroup[];
+  sources: ('ruby' | 'word' | 'fallback')[];
+} {
+  const ruby = parseRubySentence(sentence);
+  if (ruby) {
+    return {
+      groups: ruby.groups,
+      sources: ruby.groups.map(() => 'ruby' as const),
+    };
+  }
+
+  // step1 のみを実行して word 由来位置を取得
+  const chars = Array.from(sentence);
+  const assigned = new Set<number>();
+  for (const word of sortedWords) {
+    const wordChars = Array.from(word);
+    let searchFrom = 0;
+    // biome-ignore lint/suspicious/noAssignInExpressions: indexOf loop pattern
+    while ((searchFrom = sentence.indexOf(word, searchFrom)) !== -1) {
+      const charIndex = Array.from(sentence.slice(0, searchFrom)).length;
+      const wordPositions = Array.from({ length: wordChars.length }, (_, i) => charIndex + i);
+      if (wordPositions.some((pos) => assigned.has(pos))) {
+        searchFrom += word.length;
+        continue;
+      }
+      const reading = wordReadingMap.get(word) ?? '';
+      const kanjiPositions = wordPositions.filter((pos) => isKanjiChar(chars[pos]));
+      if (kanjiPositions.length > 0) {
+        const firstKanji = kanjiPositions[0];
+        const lastKanji = kanjiPositions[kanjiPositions.length - 1];
+        const spanLength = lastKanji - firstKanji + 1;
+        if (spanLength === kanjiPositions.length) {
+          for (const pos of wordPositions) assigned.add(pos);
+        } else {
+          const splitGroups = splitReadingForNonContiguous(wordChars, wordPositions, reading);
+          if (splitGroups) {
+            for (const pos of wordPositions) assigned.add(pos);
+          }
+        }
+      } else {
+        for (const pos of wordPositions) assigned.add(pos);
+      }
+      searchFrom += word.length;
+    }
+  }
+
+  const groups = buildFuriganaGroups(sentence);
+  const sources = groups.map((g) => {
+    // グループ内の漢字が全て assigned に含まれていれば word 由来、それ以外はフォールバック
+    for (let i = g.start; i < g.start + g.length; i++) {
+      if (isKanjiChar(chars[i]) && !assigned.has(i)) return 'fallback' as const;
+    }
+    return 'word' as const;
+  });
+  return { groups, sources };
 }
