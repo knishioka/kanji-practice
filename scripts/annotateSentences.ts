@@ -137,24 +137,82 @@ writeFileSync(reportPath, reportLines.join("\n"), "utf-8");
 console.log(`レビューレポート出力: ${reportPath}`);
 
 // 各 grade ファイルを書き換え
-function escapeForJsString(s: string): string {
-  // シングルクォート文字列内に埋め込むので ' と \ をエスケープ
-  return s.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+function findMatchingBracket(source: string, openBracketIndex: number): number {
+  let depth = 0;
+  let inSingleQuote = false;
+  let inDoubleQuote = false;
+  let escaped = false;
+
+  for (let i = openBracketIndex; i < source.length; i++) {
+    const ch = source[i];
+
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+
+    if (ch === "\\") {
+      escaped = true;
+      continue;
+    }
+
+    if (inSingleQuote) {
+      if (ch === "'") inSingleQuote = false;
+      continue;
+    }
+
+    if (inDoubleQuote) {
+      if (ch === '"') inDoubleQuote = false;
+      continue;
+    }
+
+    if (ch === "'") {
+      inSingleQuote = true;
+      continue;
+    }
+
+    if (ch === '"') {
+      inDoubleQuote = true;
+      continue;
+    }
+
+    if (ch === "[") depth++;
+    if (ch === "]") {
+      depth--;
+      if (depth === 0) return i;
+    }
+  }
+
+  return -1;
 }
 
 function rewriteGradeFile(gradeNum: number): { changed: number } {
   const filePath = resolve(ROOT, `src/data/grades/grade${gradeNum}.ts`);
   const src = readFileSync(filePath, "utf-8");
 
-  // sentences: [...] ブロックを正規表現で抜き出し、内部の文字列リテラルを置換
-  // Biome フォーマット後のソースは sentences: ["...", "..."] 形式（ダブルクォート）
   let changed = 0;
-  const updated = src.replace(/sentences:\s*\[([^\]]*)\]/gs, (whole, body) => {
-    // body 内の "..." または '...' 文字列リテラルを抽出して置換
+  let updated = "";
+  let cursor = 0;
+
+  // ] を文字列内に含むケースでも壊れないよう、配列終端を字句走査で検出する
+  const sentencesStartPattern = /sentences:\s*\[/g;
+  let match: RegExpExecArray | null;
+  while ((match = sentencesStartPattern.exec(src)) !== null) {
+    const openBracketIndex = sentencesStartPattern.lastIndex - 1;
+    const closeBracketIndex = findMatchingBracket(src, openBracketIndex);
+    if (closeBracketIndex === -1) {
+      throw new Error(
+        `sentences 配列の閉じ括弧が見つかりません: ${filePath} index=${openBracketIndex}`,
+      );
+    }
+
+    updated += src.slice(cursor, match.index);
+    updated += src.slice(match.index, openBracketIndex + 1);
+
+    const body = src.slice(openBracketIndex + 1, closeBracketIndex);
     const newBody = body.replace(
       /(['"])((?:\\.|(?!\1).)*)\1/g,
       (lit: string, quote: string, raw: string) => {
-        // エスケープ復元
         const original = raw
           .replace(/\\'/g, "'")
           .replace(/\\"/g, '"')
@@ -168,8 +226,14 @@ function rewriteGradeFile(gradeNum: number): { changed: number } {
         return `${quote}${escaped}${quote}`;
       },
     );
-    return `sentences: [${newBody}]`;
-  });
+    updated += newBody;
+    updated += "]";
+
+    cursor = closeBracketIndex + 1;
+    sentencesStartPattern.lastIndex = cursor;
+  }
+
+  updated += src.slice(cursor);
 
   if (WRITE && changed > 0) {
     writeFileSync(filePath, updated, "utf-8");

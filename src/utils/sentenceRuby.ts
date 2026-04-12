@@ -5,7 +5,7 @@ export interface FuriganaGroup {
   reading: string;
 }
 
-function isKanjiChar(char: string): boolean {
+export function isKanjiChar(char: string): boolean {
   const code = char.codePointAt(0) ?? 0;
   // 々 (U+3005, 漢字繰り返し記号) もルビ対象として許容
   if (code === 0x3005) return true;
@@ -13,7 +13,7 @@ function isKanjiChar(char: string): boolean {
 }
 
 const RUBY_PATTERN = /\{([^|{}]+)\|([^|{}]+)\}/g;
-const HIRAGANA_ONLY = /^[\u3041-\u3096\u30FCー]+$/;
+const HIRAGANA_ONLY = /^[\u3041-\u3096\u30FC]+$/;
 
 export interface ParsedRubySentence {
   plain: string;

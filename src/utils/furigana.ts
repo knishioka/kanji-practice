@@ -1,7 +1,8 @@
 import { allKanji } from '../data/kanji';
-import { type FuriganaGroup, parseRubySentence } from './sentenceRuby';
+import { type FuriganaGroup, isKanjiChar, parseRubySentence } from './sentenceRuby';
 
 export type { FuriganaGroup };
+export { isKanjiChar };
 
 // 漢字→Kanjiデータのルックアップ（モジュールスコープで1回だけ構築）
 const kanjiLookup = new Map(allKanji.map((k) => [k.char, k]));
@@ -18,12 +19,9 @@ for (const kanji of allKanji) {
 // 長い単語から先にマッチさせるためソート済み配列を用意
 const sortedWords = [...wordReadingMap.keys()].sort((a, b) => b.length - a.length);
 
-// 漢字かどうか判定（CJK統合漢字）
-export function isKanjiChar(char: string): boolean {
-  const code = char.codePointAt(0) ?? 0;
-  // 々 (U+3005) も漢字扱い（繰り返し記号）
-  if (code === 0x3005) return true;
-  return (code >= 0x4e00 && code <= 0x9fff) || (code >= 0x3400 && code <= 0x4dbf);
+// フォールバック推定用: 々 は辞書エントリを持たないため「熟語隣接判定」から除外する
+function isHeuristicKanjiChar(char: string): boolean {
+  return isKanjiChar(char) && char !== '々';
 }
 
 // カタカナをひらがなに変換
@@ -224,14 +222,14 @@ export function buildFuriganaGroups(sentence: string): FuriganaGroup[] {
   for (let i = 0; i < chars.length; i++) {
     if (assigned.has(i)) continue;
     const char = chars[i];
-    if (!isKanjiChar(char)) continue;
+    if (!isHeuristicKanjiChar(char)) continue;
     const kanji = kanjiLookup.get(char);
     if (!kanji) continue;
 
     // 隣接する未割り当て漢字があるか（未マッチ熟語コンテキスト）
     const adjacentKanji =
-      (i > 0 && isKanjiChar(chars[i - 1]) && !assigned.has(i - 1)) ||
-      (i + 1 < chars.length && isKanjiChar(chars[i + 1]) && !assigned.has(i + 1));
+      (i > 0 && isHeuristicKanjiChar(chars[i - 1]) && !assigned.has(i - 1)) ||
+      (i + 1 < chars.length && isHeuristicKanjiChar(chars[i + 1]) && !assigned.has(i + 1));
 
     let reading: string | undefined;
 
