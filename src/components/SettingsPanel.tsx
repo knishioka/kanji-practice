@@ -20,7 +20,13 @@ import {
   generateRadicalQuestions,
 } from '../utils/radicalQuestionGenerator';
 import { ExcludeKanjiModal } from './modals/ExcludeKanjiModal';
-import { GradeSelector, ModeSelector, PrintOptions } from './settings';
+import {
+  GradeSelector,
+  getLearningPresetSettings,
+  LearningPresetSelector,
+  ModeSelector,
+  PrintOptions,
+} from './settings';
 
 export function SettingsPanel() {
   const { settings, setSettings, setQuestions, excludedKanji, generationCounter } = useStore();
@@ -129,6 +135,11 @@ export function SettingsPanel() {
         onChange={(grade) => setSettings({ grade })}
         excludedCount={currentExcluded.length}
         onOpenExcludeModal={() => setIsExcludeModalOpen(true)}
+      />
+
+      <LearningPresetSelector
+        settings={settings}
+        onSelect={(presetId) => setSettings(getLearningPresetSettings(presetId))}
       />
 
       <ModeSelector value={settings.mode} onChange={(mode) => setSettings({ mode })} />

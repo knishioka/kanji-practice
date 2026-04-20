@@ -2,7 +2,9 @@
  * 設定パネルで使用する定数とマッピング
  */
 
-import type { Grade, GridStyle, PrintMode } from '../../types';
+import { CELL_SIZE } from '../../constants/print';
+import type { Grade, GridStyle, PrintMode, Settings } from '../../types';
+import { calculateRecommendedPracticeColumns } from '../../utils/layout';
 
 // 学年オプション
 export const grades: { value: Grade; label: string }[] = [
@@ -42,6 +44,120 @@ export const gridStyles: { value: GridStyle; label: string }[] = [
   { value: 'dots', label: 'ドットガイド' },
   { value: 'none', label: 'ガイドなし' },
 ];
+
+type LearningPresetSettingKey =
+  | 'grade'
+  | 'mode'
+  | 'pageCount'
+  | 'cellSize'
+  | 'practiceColumns'
+  | 'showHint'
+  | 'title'
+  | 'gridStyle';
+
+export type LearningPresetSettings = Pick<Settings, LearningPresetSettingKey>;
+
+export type LearningPresetId = 'kanken9-reading' | 'kanken9-writing' | 'kanken8-preview';
+
+export interface LearningPreset {
+  id: LearningPresetId;
+  label: string;
+  description: string;
+  settings: LearningPresetSettings;
+}
+
+function createLearningPresetSettings(
+  overrides: Partial<LearningPresetSettings>,
+): LearningPresetSettings {
+  return {
+    grade: 2,
+    mode: 'reading',
+    pageCount: 1,
+    cellSize: CELL_SIZE.DEFAULT,
+    practiceColumns: calculateRecommendedPracticeColumns(CELL_SIZE.DEFAULT),
+    showHint: false,
+    title: '漢字練習プリント',
+    gridStyle: 'none',
+    ...overrides,
+  };
+}
+
+export const learningPresets: LearningPreset[] = [
+  {
+    id: 'kanken9-reading',
+    label: '9級 読み定着',
+    description: '2年生の漢字を大きめ表示で読み中心に反復します。',
+    settings: createLearningPresetSettings({
+      grade: 2,
+      mode: 'reading',
+      pageCount: 2,
+      cellSize: 17,
+      practiceColumns: calculateRecommendedPracticeColumns(17),
+      showHint: false,
+      title: '9級 読み定着プリント',
+    }),
+  },
+  {
+    id: 'kanken9-writing',
+    label: '9級 書き取り',
+    description: '2年生の漢字を十字ガイド付きでしっかり書き取ります。',
+    settings: createLearningPresetSettings({
+      grade: 2,
+      mode: 'writing',
+      pageCount: 2,
+      cellSize: CELL_SIZE.DEFAULT,
+      practiceColumns: calculateRecommendedPracticeColumns(CELL_SIZE.DEFAULT),
+      showHint: true,
+      title: '9級 書き取りプリント',
+      gridStyle: 'cross',
+    }),
+  },
+  {
+    id: 'kanken8-preview',
+    label: '8級 先取り',
+    description: '3年生の漢字を1ページだけ軽めに触れて負荷を抑えます。',
+    settings: createLearningPresetSettings({
+      grade: 3,
+      mode: 'reading',
+      pageCount: 1,
+      cellSize: 18,
+      practiceColumns: calculateRecommendedPracticeColumns(18),
+      showHint: false,
+      title: '8級 先取りプリント',
+    }),
+  },
+];
+
+const learningPresetMap = learningPresets.reduce<Record<LearningPresetId, LearningPreset>>(
+  (map, preset) => {
+    map[preset.id] = preset;
+    return map;
+  },
+  {} as Record<LearningPresetId, LearningPreset>,
+);
+
+export function getLearningPresetSettings(id: LearningPresetId): LearningPresetSettings {
+  return { ...learningPresetMap[id].settings };
+}
+
+export function applyLearningPreset(settings: Settings, id: LearningPresetId): Settings {
+  return { ...settings, ...getLearningPresetSettings(id) };
+}
+
+export function getMatchingLearningPresetId(settings: Settings): LearningPresetId | null {
+  for (const preset of learningPresets) {
+    const isMatch = Object.entries(preset.settings).every(([key, value]) => {
+      const settingsKey = key as keyof Settings;
+      return settings[settingsKey] === value;
+    });
+
+    if (isMatch) {
+      return preset.id;
+    }
+  }
+
+  return null;
+}
 
 // モードごとの設定適用マップ
 export interface ModeSettingsConfig {

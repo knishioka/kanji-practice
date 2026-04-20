@@ -31,7 +31,7 @@ test.describe('全モードA4レイアウト確認', () => {
   for (const mode of modes) {
     test(`${mode.name}モードがA4 1ページに収まる`, async ({ page }) => {
       // モード選択
-      await page.click(`text=${mode.selector}`);
+      await page.getByTestId(`mode-selector-${mode.mode}`).click();
       await page.waitForTimeout(500);
 
       // フッターのページ情報を取得
@@ -61,7 +61,7 @@ test.describe('全モードA4レイアウト確認', () => {
     const cellSizeSlider = page.locator('input[type="range"][min="12"][max="25"]');
 
     for (const mode of modes) {
-      await page.click(`text=${mode.selector}`);
+      await page.getByTestId(`mode-selector-${mode.mode}`).click();
       await page.waitForTimeout(200);
       await cellSizeSlider.fill('12');
       await page.waitForTimeout(300);
@@ -82,7 +82,7 @@ test.describe('全モードA4レイアウト確認', () => {
     const cellSizeSlider = page.locator('input[type="range"][min="12"][max="25"]');
 
     for (const mode of modes) {
-      await page.click(`text=${mode.selector}`);
+      await page.getByTestId(`mode-selector-${mode.mode}`).click();
       await page.waitForTimeout(200);
       await cellSizeSlider.fill('25');
       await page.waitForTimeout(300);
