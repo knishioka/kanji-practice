@@ -52,10 +52,10 @@ type LearningPresetSettingKey =
   | 'cellSize'
   | 'practiceColumns'
   | 'showHint'
-  | 'title';
+  | 'title'
+  | 'gridStyle';
 
-export type LearningPresetSettings = Pick<Settings, LearningPresetSettingKey> &
-  Partial<Pick<Settings, 'gridStyle'>>;
+export type LearningPresetSettings = Pick<Settings, LearningPresetSettingKey>;
 
 export type LearningPresetId = 'kanken9-reading' | 'kanken9-writing' | 'kanken8-preview';
 
@@ -77,6 +77,7 @@ function createLearningPresetSettings(
     practiceColumns: calculateRecommendedPracticeColumns(CELL_SIZE.DEFAULT),
     showHint: false,
     title: '漢字練習プリント',
+    gridStyle: 'none',
     ...overrides,
   };
 }
