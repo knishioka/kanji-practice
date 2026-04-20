@@ -29,6 +29,7 @@ export function ModeSelector({ value, onChange }: Props) {
             key={modeValue}
             type="button"
             onClick={() => onChange(modeValue)}
+            data-testid={`mode-selector-${modeValue}`}
             aria-pressed={value === modeValue}
             className={`relative p-3 rounded-xl text-left transition-all duration-200 ${
               value === modeValue ? 'shadow-sm' : 'hover:shadow-sm'
