@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap");
 
 /* カラーパレット - 和風テーマ */
 :root {
@@ -25,16 +26,10 @@
   --color-border-light: #f0ebe3;
 }
 
-/* 教科書体フォントファミリー - Print optimized */
-@font-face {
-  font-family: "Klee One";
-  src: local("Klee One"), local("KleeOne-Regular");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* 教科書体フォント適用 */
+/* 教科書体フォント適用
+ * Klee One: Google Fonts経由でWebフォントとして読み込み（教科書体ベース）
+ * フォールバック: OS標準の教科書体 → 丸ゴシック → serif
+ */
 .font-textbook {
   font-family:
     "Klee One", "UD Digi Kyokasho N-R", "UD デジタル 教科書体 N-R",
