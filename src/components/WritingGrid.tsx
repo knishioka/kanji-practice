@@ -140,17 +140,21 @@ export function SentenceGrid({
 
   return (
     <div className="mb-2 avoid-break">
-      {/* お手本行 */}
+      {/* お手本行 - ターゲット漢字は太枠でハイライト */}
       <div
         className="flex flex-wrap mb-1"
         style={hasFurigana ? { paddingTop: `${cellSize * 0.3}mm` } : undefined}
       >
         {chars.map((char, i) => {
           const group = groupByStart.get(i);
+          const isTarget = targetKanji && char === targetKanji;
           return (
             <div
               key={i}
-              className="border border-gray-300 font-textbook text-gray-700 relative"
+              className={clsx(
+                'relative font-textbook text-gray-700 bg-white border',
+                isTarget ? 'border-2 border-gray-800' : 'border-gray-300',
+              )}
               style={{
                 width: `${cellSize}mm`,
                 height: `${cellSize}mm`,
@@ -182,52 +186,38 @@ export function SentenceGrid({
           );
         })}
       </div>
-      {/* 練習行 × N（同じ例文を繰り返し書写する） */}
+      {/* 練習行 × N（全マスを書き取り対象に。文字は表示せず罫線+ガイドのみ） */}
       {Array.from({ length: practiceRows }).map((_, rowIdx) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: 練習行は同型の繰り返しでindexのみが識別子になる
         <div key={`practice-${rowIdx}`} className="flex flex-wrap">
           {chars.map((char, i) => {
-            const isBlank = targetKanji && char === targetKanji;
+            const isTarget = targetKanji && char === targetKanji;
             return (
               <div
                 key={i}
                 className={clsx(
-                  'relative font-textbook',
-                  isBlank ? 'border border-gray-800 bg-white' : 'border border-gray-300',
+                  'relative font-textbook bg-white border',
+                  isTarget ? 'border-2 border-gray-800' : 'border-gray-300',
                 )}
                 style={{
                   width: `${cellSize}mm`,
                   height: `${cellSize}mm`,
                 }}
               >
-                {isBlank ? (
+                {/* 書き取り用ガイドライン（全マス共通） */}
+                {gridStyle === 'cross' && (
                   <>
-                    {/* 書き取り用ガイドライン */}
-                    {gridStyle === 'cross' && (
-                      <>
-                        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gray-300 -translate-x-1/2" />
-                        <div className="absolute top-1/2 left-0 right-0 h-px bg-gray-300 -translate-y-1/2" />
-                      </>
-                    )}
-                    {gridStyle === 'dots' && (
-                      <>
-                        <div className="absolute left-1/4 top-1/4 w-1 h-1 rounded-full bg-gray-300" />
-                        <div className="absolute right-1/4 top-1/4 w-1 h-1 rounded-full bg-gray-300" />
-                        <div className="absolute left-1/4 bottom-1/4 w-1 h-1 rounded-full bg-gray-300" />
-                        <div className="absolute right-1/4 bottom-1/4 w-1 h-1 rounded-full bg-gray-300" />
-                      </>
-                    )}
+                    <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gray-300 -translate-x-1/2" />
+                    <div className="absolute top-1/2 left-0 right-0 h-px bg-gray-300 -translate-y-1/2" />
                   </>
-                ) : (
-                  <span
-                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-400"
-                    style={{
-                      fontSize: `${cellSize * 0.7}mm`,
-                      lineHeight: 1,
-                    }}
-                  >
-                    {char}
-                  </span>
+                )}
+                {gridStyle === 'dots' && (
+                  <>
+                    <div className="absolute left-1/4 top-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                    <div className="absolute right-1/4 top-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                    <div className="absolute left-1/4 bottom-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                    <div className="absolute right-1/4 bottom-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                  </>
                 )}
               </div>
             );
