@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { SENTENCE_LAYOUT } from '../../../constants/print';
 import type { Settings } from '../../../types';
 import {
   applyLearningPreset,
@@ -15,6 +16,7 @@ const baseSettings: Settings = {
   gridStyle: 'none',
   cellSize: 25,
   practiceColumns: 3,
+  sentencePracticeRows: SENTENCE_LAYOUT.DEFAULT_PRACTICE_ROWS,
   showHint: false,
   title: 'カスタム設定',
 };
