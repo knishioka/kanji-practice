@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { A4, CELL_SIZE, WRITING_MODE_SAFE_WIDTH_MM } from '../../constants/print';
+import { A4, CELL_SIZE, SENTENCE_LAYOUT, WRITING_MODE_SAFE_WIDTH_MM } from '../../constants/print';
 import type { PrintMode } from '../../types';
 import {
   calculateColumnsPerRow,
   calculateMaxOkuriganaCells,
   calculateMaxPracticeColumns,
+  calculateMaxSentencePracticeRows,
   calculateRecommendedPracticeColumns,
   calculateRowsPerPage,
   calculateSafePracticeCount,
@@ -29,8 +30,45 @@ describe('layout utilities', () => {
     it('should calculate fewer rows for sentence mode', () => {
       // cellSize 15mm * 2.3 + 8mm = 42.5mm per row (ふりがなパディング含む)
       // 232 / 42.5 = 5.45 → 5 rows
+      // optionsを省略すると現状互換 (N=1) で計算される
       const rows = calculateRowsPerPage(15, 'sentence');
       expect(rows).toBe(5);
+    });
+
+    it('sentenceモードで practiceRows=2 のとき1問の高さが57.5mmになり4問/ページ', () => {
+      // cellSize 15 * (1.3 + 2) + 8 = 57.5mm
+      // 232 / 57.5 = 4.03 → 4 rows
+      const rows = calculateRowsPerPage(15, 'sentence', {
+        sentencePracticeRows: 2,
+      });
+      expect(rows).toBe(4);
+    });
+
+    it('sentenceモードで practiceRows=3 のとき1問の高さが72.5mmになり3問/ページ', () => {
+      // cellSize 15 * (1.3 + 3) + 8 = 72.5mm
+      // 232 / 72.5 = 3.2 → 3 rows
+      const rows = calculateRowsPerPage(15, 'sentence', {
+        sentencePracticeRows: 3,
+      });
+      expect(rows).toBe(3);
+    });
+
+    it('sentenceモード cellSize=12 × practiceRows=3 で3問/ページ', () => {
+      // cellSize 12 * 4.3 + 8 = 59.6mm
+      // 232 / 59.6 = 3.89 → 3 rows
+      const rows = calculateRowsPerPage(12, 'sentence', {
+        sentencePracticeRows: 3,
+      });
+      expect(rows).toBe(3);
+    });
+
+    it('sentenceモード cellSize=25 × practiceRows=3 で2問/ページ', () => {
+      // cellSize 25 * 4.3 + 8 = 115.5mm
+      // 232 / 115.5 = 2.0 → 2 rows
+      const rows = calculateRowsPerPage(25, 'sentence', {
+        sentencePracticeRows: 3,
+      });
+      expect(rows).toBe(2);
     });
 
     it('should calculate rows for strokeCount mode', () => {
@@ -155,6 +193,74 @@ describe('layout utilities', () => {
       const cols = calculateColumnsPerRow(25);
       expect(cols).toBe(7);
     });
+  });
+
+  describe('getRowHeight (sentence + practiceRows)', () => {
+    it('optionsを省略した場合は現状互換 (N=1)', () => {
+      // cellSize 15 * 2.3 + 8 = 42.5mm
+      expect(getRowHeight(15, 'sentence')).toBeCloseTo(42.5);
+    });
+
+    it('practiceRows=1 で 42.5mm (cellSize=15)', () => {
+      expect(getRowHeight(15, 'sentence', { sentencePracticeRows: 1 })).toBeCloseTo(42.5);
+    });
+
+    it('practiceRows=2 で 57.5mm (cellSize=15)', () => {
+      expect(getRowHeight(15, 'sentence', { sentencePracticeRows: 2 })).toBeCloseTo(57.5);
+    });
+
+    it('practiceRows=3 で 72.5mm (cellSize=15)', () => {
+      expect(getRowHeight(15, 'sentence', { sentencePracticeRows: 3 })).toBeCloseTo(72.5);
+    });
+  });
+
+  describe('calculateMaxSentencePracticeRows', () => {
+    it('cellSize=12 で 3 を返す (教育的上限で抑制)', () => {
+      expect(calculateMaxSentencePracticeRows(12)).toBe(SENTENCE_LAYOUT.EDU_MAX_PRACTICE_ROWS);
+    });
+
+    it('cellSize=15 で 3 を返す', () => {
+      expect(calculateMaxSentencePracticeRows(15)).toBe(SENTENCE_LAYOUT.EDU_MAX_PRACTICE_ROWS);
+    });
+
+    it('cellSize=20 で 3 を返す', () => {
+      expect(calculateMaxSentencePracticeRows(20)).toBe(SENTENCE_LAYOUT.EDU_MAX_PRACTICE_ROWS);
+    });
+
+    it('cellSize=25 で 3 を返す (A4制約と教育上限が両方満たされるギリギリ)', () => {
+      expect(calculateMaxSentencePracticeRows(25)).toBe(SENTENCE_LAYOUT.EDU_MAX_PRACTICE_ROWS);
+    });
+
+    it('常に MIN_PRACTICE_ROWS (=1) 以上を返す', () => {
+      // 極端に大きい cellSize でも下限を保つ
+      expect(calculateMaxSentencePracticeRows(200)).toBeGreaterThanOrEqual(
+        SENTENCE_LAYOUT.MIN_PRACTICE_ROWS,
+      );
+    });
+  });
+
+  describe('sentenceモード A4 fitting × practiceRows', () => {
+    const availableHeight = A4.SAFE_CONTENT_HEIGHT_MM - A4.HEADER_HEIGHT_MM - A4.FOOTER_HEIGHT_MM;
+    const cellSizes = [CELL_SIZE.MIN, CELL_SIZE.DEFAULT, 18, 20, 22, CELL_SIZE.MAX];
+    const practiceRowsRange = [1, 2, 3];
+
+    for (const cellSize of cellSizes) {
+      for (const practiceRows of practiceRowsRange) {
+        it(`cellSize=${cellSize}mm × practiceRows=${practiceRows} で MIN_QUESTIONS_PER_PAGE 以上が収まる`, () => {
+          const rowHeight = getRowHeight(cellSize, 'sentence', {
+            sentencePracticeRows: practiceRows,
+          });
+          const rowsPerPage = calculateRowsPerPage(cellSize, 'sentence', {
+            sentencePracticeRows: practiceRows,
+          });
+
+          // 教育要件: A4 1ページに最低2問
+          expect(rowsPerPage).toBeGreaterThanOrEqual(SENTENCE_LAYOUT.MIN_QUESTIONS_PER_PAGE);
+          // はみ出し防止
+          expect(rowsPerPage * rowHeight).toBeLessThanOrEqual(availableHeight);
+        });
+      }
+    }
   });
 
   describe('calculateSafePracticeCount', () => {

@@ -2,7 +2,7 @@
  * 設定パネルで使用する定数とマッピング
  */
 
-import { CELL_SIZE } from '../../constants/print';
+import { CELL_SIZE, SENTENCE_LAYOUT } from '../../constants/print';
 import type { Grade, GridStyle, PrintMode, Settings } from '../../types';
 import { calculateRecommendedPracticeColumns } from '../../utils/layout';
 
@@ -51,6 +51,7 @@ type LearningPresetSettingKey =
   | 'pageCount'
   | 'cellSize'
   | 'practiceColumns'
+  | 'sentencePracticeRows'
   | 'showHint'
   | 'title'
   | 'gridStyle';
@@ -75,6 +76,7 @@ function createLearningPresetSettings(
     pageCount: 1,
     cellSize: CELL_SIZE.DEFAULT,
     practiceColumns: calculateRecommendedPracticeColumns(CELL_SIZE.DEFAULT),
+    sentencePracticeRows: SENTENCE_LAYOUT.DEFAULT_PRACTICE_ROWS,
     showHint: false,
     title: '漢字練習プリント',
     gridStyle: 'none',
@@ -162,6 +164,8 @@ export function getMatchingLearningPresetId(settings: Settings): LearningPresetI
 // モードごとの設定適用マップ
 export interface ModeSettingsConfig {
   practiceColumns: boolean;
+  // 例文写経モード専用: 練習行数スライダーを表示するか
+  sentencePracticeRows: boolean;
   gridStyle: boolean;
   showHint: boolean;
   cellSizeLabel: string;
@@ -170,60 +174,70 @@ export interface ModeSettingsConfig {
 export const modeSettings: Record<PrintMode, ModeSettingsConfig> = {
   reading: {
     practiceColumns: false,
+    sentencePracticeRows: false,
     gridStyle: false,
     showHint: false,
     cellSizeLabel: '漢字サイズ',
   },
   writing: {
     practiceColumns: true,
+    sentencePracticeRows: false,
     gridStyle: true,
     showHint: true,
     cellSizeLabel: 'マスサイズ',
   },
   strokeCount: {
     practiceColumns: false,
+    sentencePracticeRows: false,
     gridStyle: false,
     showHint: false,
     cellSizeLabel: '漢字サイズ',
   },
   sentence: {
     practiceColumns: false,
+    sentencePracticeRows: true,
     gridStyle: true,
     showHint: false,
     cellSizeLabel: 'マスサイズ',
   },
   homophone: {
     practiceColumns: false,
+    sentencePracticeRows: false,
     gridStyle: false,
     showHint: false,
     cellSizeLabel: '漢字サイズ',
   },
   radical: {
     practiceColumns: false,
+    sentencePracticeRows: false,
     gridStyle: false,
     showHint: false,
     cellSizeLabel: '漢字サイズ',
   },
   okurigana: {
     practiceColumns: false,
+    sentencePracticeRows: false,
     gridStyle: true,
     showHint: true,
     cellSizeLabel: 'マスサイズ',
   },
   antonym: {
     practiceColumns: false,
+    sentencePracticeRows: false,
     gridStyle: false,
     showHint: false,
     cellSizeLabel: '漢字サイズ',
   },
   strokeOrder: {
     practiceColumns: true,
+    sentencePracticeRows: false,
     gridStyle: true,
     showHint: false,
     cellSizeLabel: 'マスサイズ',
   },
   readingWriting: {
     practiceColumns: true,
+    sentencePracticeRows: false,
     gridStyle: true,
     showHint: true,
     cellSizeLabel: 'マスサイズ',

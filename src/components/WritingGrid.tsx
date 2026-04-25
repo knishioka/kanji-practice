@@ -115,6 +115,8 @@ interface SentenceGridProps {
   targetKanji?: string;
   furiganaGroups?: FuriganaGroup[];
   gridStyle?: GridStyle;
+  // 練習行数（同じ例文を縦にN回繰り返し書く）。省略時は1で現状互換
+  practiceRows?: number;
 }
 
 export function SentenceGrid({
@@ -123,6 +125,7 @@ export function SentenceGrid({
   targetKanji,
   furiganaGroups,
   gridStyle = 'cross',
+  practiceRows = 1,
 }: SentenceGridProps) {
   const chars = Array.from(sentence);
   const hasFurigana = furiganaGroups && furiganaGroups.length > 0;
@@ -179,55 +182,58 @@ export function SentenceGrid({
           );
         })}
       </div>
-      {/* 練習行 */}
-      <div className="flex flex-wrap">
-        {chars.map((char, i) => {
-          const isBlank = targetKanji && char === targetKanji;
-          return (
-            <div
-              key={i}
-              className={clsx(
-                'relative font-textbook',
-                isBlank ? 'border border-gray-800 bg-white' : 'border border-gray-300',
-              )}
-              style={{
-                width: `${cellSize}mm`,
-                height: `${cellSize}mm`,
-              }}
-            >
-              {isBlank ? (
-                <>
-                  {/* 書き取り用ガイドライン */}
-                  {gridStyle === 'cross' && (
-                    <>
-                      <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gray-300 -translate-x-1/2" />
-                      <div className="absolute top-1/2 left-0 right-0 h-px bg-gray-300 -translate-y-1/2" />
-                    </>
-                  )}
-                  {gridStyle === 'dots' && (
-                    <>
-                      <div className="absolute left-1/4 top-1/4 w-1 h-1 rounded-full bg-gray-300" />
-                      <div className="absolute right-1/4 top-1/4 w-1 h-1 rounded-full bg-gray-300" />
-                      <div className="absolute left-1/4 bottom-1/4 w-1 h-1 rounded-full bg-gray-300" />
-                      <div className="absolute right-1/4 bottom-1/4 w-1 h-1 rounded-full bg-gray-300" />
-                    </>
-                  )}
-                </>
-              ) : (
-                <span
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-400"
-                  style={{
-                    fontSize: `${cellSize * 0.7}mm`,
-                    lineHeight: 1,
-                  }}
-                >
-                  {char}
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      {/* 練習行 × N（同じ例文を繰り返し書写する） */}
+      {Array.from({ length: practiceRows }).map((_, rowIdx) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: 練習行は同型の繰り返しでindexのみが識別子になる
+        <div key={`practice-${rowIdx}`} className="flex flex-wrap">
+          {chars.map((char, i) => {
+            const isBlank = targetKanji && char === targetKanji;
+            return (
+              <div
+                key={i}
+                className={clsx(
+                  'relative font-textbook',
+                  isBlank ? 'border border-gray-800 bg-white' : 'border border-gray-300',
+                )}
+                style={{
+                  width: `${cellSize}mm`,
+                  height: `${cellSize}mm`,
+                }}
+              >
+                {isBlank ? (
+                  <>
+                    {/* 書き取り用ガイドライン */}
+                    {gridStyle === 'cross' && (
+                      <>
+                        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gray-300 -translate-x-1/2" />
+                        <div className="absolute top-1/2 left-0 right-0 h-px bg-gray-300 -translate-y-1/2" />
+                      </>
+                    )}
+                    {gridStyle === 'dots' && (
+                      <>
+                        <div className="absolute left-1/4 top-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                        <div className="absolute right-1/4 top-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                        <div className="absolute left-1/4 bottom-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                        <div className="absolute right-1/4 bottom-1/4 w-1 h-1 rounded-full bg-gray-300" />
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <span
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-400"
+                    style={{
+                      fontSize: `${cellSize * 0.7}mm`,
+                      lineHeight: 1,
+                    }}
+                  >
+                    {char}
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ))}
     </div>
   );
 }

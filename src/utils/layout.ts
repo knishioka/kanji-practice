@@ -3,8 +3,34 @@
  * A4印刷レイアウトに関する全ての計算を集約
  */
 
-import { A4, PRACTICE_COLUMNS, WRITING_MODE_SAFE_WIDTH_MM } from '../constants/print';
+import {
+  A4,
+  PRACTICE_COLUMNS,
+  SENTENCE_LAYOUT,
+  WRITING_MODE_SAFE_WIDTH_MM,
+} from '../constants/print';
 import type { PrintMode } from '../types';
+
+/**
+ * レイアウト計算用のオプション
+ * モード固有のパラメータを受け取るために使用
+ */
+export interface LayoutOptions {
+  /** 例文写経モードの練習行数（省略時は1で現状互換） */
+  sentencePracticeRows?: number;
+}
+
+/**
+ * 例文写経モード1問の高さ式（mm）
+ *   cellSize × (FURIGANA_PADDING_RATIO + EXAMPLE_ROW_RATIO + PRACTICE_ROW_RATIO × N) + BOTTOM_MARGIN_MM
+ */
+function getSentenceRowHeight(cellSize: number, practiceRows: number): number {
+  const ratio =
+    SENTENCE_LAYOUT.FURIGANA_PADDING_RATIO +
+    SENTENCE_LAYOUT.EXAMPLE_ROW_RATIO +
+    SENTENCE_LAYOUT.PRACTICE_ROW_RATIO * practiceRows;
+  return cellSize * ratio + SENTENCE_LAYOUT.BOTTOM_MARGIN_MM;
+}
 
 /**
  * モード別の1問あたりの推定行高さ(mm)を返す
@@ -16,13 +42,16 @@ import type { PrintMode } from '../types';
  *
  * @param cellSize - マスサイズ (mm)
  * @param mode - プリントモード
+ * @param options - モード固有のオプション（sentencePracticeRows等）
  * @returns 推定行高さ (mm)
  */
-export function getRowHeight(cellSize: number, mode: PrintMode): number {
+export function getRowHeight(cellSize: number, mode: PrintMode, options?: LayoutOptions): number {
   switch (mode) {
-    case 'sentence':
-      // 例文写経: ふりがなパディング + お手本行 + 練習行 + 問題間マージン
-      return cellSize * 2.3 + 8;
+    case 'sentence': {
+      // 例文写経: ふりがなパディング + お手本行 + 練習行(N) + 問題間マージン
+      const practiceRows = options?.sentencePracticeRows ?? SENTENCE_LAYOUT.MIN_PRACTICE_ROWS;
+      return getSentenceRowHeight(cellSize, practiceRows);
+    }
     case 'homophone':
       // 同音異字: 読み見出し + 最大3選択肢 + マージン（経験値）
       return cellSize * 2.6;
@@ -49,11 +78,42 @@ export function getRowHeight(cellSize: number, mode: PrintMode): number {
  * 1ページあたりの問題数を計算
  * @param cellSize - マスサイズ (mm)
  * @param mode - プリントモード
+ * @param options - モード固有のオプション（sentencePracticeRows等）
  * @returns 1ページに収まる問題数
  */
-export function calculateRowsPerPage(cellSize: number, mode: PrintMode): number {
+export function calculateRowsPerPage(
+  cellSize: number,
+  mode: PrintMode,
+  options?: LayoutOptions,
+): number {
   const availableHeight = A4.SAFE_CONTENT_HEIGHT_MM - A4.HEADER_HEIGHT_MM - A4.FOOTER_HEIGHT_MM;
-  return Math.max(1, Math.floor(availableHeight / getRowHeight(cellSize, mode)));
+  return Math.max(1, Math.floor(availableHeight / getRowHeight(cellSize, mode, options)));
+}
+
+/**
+ * 例文写経モードの練習行数の動的上限を計算
+ * 「A4 1ページに最低 MIN_QUESTIONS_PER_PAGE 問が収まる」制約と
+ * 教育的疲労上限 EDU_MAX_PRACTICE_ROWS の小さい方を返す
+ *
+ * 計算式の導出:
+ *   minQ × (cellSize × (1.3 + N) + BOTTOM) ≤ availableHeight
+ *   ⇔ N ≤ (availableHeight / minQ − BOTTOM) / cellSize − 1.3
+ *
+ * @param cellSize - マスサイズ (mm)
+ * @returns 練習行数の上限 (≧ MIN_PRACTICE_ROWS)
+ */
+export function calculateMaxSentencePracticeRows(cellSize: number): number {
+  const availableHeight = A4.SAFE_CONTENT_HEIGHT_MM - A4.HEADER_HEIGHT_MM - A4.FOOTER_HEIGHT_MM;
+  const baseRatio = SENTENCE_LAYOUT.FURIGANA_PADDING_RATIO + SENTENCE_LAYOUT.EXAMPLE_ROW_RATIO;
+  const heightForOne =
+    availableHeight / SENTENCE_LAYOUT.MIN_QUESTIONS_PER_PAGE - SENTENCE_LAYOUT.BOTTOM_MARGIN_MM;
+  const maxByLayout = Math.floor(
+    heightForOne / cellSize / SENTENCE_LAYOUT.PRACTICE_ROW_RATIO - baseRatio,
+  );
+  return Math.max(
+    SENTENCE_LAYOUT.MIN_PRACTICE_ROWS,
+    Math.min(SENTENCE_LAYOUT.EDU_MAX_PRACTICE_ROWS, maxByLayout),
+  );
 }
 
 /**

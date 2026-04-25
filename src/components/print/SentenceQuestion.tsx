@@ -10,6 +10,8 @@ interface Props {
   cellSize: number;
   columnsPerRow: number;
   gridStyle: GridStyle;
+  // 同じ例文を縦に何回写すか（お手本1行 + 練習N行）
+  practiceRows: number;
 }
 
 export function SentenceQuestion({
@@ -18,6 +20,7 @@ export function SentenceQuestion({
   cellSize,
   columnsPerRow,
   gridStyle,
+  practiceRows,
 }: Props) {
   const targetKanji = question.kanji.char;
   const rawSentence = question.sentence || '';
@@ -35,6 +38,7 @@ export function SentenceQuestion({
         targetKanji={targetKanji}
         furiganaGroups={furiganaGroups}
         gridStyle={gridStyle}
+        practiceRows={practiceRows}
       />
     </div>
   );

@@ -9,7 +9,11 @@ import {
   canGenerateHomophoneQuestions,
   generateHomophoneQuestions,
 } from '../utils/homophoneQuestionGenerator';
-import { calculateMaxPracticeColumns, calculateRowsPerPage } from '../utils/layout';
+import {
+  calculateMaxPracticeColumns,
+  calculateMaxSentencePracticeRows,
+  calculateRowsPerPage,
+} from '../utils/layout';
 import {
   canGenerateOkuriganaQuestions,
   generateOkuriganaQuestions,
@@ -38,10 +42,13 @@ export function SettingsPanel() {
     [excludedKanji, settings.grade],
   );
 
-  // 1ページあたりの問題数
+  // 1ページあたりの問題数（sentenceモードは練習行数も加味）
   const rowsPerPage = useMemo(
-    () => calculateRowsPerPage(settings.cellSize, settings.mode),
-    [settings.cellSize, settings.mode],
+    () =>
+      calculateRowsPerPage(settings.cellSize, settings.mode, {
+        sentencePracticeRows: settings.sentencePracticeRows,
+      }),
+    [settings.cellSize, settings.mode, settings.sentencePracticeRows],
   );
 
   // 合計問題数
@@ -50,6 +57,12 @@ export function SettingsPanel() {
   // 最大練習マス数
   const maxPracticeColumns = useMemo(
     () => calculateMaxPracticeColumns(settings.cellSize),
+    [settings.cellSize],
+  );
+
+  // 例文写経の最大練習行数（cellSizeに応じて動的）
+  const maxSentencePracticeRows = useMemo(
+    () => calculateMaxSentencePracticeRows(settings.cellSize),
     [settings.cellSize],
   );
 
@@ -149,6 +162,7 @@ export function SettingsPanel() {
         rowsPerPage={rowsPerPage}
         totalQuestions={totalQuestions}
         maxPracticeColumns={maxPracticeColumns}
+        maxSentencePracticeRows={maxSentencePracticeRows}
         onSettingsChange={setSettings}
       />
 
