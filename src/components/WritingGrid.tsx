@@ -152,8 +152,8 @@ export function SentenceGrid({
             <div
               key={i}
               className={clsx(
-                'font-textbook text-gray-700 relative',
-                isTarget ? 'border-2 border-gray-800' : 'border border-gray-300',
+                'relative font-textbook text-gray-700 bg-white border',
+                isTarget ? 'border-2 border-gray-800' : 'border-gray-300',
               )}
               style={{
                 width: `${cellSize}mm`,
@@ -190,14 +190,14 @@ export function SentenceGrid({
       {Array.from({ length: practiceRows }).map((_, rowIdx) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: 練習行は同型の繰り返しでindexのみが識別子になる
         <div key={`practice-${rowIdx}`} className="flex flex-wrap">
-          {chars.map((_char, i) => {
-            const isTarget = targetKanji && chars[i] === targetKanji;
+          {chars.map((char, i) => {
+            const isTarget = targetKanji && char === targetKanji;
             return (
               <div
                 key={i}
                 className={clsx(
-                  'relative font-textbook bg-white',
-                  isTarget ? 'border-2 border-gray-800' : 'border border-gray-300',
+                  'relative font-textbook bg-white border',
+                  isTarget ? 'border-2 border-gray-800' : 'border-gray-300',
                 )}
                 style={{
                   width: `${cellSize}mm`,
