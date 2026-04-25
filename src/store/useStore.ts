@@ -24,6 +24,16 @@ interface Store {
   clearExcludedKanji: (grade: Grade) => void;
 }
 
+/**
+ * sentencePracticeRows を「教育的下限〜A4制約に応じた動的上限」の範囲にクランプする
+ */
+function clampSentencePracticeRows(rows: number, cellSize: number): number {
+  return Math.max(
+    SENTENCE_LAYOUT.MIN_PRACTICE_ROWS,
+    Math.min(rows, calculateMaxSentencePracticeRows(cellSize)),
+  );
+}
+
 // デフォルト設定（おすすめ値）
 const defaultSettings: Settings = {
   grade: 1,
@@ -64,20 +74,12 @@ export const useStore = create<Store>()(
             newSettings.practiceColumns = Math.min(s.practiceColumns, maxColumns);
           }
 
-          // cellSize変更時に sentencePracticeRows を動的上限にクランプ
-          if (s.cellSize !== undefined) {
-            const maxRows = calculateMaxSentencePracticeRows(s.cellSize);
-            if (newSettings.sentencePracticeRows > maxRows) {
-              newSettings.sentencePracticeRows = maxRows;
-            }
-          }
-
-          // sentencePracticeRows指定時も上限・下限でクランプ
-          if (s.sentencePracticeRows !== undefined) {
-            const maxRows = calculateMaxSentencePracticeRows(newSettings.cellSize);
-            newSettings.sentencePracticeRows = Math.max(
-              SENTENCE_LAYOUT.MIN_PRACTICE_ROWS,
-              Math.min(s.sentencePracticeRows, maxRows),
+          // sentencePracticeRows を動的上限・下限にクランプ
+          // cellSize と sentencePracticeRows のどちらの変更でも一貫した処理
+          if (s.cellSize !== undefined || s.sentencePracticeRows !== undefined) {
+            newSettings.sentencePracticeRows = clampSentencePracticeRows(
+              newSettings.sentencePracticeRows,
+              newSettings.cellSize,
             );
           }
 
