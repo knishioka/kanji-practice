@@ -55,6 +55,8 @@ export interface Settings {
   gridStyle: GridStyle;
   cellSize: number;
   practiceColumns: number;
+  // 例文写経モードの練習行数（同じ例文を縦に何回写すか）
+  sentencePracticeRows: number;
   showHint: boolean;
   title: string;
 }

@@ -1,8 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { CELL_SIZE } from '../constants/print';
+import { CELL_SIZE, SENTENCE_LAYOUT } from '../constants/print';
 import type { ExcludedKanjiMap, Grade, Question, Settings } from '../types';
-import { calculateMaxPracticeColumns, calculateRecommendedPracticeColumns } from '../utils/layout';
+import {
+  calculateMaxPracticeColumns,
+  calculateMaxSentencePracticeRows,
+  calculateRecommendedPracticeColumns,
+} from '../utils/layout';
 
 interface Store {
   settings: Settings;
@@ -29,6 +33,7 @@ const defaultSettings: Settings = {
   gridStyle: 'cross',
   cellSize: CELL_SIZE.DEFAULT,
   practiceColumns: calculateRecommendedPracticeColumns(CELL_SIZE.DEFAULT),
+  sentencePracticeRows: SENTENCE_LAYOUT.DEFAULT_PRACTICE_ROWS,
   showHint: false,
   title: '漢字練習プリント',
 };
@@ -57,6 +62,23 @@ export const useStore = create<Store>()(
           if (s.practiceColumns !== undefined) {
             const maxColumns = calculateMaxPracticeColumns(newSettings.cellSize);
             newSettings.practiceColumns = Math.min(s.practiceColumns, maxColumns);
+          }
+
+          // cellSize変更時に sentencePracticeRows を動的上限にクランプ
+          if (s.cellSize !== undefined) {
+            const maxRows = calculateMaxSentencePracticeRows(s.cellSize);
+            if (newSettings.sentencePracticeRows > maxRows) {
+              newSettings.sentencePracticeRows = maxRows;
+            }
+          }
+
+          // sentencePracticeRows指定時も上限・下限でクランプ
+          if (s.sentencePracticeRows !== undefined) {
+            const maxRows = calculateMaxSentencePracticeRows(newSettings.cellSize);
+            newSettings.sentencePracticeRows = Math.max(
+              SENTENCE_LAYOUT.MIN_PRACTICE_ROWS,
+              Math.min(s.sentencePracticeRows, maxRows),
+            );
           }
 
           return { settings: newSettings };
@@ -102,6 +124,10 @@ export const useStore = create<Store>()(
             state.settings.pageCount = 1;
             delete state.settings.count;
           }
+          // v2 → v3: 例文写経の練習行数を新規追加（既存ユーザーはデフォルト2に）
+          if (!('sentencePracticeRows' in state.settings)) {
+            state.settings.sentencePracticeRows = SENTENCE_LAYOUT.DEFAULT_PRACTICE_ROWS;
+          }
         }
         // excludedKanjiがない場合は空オブジェクトを設定
         if (!state?.excludedKanji) {
@@ -109,7 +135,7 @@ export const useStore = create<Store>()(
         }
         return state;
       },
-      version: 2,
+      version: 3,
     },
   ),
 );

@@ -46,8 +46,11 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
   });
 
   const rowsPerPage = useMemo(
-    () => calculateRowsPerPage(settings.cellSize, settings.mode),
-    [settings.cellSize, settings.mode],
+    () =>
+      calculateRowsPerPage(settings.cellSize, settings.mode, {
+        sentencePracticeRows: settings.sentencePracticeRows,
+      }),
+    [settings.cellSize, settings.mode, settings.sentencePracticeRows],
   );
 
   const pages = useMemo(() => chunkArray(questions, rowsPerPage), [questions, rowsPerPage]);
@@ -90,6 +93,7 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
             cellSize={settings.cellSize}
             columnsPerRow={safeColumnsPerRow}
             gridStyle={settings.gridStyle}
+            practiceRows={settings.sentencePracticeRows}
           />
         );
       case 'strokeCount':

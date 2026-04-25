@@ -1,4 +1,4 @@
-import { CELL_SIZE } from '../../constants/print';
+import { CELL_SIZE, SENTENCE_LAYOUT } from '../../constants/print';
 import type { GridStyle, Settings } from '../../types';
 import { gridStyles, modeSettings } from './config';
 
@@ -7,6 +7,7 @@ interface Props {
   rowsPerPage: number;
   totalQuestions: number;
   maxPracticeColumns: number;
+  maxSentencePracticeRows: number;
   onSettingsChange: (s: Partial<Settings>) => void;
 }
 
@@ -15,6 +16,7 @@ export function PrintOptions({
   rowsPerPage,
   totalQuestions,
   maxPracticeColumns,
+  maxSentencePracticeRows,
   onSettingsChange,
 }: Props) {
   const currentModeSettings = modeSettings[settings.mode];
@@ -67,6 +69,34 @@ export function PrintOptions({
           >
             <span>3マス</span>
             <span>最大 {maxPracticeColumns}マス</span>
+          </div>
+        </div>
+      )}
+
+      {/* 練習行数 - 例文写経のみ（同じ例文を縦にN回写す） */}
+      {currentModeSettings.sentencePracticeRows && (
+        <div>
+          <label className="section-title">練習行数: {settings.sentencePracticeRows}行</label>
+          <input
+            type="range"
+            min={SENTENCE_LAYOUT.MIN_PRACTICE_ROWS}
+            max={maxSentencePracticeRows}
+            value={settings.sentencePracticeRows}
+            onChange={(e) =>
+              onSettingsChange({
+                sentencePracticeRows: Number(e.target.value),
+              })
+            }
+            className="w-full h-2 rounded-lg cursor-pointer"
+            style={{ background: 'var(--color-border)' }}
+            aria-label="例文写経の練習行数"
+          />
+          <div
+            className="flex justify-between text-xs mt-1"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
+            <span>{SENTENCE_LAYOUT.MIN_PRACTICE_ROWS}行</span>
+            <span>最大 {maxSentencePracticeRows}行（A4はみ出し防止）</span>
           </div>
         </div>
       )}
