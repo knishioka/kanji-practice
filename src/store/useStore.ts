@@ -54,16 +54,16 @@ const defaultSettings: Settings = {
 
 function applyHeaderDefaults(settings: Record<string, unknown>): void {
   if (!('showNameField' in settings)) {
-    settings.showNameField = defaultSettings.showNameField;
+    settings['showNameField'] = defaultSettings.showNameField;
   }
   if (!('showDateField' in settings)) {
-    settings.showDateField = defaultSettings.showDateField;
+    settings['showDateField'] = defaultSettings.showDateField;
   }
   if (!('nameLabel' in settings)) {
-    settings.nameLabel = defaultSettings.nameLabel;
+    settings['nameLabel'] = defaultSettings.nameLabel;
   }
   if (!('dateLabel' in settings)) {
-    settings.dateLabel = defaultSettings.dateLabel;
+    settings['dateLabel'] = defaultSettings.dateLabel;
   }
 }
 
