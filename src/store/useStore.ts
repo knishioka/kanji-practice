@@ -46,7 +46,26 @@ const defaultSettings: Settings = {
   sentencePracticeRows: SENTENCE_LAYOUT.DEFAULT_PRACTICE_ROWS,
   showHint: false,
   title: '漢字練習プリント',
+  showNameField: true,
+  showDateField: true,
+  nameLabel: 'なまえ',
+  dateLabel: 'ひづけ',
 };
+
+function applyHeaderDefaults(settings: Record<string, unknown>): void {
+  if (!('showNameField' in settings)) {
+    settings['showNameField'] = defaultSettings.showNameField;
+  }
+  if (!('showDateField' in settings)) {
+    settings['showDateField'] = defaultSettings.showDateField;
+  }
+  if (!('nameLabel' in settings)) {
+    settings['nameLabel'] = defaultSettings.nameLabel;
+  }
+  if (!('dateLabel' in settings)) {
+    settings['dateLabel'] = defaultSettings.dateLabel;
+  }
+}
 
 export const useStore = create<Store>()(
   persist(
@@ -130,6 +149,8 @@ export const useStore = create<Store>()(
           if (!('sentencePracticeRows' in state.settings)) {
             state.settings.sentencePracticeRows = SENTENCE_LAYOUT.DEFAULT_PRACTICE_ROWS;
           }
+          // v3 → v4: 1ページ目ヘッダーの表示切替とラベルを追加
+          applyHeaderDefaults(state.settings);
         }
         // excludedKanjiがない場合は空オブジェクトを設定
         if (!state?.excludedKanji) {
@@ -137,7 +158,7 @@ export const useStore = create<Store>()(
         }
         return state;
       },
-      version: 3,
+      version: 4,
     },
   ),
 );

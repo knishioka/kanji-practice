@@ -194,6 +194,65 @@ export function PrintOptions({
           placeholder="漢字練習プリント"
         />
       </div>
+
+      {/* 1ページ目ヘッダー */}
+      <div className="space-y-3 p-4 rounded-xl" style={{ background: 'var(--color-bg)' }}>
+        <label className="section-title">1ページ目ヘッダー</label>
+
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={settings.showNameField}
+            onChange={(e) => onSettingsChange({ showNameField: e.target.checked })}
+            className="w-5 h-5 rounded"
+          />
+          <span className="text-sm" style={{ color: 'var(--color-text)' }}>
+            名前欄を表示
+          </span>
+        </label>
+
+        {settings.showNameField && (
+          <input
+            type="text"
+            value={settings.nameLabel}
+            onChange={(e) => onSettingsChange({ nameLabel: e.target.value })}
+            className="w-full p-3 rounded-xl text-sm"
+            style={{
+              border: '2px solid var(--color-border)',
+              background: 'white',
+            }}
+            aria-label="名前欄ラベル"
+            placeholder="なまえ"
+          />
+        )}
+
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={settings.showDateField}
+            onChange={(e) => onSettingsChange({ showDateField: e.target.checked })}
+            className="w-5 h-5 rounded"
+          />
+          <span className="text-sm" style={{ color: 'var(--color-text)' }}>
+            日付欄を表示
+          </span>
+        </label>
+
+        {settings.showDateField && (
+          <input
+            type="text"
+            value={settings.dateLabel}
+            onChange={(e) => onSettingsChange({ dateLabel: e.target.value })}
+            className="w-full p-3 rounded-xl text-sm"
+            style={{
+              border: '2px solid var(--color-border)',
+              background: 'white',
+            }}
+            aria-label="日付欄ラベル"
+            placeholder="ひづけ"
+          />
+        )}
+      </div>
     </div>
   );
 }

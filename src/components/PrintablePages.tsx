@@ -208,6 +208,10 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
             mode={settings.mode}
             date={today}
             isFirstPage={pageIndex === 0}
+            showNameField={settings.showNameField}
+            showDateField={settings.showDateField}
+            nameLabel={settings.nameLabel}
+            dateLabel={settings.dateLabel}
           />
 
           <div className="flex-grow">
