@@ -6,6 +6,10 @@ const A4_HEIGHT_PX = Math.round((297 / 25.4) * 96); // ~1123px
 const MARGIN_PX = Math.round((15 / 25.4) * 96); // ~57px
 const TOLERANCE_PX = 10; // 許容誤差
 
+async function disableRandomQuestions(page: import('@playwright/test').Page) {
+  await page.getByLabel('ランダム出題').uncheck();
+}
+
 test.describe('印刷レイアウトテスト', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
@@ -157,6 +161,7 @@ test.describe('ビジュアルリグレッションテスト', () => {
     await page.goto('/');
 
     // 設定を固定（再現性のため）
+    await disableRandomQuestions(page);
     await page.click('button:has-text("問題を生成")');
     await page.waitForSelector('.a4-page');
 
@@ -172,6 +177,7 @@ test.describe('ビジュアルリグレッションテスト', () => {
 
     // 書き練習モードに変更（buttonに変更）
     await page.click('button:has-text("書き練習")');
+    await disableRandomQuestions(page);
 
     await page.click('button:has-text("問題を生成")');
     await page.waitForSelector('.a4-page');

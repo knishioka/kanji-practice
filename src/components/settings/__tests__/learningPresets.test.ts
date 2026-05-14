@@ -19,6 +19,10 @@ const baseSettings: Settings = {
   sentencePracticeRows: SENTENCE_LAYOUT.DEFAULT_PRACTICE_ROWS,
   showHint: false,
   title: 'カスタム設定',
+  showNameField: false,
+  showDateField: false,
+  nameLabel: 'おなまえ',
+  dateLabel: '日付',
 };
 
 describe('learning presets', () => {
@@ -114,5 +118,16 @@ describe('learning presets', () => {
     );
 
     expect(next).toMatchObject(writingPreset);
+  });
+
+  it('keeps first-page header settings when a learning preset is selected', () => {
+    const next = applyLearningPreset(baseSettings, 'kanken9-writing');
+
+    expect(next).toMatchObject({
+      showNameField: false,
+      showDateField: false,
+      nameLabel: 'おなまえ',
+      dateLabel: '日付',
+    });
   });
 });

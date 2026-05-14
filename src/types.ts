@@ -59,6 +59,10 @@ export interface Settings {
   sentencePracticeRows: number;
   showHint: boolean;
   title: string;
+  showNameField: boolean;
+  showDateField: boolean;
+  nameLabel: string;
+  dateLabel: string;
 }
 
 // 問題

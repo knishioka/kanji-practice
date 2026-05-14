@@ -5,6 +5,10 @@ interface Props {
   mode: PrintMode;
   date: string;
   isFirstPage: boolean;
+  showNameField: boolean;
+  showDateField: boolean;
+  nameLabel: string;
+  dateLabel: string;
 }
 
 const modeDescriptions: Record<PrintMode, string> = {
@@ -20,20 +24,40 @@ const modeDescriptions: Record<PrintMode, string> = {
   readingWriting: '漢字の読み方と書き方を練習しましょう',
 };
 
-export function PageHeader({ title, mode, date, isFirstPage }: Props) {
+export function PageHeader({
+  title,
+  mode,
+  date,
+  isFirstPage,
+  showNameField,
+  showDateField,
+  nameLabel,
+  dateLabel,
+}: Props) {
   if (isFirstPage) {
+    const hasHeaderFields = showDateField || showNameField;
+
     return (
       <div className="flex justify-between items-start mb-4 border-b pb-3">
         <div>
           <h1 className="text-xl font-bold">{title}</h1>
           <p className="text-sm text-gray-600 mt-1">{modeDescriptions[mode]}</p>
         </div>
-        <div className="text-right text-sm">
-          <div className="text-gray-500">{date}</div>
-          <div className="mt-2 border-b border-gray-400 w-32">
-            <span className="text-xs text-gray-400">なまえ</span>
+        {hasHeaderFields && (
+          <div className="text-right text-sm">
+            {showDateField && (
+              <div className="text-gray-500">
+                {dateLabel && <span className="text-xs text-gray-400 mr-2">{dateLabel}</span>}
+                <span>{date}</span>
+              </div>
+            )}
+            {showNameField && (
+              <div className="mt-2 border-b border-gray-400 w-32">
+                {nameLabel && <span className="text-xs text-gray-400">{nameLabel}</span>}
+              </div>
+            )}
           </div>
-        </div>
+        )}
       </div>
     );
   }

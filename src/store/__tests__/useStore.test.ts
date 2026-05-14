@@ -68,3 +68,34 @@ describe('useStore - sentencePracticeRows', () => {
     expect(useStore.getState().settings.sentencePracticeRows).toBeLessThanOrEqual(expected);
   });
 });
+
+describe('useStore - first page header settings', () => {
+  beforeEach(() => {
+    useStore.getState().resetSettings();
+  });
+
+  it('uses compatible defaults for the first page header', () => {
+    const { settings } = useStore.getState();
+
+    expect(settings.showNameField).toBe(true);
+    expect(settings.showDateField).toBe(true);
+    expect(settings.nameLabel).toBe('なまえ');
+    expect(settings.dateLabel).toBe('ひづけ');
+  });
+
+  it('updates first page header visibility and labels', () => {
+    useStore.getState().setSettings({
+      showNameField: false,
+      showDateField: false,
+      nameLabel: 'Name',
+      dateLabel: 'Date',
+    });
+
+    expect(useStore.getState().settings).toMatchObject({
+      showNameField: false,
+      showDateField: false,
+      nameLabel: 'Name',
+      dateLabel: 'Date',
+    });
+  });
+});
