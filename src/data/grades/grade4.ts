@@ -272,7 +272,7 @@ export const grade4: Kanji[] = [
       { word: '完成', reading: 'かんせい' },
       { word: '完全', reading: 'かんぜん' },
     ],
-    sentences: ['{完成|かんせい}する。', '{完全|かんぜん}に{直|ただちに}る。'],
+    sentences: ['{完成|かんせい}する。', '{完全|かんぜん}に{直|なお}る。'],
     antonyms: ['未'],
   },
   {
@@ -1159,7 +1159,7 @@ export const grade4: Kanji[] = [
       { word: '照らす', reading: 'てらす' },
       { word: '日照り', reading: 'ひでり' },
     ],
-    sentences: ['ライトで{照|て}らす。', '{照|てる}れる。'],
+    sentences: ['ライトで{照|て}らす。', '{照|て}れる。'],
     okuriganaExamples: [{ stem: '照', okurigana: 'らす', word: '照らす', reading: 'てらす' }],
   },
   {

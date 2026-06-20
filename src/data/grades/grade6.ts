@@ -1617,7 +1617,14 @@ export const grade6: Kanji[] = [
       { word: '著しい', reading: 'いちじるしい' },
     ],
     sentences: ['{著者|ちょしゃ}に{会|あ}う。', '{著|いちじる}しい{変化|へんか}がある。'],
-    okuriganaExamples: [{ stem: '著', okurigana: 'しい', word: '著しい', reading: 'いちじるしい' }],
+    okuriganaExamples: [
+      {
+        stem: '著',
+        okurigana: 'しい',
+        word: '著しい',
+        reading: 'いちじるしい',
+      },
+    ],
   },
   {
     char: '庁',
@@ -1935,7 +1942,7 @@ export const grade6: Kanji[] = [
       { word: '腹痛', reading: 'ふくつう' },
       { word: 'お腹', reading: 'おなか' },
     ],
-    sentences: ['{腹痛|ふくつう}がする。', 'お{腹|なか}が{空|そら}いた。'],
+    sentences: ['{腹痛|ふくつう}がする。', 'お{腹|なか}が{空|す}いた。'],
   },
   {
     char: '奮',
@@ -2075,7 +2082,14 @@ export const grade6: Kanji[] = [
       { word: '亡くなる', reading: 'なくなる' },
     ],
     sentences: ['{事故|じこ}で{死亡|しぼう}する。', '{祖母|そぼ}が{亡|な}くなる。'],
-    okuriganaExamples: [{ stem: '亡', okurigana: 'くなる', word: '亡くなる', reading: 'なくなる' }],
+    okuriganaExamples: [
+      {
+        stem: '亡',
+        okurigana: 'くなる',
+        word: '亡くなる',
+        reading: 'なくなる',
+      },
+    ],
     antonyms: ['存'],
   },
   {

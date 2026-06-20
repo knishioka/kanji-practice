@@ -227,7 +227,12 @@ export const grade5: Kanji[] = [
     ],
     sentences: ['{確|たし}かな{情報|じょうほう}。', '{確認|かくにん}する。'],
     okuriganaExamples: [
-      { stem: '確', okurigana: 'かめる', word: '確かめる', reading: 'たしかめる' },
+      {
+        stem: '確',
+        okurigana: 'かめる',
+        word: '確かめる',
+        reading: 'たしかめる',
+      },
     ],
   },
   {
@@ -1852,7 +1857,7 @@ export const grade5: Kanji[] = [
       { word: '喜ぶ', reading: 'よろこぶ' },
       { word: '喜劇', reading: 'きげき' },
     ],
-    sentences: ['{喜|よろこ}びを{表|おもて}す。', '{大|おお}{喜|よろこ}びする。'],
+    sentences: ['{喜|よろこ}びを{表|あらわ}す。', '{大|おお}{喜|よろこ}びする。'],
     okuriganaExamples: [{ stem: '喜', okurigana: 'ぶ', word: '喜ぶ', reading: 'よろこぶ' }],
   },
   {

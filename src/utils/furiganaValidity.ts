@@ -52,8 +52,18 @@ function isOkuriganaReadingValid(kanji: Kanji, r: string, okurigana: string): bo
     return true;
   }
 
-  // 2. 訓読みと完全一致（送りがなを持たない名詞読み。後続かなは別語/助詞）
-  if (kunHira.includes(r)) return true;
+  // 2. 訓読みと完全一致（送りがなを持たない名詞読み。後続かなは別語/助詞）。
+  //    ただし「別の訓読みが動詞/形容詞で、後続かながその活用語尾になりうる」場合は曖昧なので
+  //    短絡せず後続の積極判定に委ねる。例: 表=おもて だが「表す」は あらわす（語尾「す」）。
+  if (kunHira.includes(r)) {
+    const ambiguousWithVerbReading = kunHira.some((k2) => {
+      if (k2 === r) return false;
+      const end = k2[k2.length - 1];
+      if (end === 'い') return 'いくけ'.includes(head) || (head === 'か' && okurigana[1] === 'っ');
+      return (GODAN_ROWS[end] ?? '').includes(head);
+    });
+    if (!ambiguousWithVerbReading) return true;
+  }
 
   // 2b. r ＋ 送りがな先頭部分 が訓読みを完全再構成（後ろ=うし＋ろ、少し=すこ＋し 等）
   for (const K of kunHira) {
