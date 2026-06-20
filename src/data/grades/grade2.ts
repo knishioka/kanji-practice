@@ -23,7 +23,7 @@ export const grade2: Kanji[] = [
       { word: '羽', reading: 'はね' },
       { word: '羽毛', reading: 'うもう' },
     ],
-    sentences: ['{鳥|とり}の{羽|はね}。', '{羽|はね}が{生|い}える。'],
+    sentences: ['{鳥|とり}の{羽|はね}。', '{羽|はね}が{生|は}える。'],
   },
   {
     char: '雲',
@@ -597,7 +597,10 @@ export const grade2: Kanji[] = [
       { word: '旅行', reading: 'りょこう' },
     ],
     sentences: ['{学校|がっこう}に{行|い}く。', '{旅行|りょこう}に{行|い}く。'],
-    okuriganaExamples: [{ stem: '行', okurigana: 'く', word: '行く', reading: 'いく' }],
+    okuriganaExamples: [
+      { stem: '行', okurigana: 'く', word: '行く', reading: 'いく' },
+      { stem: '行', okurigana: 'う', word: '行う', reading: 'おこなう' },
+    ],
   },
   {
     char: '高',
@@ -1318,8 +1321,11 @@ export const grade2: Kanji[] = [
       { word: '通る', reading: 'とおる' },
       { word: '交通', reading: 'こうつう' },
     ],
-    sentences: ['{道|みち}を{通|とお}る。', '{学校|がっこう}に{通|とお}う。'],
-    okuriganaExamples: [{ stem: '通', okurigana: 'る', word: '通る', reading: 'とおる' }],
+    sentences: ['{道|みち}を{通|とお}る。', '{学校|がっこう}に{通|かよ}う。'],
+    okuriganaExamples: [
+      { stem: '通', okurigana: 'る', word: '通る', reading: 'とおる' },
+      { stem: '通', okurigana: 'う', word: '通う', reading: 'かよう' },
+    ],
   },
   {
     char: '弟',
@@ -1646,7 +1652,10 @@ export const grade2: Kanji[] = [
       { word: '散歩', reading: 'さんぽ' },
     ],
     sentences: ['{道|みち}を{歩|ある}く。', '{散歩|さんぽ}する。'],
-    okuriganaExamples: [{ stem: '歩', okurigana: 'く', word: '歩く', reading: 'あるく' }],
+    okuriganaExamples: [
+      { stem: '歩', okurigana: 'く', word: '歩く', reading: 'あるく' },
+      { stem: '歩', okurigana: 'む', word: '歩む', reading: 'あゆむ' },
+    ],
   },
   {
     char: '母',

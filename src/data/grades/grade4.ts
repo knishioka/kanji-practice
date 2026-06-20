@@ -257,8 +257,11 @@ export const grade4: Kanji[] = [
       { word: '覚える', reading: 'おぼえる' },
       { word: '感覚', reading: 'かんかく' },
     ],
-    sentences: ['{漢字|かんじ}を{覚|おぼ}える。', '{目|め}が{覚|おぼ}める。'],
-    okuriganaExamples: [{ stem: '覚', okurigana: 'える', word: '覚える', reading: 'おぼえる' }],
+    sentences: ['{漢字|かんじ}を{覚|おぼ}える。', '{目|め}が{覚|さ}める。'],
+    okuriganaExamples: [
+      { stem: '覚', okurigana: 'える', word: '覚える', reading: 'おぼえる' },
+      { stem: '覚', okurigana: 'める', word: '覚める', reading: 'さめる' },
+    ],
   },
   {
     char: '完',
@@ -370,7 +373,7 @@ export const grade4: Kanji[] = [
       { word: '喜ぶ', reading: 'よろこぶ' },
       { word: '喜劇', reading: 'きげき' },
     ],
-    sentences: ['{喜|よろこ}んで{参加|さんか}する。', '{大|だい}{喜|き}び。'],
+    sentences: ['{喜|よろこ}んで{参加|さんか}する。', '{大|おお}{喜|よろこ}び。'],
     okuriganaExamples: [{ stem: '喜', okurigana: 'ぶ', word: '喜ぶ', reading: 'よろこぶ' }],
   },
   {
@@ -496,7 +499,7 @@ export const grade4: Kanji[] = [
       { word: '共通', reading: 'きょうつう' },
       { word: '共同', reading: 'きょうどう' },
     ],
-    sentences: ['{共通|きょうつう}{点|てん}がある。', '{共|とも}に{歩|ある}む。'],
+    sentences: ['{共通|きょうつう}{点|てん}がある。', '{共|とも}に{歩|あゆ}む。'],
   },
   {
     char: '協',
@@ -1133,7 +1136,7 @@ export const grade4: Kanji[] = [
       { word: '焼く', reading: 'やく' },
       { word: '焼肉', reading: 'やきにく' },
     ],
-    sentences: ['パンを{焼|や}く。', '{日|にち}{焼|しょう}けする。'],
+    sentences: ['パンを{焼|や}く。', '{日|ひ}{焼|や}けする。'],
     okuriganaExamples: [{ stem: '焼', okurigana: 'く', word: '焼く', reading: 'やく' }],
   },
   {
@@ -1497,7 +1500,7 @@ export const grade4: Kanji[] = [
       { word: '置く', reading: 'おく' },
       { word: '位置', reading: 'いち' },
     ],
-    sentences: ['{本|ほん}を{置|お}く。', '{物|もの}{置|お}にしまう。'],
+    sentences: ['{本|ほん}を{置|お}く。', '{物|もの}{置|おき}にしまう。'],
     okuriganaExamples: [{ stem: '置', okurigana: 'く', word: '置く', reading: 'おく' }],
   },
   {
@@ -1714,7 +1717,7 @@ export const grade4: Kanji[] = [
       { word: '熱い', reading: 'あつい' },
       { word: '熱心', reading: 'ねっしん' },
     ],
-    sentences: ['お{湯|ゆ}が{熱|あつ}い。', '{熱|あつ}が{出|で}る。'],
+    sentences: ['お{湯|ゆ}が{熱|あつ}い。', '{熱|ねつ}が{出|で}る。'],
     okuriganaExamples: [{ stem: '熱', okurigana: 'い', word: '熱い', reading: 'あつい' }],
     antonyms: ['冷'],
   },
@@ -1727,7 +1730,7 @@ export const grade4: Kanji[] = [
       { word: '念', reading: 'ねん' },
       { word: '記念', reading: 'きねん' },
     ],
-    sentences: ['{記念|きねん}に{写真|しゃしん}を{撮|と}る。', '{念|ねん}{願|ねが}の{夢|ゆめ}。'],
+    sentences: ['{記念|きねん}に{写真|しゃしん}を{撮|と}る。', '{念願|ねんがん}の{夢|ゆめ}。'],
   },
   {
     char: '敗',
@@ -1943,7 +1946,7 @@ export const grade4: Kanji[] = [
       { word: '変わる', reading: 'かわる' },
       { word: '変化', reading: 'へんか' },
     ],
-    sentences: ['{色|いろ}が{変|か}わる。', '{変|か}な{人|ひと}。'],
+    sentences: ['{色|いろ}が{変|か}わる。', '{変|へん}な{人|ひと}。'],
     okuriganaExamples: [{ stem: '変', okurigana: 'わる', word: '変わる', reading: 'かわる' }],
   },
   {
@@ -2070,7 +2073,7 @@ export const grade4: Kanji[] = [
       { word: '無い', reading: 'ない' },
       { word: '無理', reading: 'むり' },
     ],
-    sentences: ['お{金|かね}が{無|な}い。', '{無|む}{事|じ}に{着|き}く。'],
+    sentences: ['お{金|かね}が{無|な}い。', '{無|む}{事|じ}に{着|つ}く。'],
     antonyms: ['有'],
   },
   {
@@ -2245,7 +2248,7 @@ export const grade4: Kanji[] = [
       { word: '例', reading: 'れい' },
       { word: '例外', reading: 'れいがい' },
     ],
-    sentences: ['{例|れい}を{挙|あ}げる。', '{例|れい}えば。'],
+    sentences: ['{例|れい}を{挙|あ}げる。', '{例|たと}えば。'],
   },
   {
     char: '歴',

@@ -153,7 +153,7 @@ export const grade3: Kanji[] = [
       { word: '駅', reading: 'えき' },
       { word: '駅前', reading: 'えきまえ' },
     ],
-    sentences: ['{駅|えき}に{着|き}く。', '{駅|えき}で{待|ま}つ。'],
+    sentences: ['{駅|えき}に{着|つ}く。', '{駅|えき}で{待|ま}つ。'],
   },
   {
     char: '央',
@@ -369,7 +369,7 @@ export const grade3: Kanji[] = [
       { word: '急ぐ', reading: 'いそぐ' },
       { word: '急行', reading: 'きゅうこう' },
     ],
-    sentences: ['{急|いそ}いで{行|い}く。', '{急|いそ}な{坂道|さかみち}。'],
+    sentences: ['{急|いそ}いで{行|い}く。', '{急|きゅう}な{坂道|さかみち}。'],
     okuriganaExamples: [{ stem: '急', okurigana: 'ぐ', word: '急ぐ', reading: 'いそぐ' }],
   },
   {
@@ -598,7 +598,7 @@ export const grade3: Kanji[] = [
       { word: '倉庫', reading: 'そうこ' },
       { word: '車庫', reading: 'しゃこ' },
     ],
-    sentences: ['{倉庫|そうこ}に{入|い}れる。', '{車庫|しゃこ}に{停|てい}める。'],
+    sentences: ['{倉庫|そうこ}に{入|い}れる。', '{車庫|しゃこ}に{停|と}める。'],
   },
   {
     char: '湖',
@@ -643,7 +643,7 @@ export const grade3: Kanji[] = [
       { word: '港', reading: 'みなと' },
       { word: '空港', reading: 'くうこう' },
     ],
-    sentences: ['{港|みなと}に{着|き}く。', '{空港|くうこう}に{行|い}く。'],
+    sentences: ['{港|みなと}に{着|つ}く。', '{空港|くうこう}に{行|い}く。'],
   },
   {
     char: '号',
@@ -995,7 +995,10 @@ export const grade3: Kanji[] = [
       { word: '重要', reading: 'じゅうよう' },
     ],
     sentences: ['{荷物|にもつ}が{重|おも}い。', '{重要|じゅうよう}な{話|はな}。'],
-    okuriganaExamples: [{ stem: '重', okurigana: 'い', word: '重い', reading: 'おもい' }],
+    okuriganaExamples: [
+      { stem: '重', okurigana: 'い', word: '重い', reading: 'おもい' },
+      { stem: '重', okurigana: 'ねる', word: '重ねる', reading: 'かさねる' },
+    ],
     antonyms: ['軽'],
   },
   {
@@ -1433,8 +1436,11 @@ export const grade3: Kanji[] = [
       { word: '着る', reading: 'きる' },
       { word: '到着', reading: 'とうちゃく' },
     ],
-    sentences: ['{服|ふく}を{着|き}る。', '{駅|えき}に{着|き}く。'],
-    okuriganaExamples: [{ stem: '着', okurigana: 'る', word: '着る', reading: 'きる' }],
+    sentences: ['{服|ふく}を{着|き}る。', '{駅|えき}に{着|つ}く。'],
+    okuriganaExamples: [
+      { stem: '着', okurigana: 'る', word: '着る', reading: 'きる' },
+      { stem: '着', okurigana: 'く', word: '着く', reading: 'つく' },
+    ],
   },
   {
     char: '注',
@@ -1777,7 +1783,7 @@ export const grade3: Kanji[] = [
       { word: '坂', reading: 'さか' },
       { word: '坂道', reading: 'さかみち' },
     ],
-    sentences: ['{坂|さか}を{上|うえ}る。', '{急|いそ}な{坂|さか}。'],
+    sentences: ['{坂|さか}を{上|のぼ}る。', '{急|きゅう}な{坂|さか}。'],
   },
   {
     char: '板',
@@ -1946,7 +1952,7 @@ export const grade3: Kanji[] = [
       { word: '幸福', reading: 'こうふく' },
       { word: '福祉', reading: 'ふくし' },
     ],
-    sentences: ['{幸福|こうふく}な{人|ひと}。', '{福|ふく}{引|いん}き。'],
+    sentences: ['{幸福|こうふく}な{人|ひと}。', '{福|ふく}{引|び}き。'],
   },
   {
     char: '物',
@@ -2191,7 +2197,7 @@ export const grade3: Kanji[] = [
       { word: '落ちる', reading: 'おちる' },
       { word: '落葉', reading: 'らくよう' },
     ],
-    sentences: ['{葉|は}が{落|お}ちる。', '{落|お}ち{着|き}く。'],
+    sentences: ['{葉|は}が{落|お}ちる。', '{落|お}ち{着|つ}く。'],
     okuriganaExamples: [{ stem: '落', okurigana: 'ちる', word: '落ちる', reading: 'おちる' }],
   },
   {

@@ -326,7 +326,7 @@ export const grade6: Kanji[] = [
       { word: '吸収', reading: 'きゅうしゅう' },
       { word: '吸う', reading: 'すう' },
     ],
-    sentences: ['{水|みず}{分|わ}を{吸収|きゅうしゅう}する。', '{深|ふか}く{息|いき}を{吸|す}う。'],
+    sentences: ['{水分|すいぶん}を{吸収|きゅうしゅう}する。', '{深|ふか}く{息|いき}を{吸|す}う。'],
     okuriganaExamples: [{ stem: '吸', okurigana: 'う', word: '吸う', reading: 'すう' }],
   },
   {
@@ -653,7 +653,7 @@ export const grade6: Kanji[] = [
     ],
     sentences: [
       '{出発|しゅっぱつ}{時刻|じこく}を{確認|かくにん}する。',
-      '{野菜|やさい}を{細|ほそ}かく{刻|きざ}む。',
+      '{野菜|やさい}を{細|こま}かく{刻|きざ}む。',
     ],
     okuriganaExamples: [{ stem: '刻', okurigana: 'む', word: '刻む', reading: 'きざむ' }],
   },
@@ -718,7 +718,7 @@ export const grade6: Kanji[] = [
       { word: '座席', reading: 'ざせき' },
       { word: '座る', reading: 'すわる' },
     ],
-    sentences: ['{座席|ざせき}に{着|き}く。', '{椅子|いす}に{座|すわ}る。'],
+    sentences: ['{座席|ざせき}に{着|つ}く。', '{椅子|いす}に{座|すわ}る。'],
     okuriganaExamples: [{ stem: '座', okurigana: 'る', word: '座る', reading: 'すわる' }],
   },
   {
@@ -1639,7 +1639,7 @@ export const grade6: Kanji[] = [
       { word: '山頂', reading: 'さんちょう' },
       { word: '頂く', reading: 'いただく' },
     ],
-    sentences: ['{山頂|さんちょう}に{着|き}く。', 'お{土産|みやげ}を{頂|いただ}く。'],
+    sentences: ['{山頂|さんちょう}に{着|つ}く。', 'お{土産|みやげ}を{頂|いただ}く。'],
     okuriganaExamples: [{ stem: '頂', okurigana: 'く', word: '頂く', reading: 'いただく' }],
   },
   {
@@ -1987,7 +1987,7 @@ export const grade6: Kanji[] = [
       { word: '閉会', reading: 'へいかい' },
       { word: '閉じる', reading: 'とじる' },
     ],
-    sentences: ['{閉会|へいかい}{式|しき}が{行|い}われる。', 'ドアを{閉|と}じる。'],
+    sentences: ['{閉会|へいかい}{式|しき}が{行|おこな}われる。', 'ドアを{閉|と}じる。'],
     okuriganaExamples: [
       { stem: '閉', okurigana: 'じる', word: '閉じる', reading: 'とじる' },
       { stem: '閉', okurigana: 'める', word: '閉める', reading: 'しめる' },
@@ -2321,7 +2321,7 @@ export const grade6: Kanji[] = [
       { word: '議論', reading: 'ぎろん' },
       { word: '論文', reading: 'ろんぶん' },
     ],
-    sentences: ['{議論|ぎろん}を{重|おも}ねる。', '{論文|ろんぶん}を{提出|ていしゅつ}する。'],
+    sentences: ['{議論|ぎろん}を{重|かさ}ねる。', '{論文|ろんぶん}を{提出|ていしゅつ}する。'],
   },
   // 2020年学習指導要領で4年生から移動した漢字
   {
