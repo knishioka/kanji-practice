@@ -44,7 +44,7 @@ PR 本文は **日本語**、ブランチ名 / コミット / PR タイトルは
 
 エージェントが触ってはいけないファイル / ディレクトリ:
 
-- `src/data/kanji.ts` および `src/data/grades/*.ts` — 全学年の漢字データ SSOT。手動メンテのみ。
+- `src/data/kanji.ts` および `src/data/grades/*.ts` — 全学年の漢字データ SSOT。自動生成・無断の一括改変は禁止。誤データ（読み・例文など）の修正は、レビュー済み PR であれば可。
 - `package-lock.json` — 依存追加・更新コミット以外で書き換えない。
 - 自動生成: `dist/`, `playwright-report/`, `test-results/`, `node_modules/`。
 

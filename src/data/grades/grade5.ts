@@ -227,7 +227,12 @@ export const grade5: Kanji[] = [
     ],
     sentences: ['{確|たし}かな{情報|じょうほう}。', '{確認|かくにん}する。'],
     okuriganaExamples: [
-      { stem: '確', okurigana: 'かめる', word: '確かめる', reading: 'たしかめる' },
+      {
+        stem: '確',
+        okurigana: 'かめる',
+        word: '確かめる',
+        reading: 'たしかめる',
+      },
     ],
   },
   {
@@ -511,7 +516,7 @@ export const grade5: Kanji[] = [
       { word: '減る', reading: 'へる' },
       { word: '削減', reading: 'さくげん' },
     ],
-    sentences: ['{体|からだ}{重|おも}が{減|へ}る。', '{経|けい}{費|ひ}を{減|へ}らす。'],
+    sentences: ['{体重|たいじゅう}が{減|へ}る。', '{経|けい}{費|ひ}を{減|へ}らす。'],
     okuriganaExamples: [{ stem: '減', okurigana: 'る', word: '減る', reading: 'へる' }],
     antonyms: ['増'],
   },
@@ -762,7 +767,7 @@ export const grade5: Kanji[] = [
       { word: '酸素', reading: 'さんそ' },
       { word: '酸', reading: 'さん' },
     ],
-    sentences: ['{酸素|さんそ}を{吸|す}う。', '{酸|さん}っぱい{味|あじ}。'],
+    sentences: ['{酸素|さんそ}を{吸|す}う。', '{酸|す}っぱい{味|あじ}。'],
   },
   {
     char: '賛',
@@ -1194,7 +1199,7 @@ export const grade5: Kanji[] = [
       { word: '素材', reading: 'そざい' },
       { word: '素直', reading: 'すなお' },
     ],
-    sentences: ['{素材|そざい}を{選|えら}ぶ。', '{素|そ}{晴|せい}らしい。'],
+    sentences: ['{素材|そざい}を{選|えら}ぶ。', '{素|す}{晴|ば}らしい。'],
   },
   {
     char: '総',
@@ -1611,7 +1616,7 @@ export const grade5: Kanji[] = [
       { word: '仏', reading: 'ほとけ' },
       { word: '仏像', reading: 'ぶつぞう' },
     ],
-    sentences: ['{仏様|ほとけさま}に{祈|いの}る。', '{仏|ほとけ}{教|おし}を{学|まな}ぶ。'],
+    sentences: ['{仏様|ほとけさま}に{祈|いの}る。', '{仏教|ぶっきょう}を{学|まな}ぶ。'],
   },
   {
     char: '編',
@@ -1852,7 +1857,7 @@ export const grade5: Kanji[] = [
       { word: '喜ぶ', reading: 'よろこぶ' },
       { word: '喜劇', reading: 'きげき' },
     ],
-    sentences: ['{喜|よろこ}びを{表|おもて}す。', '{大|だい}{喜|き}びする。'],
+    sentences: ['{喜|よろこ}びを{表|あらわ}す。', '{大|おお}{喜|よろこ}びする。'],
     okuriganaExamples: [{ stem: '喜', okurigana: 'ぶ', word: '喜ぶ', reading: 'よろこぶ' }],
   },
   {
@@ -2178,7 +2183,7 @@ export const grade5: Kanji[] = [
       { word: '独立', reading: 'どくりつ' },
       { word: '独自', reading: 'どくじ' },
     ],
-    sentences: ['{独立|どくりつ}する。', '{独|ひとり}り{言|い}を{言|い}う。'],
+    sentences: ['{独立|どくりつ}する。', '{独|ひと}り{言|ごと}を{言|い}う。'],
   },
   {
     char: '評',

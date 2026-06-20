@@ -233,7 +233,7 @@ export const grade1: Kanji[] = [
       { word: '小さい', reading: 'ちいさい' },
       { word: '小学校', reading: 'しょうがっこう' },
     ],
-    sentences: ['{小|ちい}さい{花|はな}が{咲|さ}いた。', '{小学校|しょうがっこう}に{通|とお}う。'],
+    sentences: ['{小|ちい}さい{花|はな}が{咲|さ}いた。', '{小学校|しょうがっこう}に{通|かよ}う。'],
     okuriganaExamples: [{ stem: '小', okurigana: 'さい', word: '小さい', reading: 'ちいさい' }],
     antonyms: ['大'],
   },
@@ -400,6 +400,7 @@ export const grade1: Kanji[] = [
         word: '生まれる',
         reading: 'うまれる',
       },
+      { stem: '生', okurigana: 'える', word: '生える', reading: 'はえる' },
     ],
   },
   {
@@ -422,7 +423,7 @@ export const grade1: Kanji[] = [
       { word: '草', reading: 'くさ' },
       { word: '草原', reading: 'そうげん' },
     ],
-    sentences: ['{草|くさ}が{生|い}える。', '{草原|そうげん}を{走|はし}る。'],
+    sentences: ['{草|くさ}が{生|は}える。', '{草原|そうげん}を{走|はし}る。'],
   },
   {
     char: '虫',
@@ -805,7 +806,10 @@ export const grade1: Kanji[] = [
       { word: '正月', reading: 'しょうがつ' },
     ],
     sentences: ['{正|ただ}しい{答|こた}え。', '{正月|しょうがつ}を{祝|いわ}う。'],
-    okuriganaExamples: [{ stem: '正', okurigana: 'しい', word: '正しい', reading: 'ただしい' }],
+    okuriganaExamples: [
+      { stem: '正', okurigana: 'しい', word: '正しい', reading: 'ただしい' },
+      { stem: '正', okurigana: 'す', word: '正す', reading: 'ただす' },
+    ],
   },
   {
     char: '水',
