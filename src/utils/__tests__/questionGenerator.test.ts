@@ -1,5 +1,19 @@
 import { describe, expect, it } from 'vitest';
+import { allKanji } from '../../data/kanji';
+import type { Grade } from '../../types';
 import { canGenerateQuestions, generateQuestions } from '../questionGenerator';
+import { getSentencePlainText, isKanjiChar, parseRubySentence } from '../sentenceRuby';
+
+function expectOnlyLearnedKanji(text: string, grade: Grade) {
+  const allowedKanji = new Set(
+    allKanji.filter((kanji) => kanji.grade <= grade).map((kanji) => kanji.char),
+  );
+  const unexpectedKanji = Array.from(text).filter(
+    (char) => char !== '々' && isKanjiChar(char) && !allowedKanji.has(char),
+  );
+
+  expect(unexpectedKanji).toEqual([]);
+}
 
 describe('questionGenerator utilities', () => {
   describe('canGenerateQuestions', () => {
@@ -92,6 +106,56 @@ describe('questionGenerator utilities', () => {
       // At least some questions should have sentences
       const withSentence = questions.filter((q) => q.sentence);
       expect(withSentence.length).toBeGreaterThan(0);
+    });
+
+    it('1年生の書き練習用例語・例文に未習漢字を含めない', () => {
+      const count = allKanji
+        .filter((kanji) => kanji.grade === 1)
+        .reduce((total, kanji) => total + Math.max(kanji.examples.length, 1), 0);
+      const questions = generateQuestions(1, count, false);
+
+      expect(questions).toHaveLength(count);
+      expect(questions.every((question) => question.kanji.grade === 1)).toBe(true);
+      for (const question of questions) {
+        expectOnlyLearnedKanji(question.example?.word ?? '', 1);
+        expectOnlyLearnedKanji(getSentencePlainText(question.sentence ?? ''), 1);
+      }
+
+      const dayQuestion = questions.find((question) => question.kanji.char === '日');
+      expect(dayQuestion?.example).toEqual({ word: '日', reading: 'ひ' });
+      expect(dayQuestion?.sentence).toBe('{日|ひ}');
+      expect(getSentencePlainText(dayQuestion?.sentence ?? '')).toContain('日');
+      expect(parseRubySentence(dayQuestion?.sentence ?? '')?.groups).toEqual([
+        { start: 0, length: 1, reading: 'ひ' },
+      ]);
+    });
+
+    it.each([
+      2, 3, 4, 5, 6,
+    ] as const)('%i年生では対象漢字を指定学年に限定し、例語・例文を学習済み漢字だけで構成する', (grade) => {
+      const gradeKanji = allKanji.filter((kanji) => kanji.grade === grade);
+      const count = gradeKanji.reduce(
+        (total, kanji) => total + Math.max(kanji.examples.length, 1),
+        0,
+      );
+      const questions = generateQuestions(grade, count, false);
+
+      expect(questions).toHaveLength(count);
+      expect(questions.every((question) => question.kanji.grade === grade)).toBe(true);
+      for (const question of questions) {
+        expectOnlyLearnedKanji(question.example?.word ?? '', grade);
+        expectOnlyLearnedKanji(getSentencePlainText(question.sentence ?? ''), grade);
+      }
+    });
+
+    it('安全な候補が不足してもかなフォールバックを繰り返して指定件数を維持する', () => {
+      const questions = generateQuestions(1, 500, false);
+
+      expect(questions).toHaveLength(500);
+      for (const question of questions) {
+        expectOnlyLearnedKanji(question.example?.word ?? '', 1);
+        expectOnlyLearnedKanji(getSentencePlainText(question.sentence ?? ''), 1);
+      }
     });
   });
 });
