@@ -72,7 +72,7 @@ function App() {
       </footer>
 
       {/* デバッグオーバーレイ */}
-      <DebugOverlay targetRef={printRef} />
+      {import.meta.env.DEV && <DebugOverlay targetRef={printRef} />}
     </div>
   );
 }
