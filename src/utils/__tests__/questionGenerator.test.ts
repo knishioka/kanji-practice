@@ -122,12 +122,28 @@ describe('questionGenerator utilities', () => {
       }
 
       const dayQuestion = questions.find((question) => question.kanji.char === '日');
-      expect(dayQuestion?.example).toEqual({ word: '日', reading: 'ひ' });
-      expect(dayQuestion?.sentence).toBe('{日|ひ}');
+      expect(dayQuestion?.example).toEqual({ word: '日', reading: 'にち' });
+      expect(dayQuestion?.sentence).toBe('{日|にち}');
       expect(getSentencePlainText(dayQuestion?.sentence ?? '')).toContain('日');
       expect(parseRubySentence(dayQuestion?.sentence ?? '')?.groups).toEqual([
-        { start: 0, length: 1, reading: 'ひ' },
+        { start: 0, length: 1, reading: 'にち' },
       ]);
+    });
+
+    it('単独漢字のフォールバックには送り仮名を必要としない音読みを使う', () => {
+      const grade1Questions = generateQuestions(1, 500, false);
+      const grade2Questions = generateQuestions(2, 500, false);
+
+      expect(grade1Questions.find((question) => question.kanji.char === '休')?.sentence).toBe(
+        '{休|きゅう}',
+      );
+      expect(grade1Questions.find((question) => question.kanji.char === '小')?.sentence).toBe(
+        '{小|しょう}',
+      );
+      expect(grade2Questions.find((question) => question.kanji.char === '用')?.example).toEqual({
+        word: '用',
+        reading: 'よう',
+      });
     });
 
     it.each([

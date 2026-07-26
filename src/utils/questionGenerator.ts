@@ -54,7 +54,9 @@ function normalizeReadingForRuby(reading: string): string | undefined {
  * 熟語全体の読みを流用せず、対象漢字自身の読みから安全な読みを選ぶ。
  */
 function getFallbackReading(kanji: Kanji): string | undefined {
-  for (const reading of [...kanji.readings.kun, ...kanji.readings.on]) {
+  // 単独の漢字に送り仮名込みの訓読みを付けると表示と読みが一致しないため、
+  // まず単独でも成立する音読みを優先する。
+  for (const reading of [...kanji.readings.on, ...kanji.readings.kun]) {
     const normalized = normalizeReadingForRuby(reading);
     if (normalized) return normalized;
   }
