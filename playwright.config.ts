@@ -16,12 +16,29 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testIgnore: '**/production.spec.ts',
+    },
+    {
+      name: 'production-chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:4173/kanji-practice/',
+      },
+      testMatch: '**/production.spec.ts',
     },
   ],
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-  },
+  webServer: [
+    {
+      command: 'npm run dev',
+      url: 'http://localhost:5173',
+      reuseExistingServer: !process.env.CI,
+      timeout: 120000,
+    },
+    {
+      command: 'npm run build && npm run preview -- --host 127.0.0.1 --port 4173',
+      url: 'http://localhost:4173/kanji-practice/',
+      reuseExistingServer: false,
+      timeout: 120000,
+    },
+  ],
 });
