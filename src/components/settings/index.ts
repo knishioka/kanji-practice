@@ -17,4 +17,5 @@ export {
 export { GradeSelector } from './GradeSelector';
 export { LearningPresetSelector } from './LearningPresetSelector';
 export { ModeSelector } from './ModeSelector';
+export { PracticeHistory } from './PracticeHistory';
 export { PrintOptions } from './PrintOptions';

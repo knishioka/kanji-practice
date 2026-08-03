@@ -1,19 +1,20 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { CELL_SIZE, SENTENCE_LAYOUT } from '../constants/print';
-import type { ExcludedKanjiMap, Grade, Question, Settings } from '../types';
+import type { ExcludedKanjiMap, Grade, PracticeHistoryEntry, Question, Settings } from '../types';
 import {
   calculateMaxPracticeColumns,
   calculateMaxSentencePracticeRows,
   calculateRecommendedPracticeColumns,
 } from '../utils/layout';
 
-interface Store {
+export interface Store {
   settings: Settings;
   questions: Question[];
   excludedKanji: ExcludedKanjiMap;
   /** 問題再生成トリガー（インクリメントで再生成を要求） */
   generationCounter: number;
+  practiceHistory: PracticeHistoryEntry[];
   setSettings: (s: Partial<Settings>) => void;
   setQuestions: (q: Question[]) => void;
   /** 問題再生成をトリガー（ランダム問題の再生成等） */
@@ -22,6 +23,9 @@ interface Store {
   setExcludedKanji: (grade: Grade, chars: string[]) => void;
   toggleExcludedKanji: (grade: Grade, char: string) => void;
   clearExcludedKanji: (grade: Grade) => void;
+  addPracticeHistory: (questionCount: number) => void;
+  clearPracticeHistory: () => void;
+  restorePracticeHistory: (entry: PracticeHistoryEntry) => void;
 }
 
 /**
@@ -52,6 +56,24 @@ const defaultSettings: Settings = {
   dateLabel: 'ひづけ',
 };
 
+export const MAX_PRACTICE_HISTORY = 20;
+
+function createPracticeHistoryEntry(
+  settings: Settings,
+  questionCount: number,
+): PracticeHistoryEntry {
+  const executedAt = new Date().toISOString();
+  return {
+    id: `${executedAt}-${Math.random().toString(36).slice(2)}`,
+    executedAt,
+    grade: settings.grade,
+    mode: settings.mode,
+    pageCount: settings.pageCount,
+    questionCount,
+    settings: { ...settings },
+  };
+}
+
 function applyHeaderDefaults(settings: Record<string, unknown>): void {
   if (!('showNameField' in settings)) {
     settings['showNameField'] = defaultSettings.showNameField;
@@ -74,6 +96,7 @@ export const useStore = create<Store>()(
       questions: [],
       excludedKanji: {},
       generationCounter: 0,
+      practiceHistory: [],
       regenerate: () => set((state) => ({ generationCounter: state.generationCounter + 1 })),
       setSettings: (s) =>
         set((state) => {
@@ -124,6 +147,19 @@ export const useStore = create<Store>()(
         set((state) => ({
           excludedKanji: { ...state.excludedKanji, [grade]: [] },
         })),
+      addPracticeHistory: (questionCount) =>
+        set((state) => ({
+          practiceHistory: [
+            createPracticeHistoryEntry(state.settings, questionCount),
+            ...state.practiceHistory,
+          ].slice(0, MAX_PRACTICE_HISTORY),
+        })),
+      clearPracticeHistory: () => set({ practiceHistory: [] }),
+      restorePracticeHistory: (entry) =>
+        set((state) => ({
+          settings: { ...entry.settings },
+          generationCounter: state.generationCounter + 1,
+        })),
     }),
     {
       name: 'kanji-practice-settings',
@@ -132,6 +168,7 @@ export const useStore = create<Store>()(
         const state = persistedState as {
           settings?: Record<string, unknown>;
           excludedKanji?: ExcludedKanjiMap;
+          practiceHistory?: PracticeHistoryEntry[];
         };
         if (state?.settings) {
           // grades (配列) から grade (単一) へのマイグレーション
@@ -156,9 +193,13 @@ export const useStore = create<Store>()(
         if (!state?.excludedKanji) {
           state.excludedKanji = {};
         }
+        // v4 → v5: 練習履歴を追加（既存設定はそのまま維持）
+        if (!state.practiceHistory) {
+          state.practiceHistory = [];
+        }
         return state;
       },
-      version: 4,
+      version: 5,
     },
   ),
 );
