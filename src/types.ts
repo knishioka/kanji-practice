@@ -65,6 +65,20 @@ export interface Settings {
   dateLabel: string;
 }
 
+// 印刷/PDF保存時の設定スナップショット
+export type PracticeSettingsSnapshot = Settings;
+
+// 端末内に保存する練習履歴
+export interface PracticeHistoryEntry {
+  id: string;
+  executedAt: string;
+  grade: Grade;
+  mode: PrintMode;
+  pageCount: number;
+  questionCount: number;
+  settings: PracticeSettingsSnapshot;
+}
+
 // 問題
 export interface Question {
   kanji: Kanji;

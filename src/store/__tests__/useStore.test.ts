@@ -1,5 +1,6 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CELL_SIZE, SENTENCE_LAYOUT } from '../../constants/print';
+import type { PracticeHistoryEntry } from '../../types';
 import { calculateMaxSentencePracticeRows } from '../../utils/layout';
 
 // vitest が node 環境で動作するため、useStore (zustand persist) のロード前に localStorage をスタブする必要がある
@@ -97,5 +98,71 @@ describe('useStore - first page header settings', () => {
       nameLabel: 'Name',
       dateLabel: 'Date',
     });
+  });
+});
+
+describe('useStore - practice history', () => {
+  beforeEach(() => {
+    useStore.getState().resetSettings();
+    useStore.getState().clearPracticeHistory();
+  });
+
+  it('stores a settings snapshot and trims history to the latest 20 entries', () => {
+    useStore.getState().setSettings({ grade: 2, mode: 'reading', pageCount: 2 });
+
+    for (let index = 0; index < 21; index += 1) {
+      useStore.getState().addPracticeHistory(index + 1);
+    }
+
+    const { practiceHistory } = useStore.getState();
+    expect(practiceHistory).toHaveLength(20);
+    expect(practiceHistory[0]).toMatchObject({
+      grade: 2,
+      mode: 'reading',
+      pageCount: 2,
+      questionCount: 21,
+      settings: { grade: 2, mode: 'reading', pageCount: 2 },
+    });
+    expect(practiceHistory.at(-1)?.questionCount).toBe(2);
+  });
+
+  it('restores saved settings and requests question regeneration', () => {
+    useStore.getState().setSettings({ grade: 2, mode: 'writing', pageCount: 3 });
+    useStore.getState().addPracticeHistory(24);
+    const entry = useStore.getState().practiceHistory[0] as PracticeHistoryEntry;
+    const generationCounter = useStore.getState().generationCounter;
+    useStore.getState().setSettings({ grade: 5, mode: 'sentence', pageCount: 1 });
+
+    useStore.getState().restorePracticeHistory(entry);
+
+    expect(useStore.getState().settings).toEqual(entry.settings);
+    expect(useStore.getState().generationCounter).toBe(generationCounter + 1);
+  });
+
+  it('clears all history', () => {
+    useStore.getState().addPracticeHistory(8);
+
+    useStore.getState().clearPracticeHistory();
+
+    expect(useStore.getState().practiceHistory).toEqual([]);
+  });
+
+  it('migrates version 4 persisted settings without losing them', async () => {
+    localStorage.setItem(
+      'kanji-practice-settings',
+      JSON.stringify({
+        state: {
+          settings: { ...useStore.getState().settings, grade: 4, pageCount: 3 },
+          excludedKanji: { 4: ['愛'] },
+        },
+        version: 4,
+      }),
+    );
+
+    await useStore.persist.rehydrate();
+
+    expect(useStore.getState().settings).toMatchObject({ grade: 4, pageCount: 3 });
+    expect(useStore.getState().excludedKanji).toEqual({ 4: ['愛'] });
+    expect(useStore.getState().practiceHistory).toEqual([]);
   });
 });
