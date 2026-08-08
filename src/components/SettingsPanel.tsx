@@ -29,6 +29,7 @@ import {
   getLearningPresetSettings,
   LearningPresetSelector,
   ModeSelector,
+  PracticeHistory,
   PrintOptions,
 } from './settings';
 
@@ -165,6 +166,8 @@ export function SettingsPanel() {
         maxSentencePracticeRows={maxSentencePracticeRows}
         onSettingsChange={setSettings}
       />
+
+      <PracticeHistory />
 
       <ExcludeKanjiModal
         isOpen={isExcludeModalOpen}

@@ -2,6 +2,7 @@ import { forwardRef, useCallback, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useStore } from '../store/useStore';
 import { generateFilename, generatePDF } from '../utils/pdf';
+import { runAndRecordOnSuccess } from '../utils/practiceHistory';
 import { PrintablePages } from './PrintablePages';
 
 interface Props {
@@ -13,10 +14,13 @@ export const PrintPreview = forwardRef<HTMLDivElement, Props>(function PrintPrev
   ref,
 ) {
   const contentRef = useRef<HTMLDivElement>(null);
-  const { settings, questions } = useStore();
+  const { settings, questions, addPracticeHistory } = useStore();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
-  const handlePrint = useReactToPrint({ contentRef });
+  const handlePrint = useReactToPrint({
+    contentRef,
+    onAfterPrint: () => addPracticeHistory(questions.length),
+  });
 
   // forwardRefとローカルrefを統合するコールバック
   const setRefs = useCallback(
@@ -36,7 +40,10 @@ export const PrintPreview = forwardRef<HTMLDivElement, Props>(function PrintPrev
 
     setIsGeneratingPDF(true);
     try {
-      await generatePDF(contentRef.current, generateFilename(settings.title));
+      await runAndRecordOnSuccess(
+        () => generatePDF(contentRef.current!, generateFilename(settings.title)),
+        () => addPracticeHistory(questions.length),
+      );
     } catch (error) {
       console.error('PDF生成エラー:', error);
       alert('PDFの生成に失敗しました');
