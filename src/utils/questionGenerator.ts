@@ -19,7 +19,7 @@ interface QuestionCandidate {
 const HIRAGANA_READING_PATTERN = /^[\u3041-\u3096\u30FC]+$/;
 const RUBY_ANNOTATION_PATTERN = /\{([^|{}]+)\|([^|{}]+)\}/g;
 const FINAL_RUBY_PHRASE_PATTERN = /\{[^|{}]+\|[^|{}]+\}[\u3041-\u3096\u30FC]*。$/;
-const SENTENCE_PARTICLE_PATTERN = /[はがをにへでと]/;
+const NOMINAL_PREDICATE_PARTICLE_PATTERN = /[はが]/;
 const PREDICATE_ENDING_PATTERN = /(?:い|う|く|ぐ|す|つ|ぬ|ぶ|む|る|た|ない|ます|です|だ)$/;
 
 /**
@@ -155,7 +155,7 @@ function createGradeAppropriateSentence(
   if (
     simplifiesRuby &&
     FINAL_RUBY_PHRASE_PATTERN.test(sentence) &&
-    !SENTENCE_PARTICLE_PATTERN.test(textOutsideRuby) &&
+    !NOMINAL_PREDICATE_PARTICLE_PATTERN.test(textOutsideRuby) &&
     !PREDICATE_ENDING_PATTERN.test(textWithoutPunctuation)
   ) {
     // 未習漢字の簡略化で名詞句の断片が候補に昇格するのを防ぐ。

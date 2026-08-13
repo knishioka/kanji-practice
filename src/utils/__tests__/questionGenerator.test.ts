@@ -171,7 +171,7 @@ describe('questionGenerator utilities', () => {
           .map((question) => `${grade}年:${question.kanji.char}`),
       );
 
-      expect([...new Set(fallbackKanji)]).toEqual(['3年:式']);
+      expect([...new Set(fallbackKanji)]).toEqual(['3年:式', '5年:状']);
     });
 
     it('フォールバック対象の全11字を、それぞれ完結した例文へ変換する', () => {
@@ -185,7 +185,7 @@ describe('questionGenerator utilities', () => {
         ['局', /^(?:ゆうびん局に行く|けっ局そうなった)。$/],
         ['式', /^「式」の字をかく。$/],
         ['芸', /^芸じゅつを楽しむ。$/],
-        ['状', /^状態をかくにん。$/],
+        ['状', /^「状」の字をかく。$/],
         ['砂', /^砂(?:ばくを旅する|はまで遊ぶ)。$/],
       ]);
 
@@ -217,6 +217,7 @@ describe('questionGenerator utilities', () => {
         /^老じゃく男女がある。$/,
         /^正しいこたえ。$/,
         /^貧ぼうなくらし。$/,
+        /^状態をかくにん。$/,
       ];
 
       for (const randomValue of [0, 0.999]) {
