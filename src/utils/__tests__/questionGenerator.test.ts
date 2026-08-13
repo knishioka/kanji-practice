@@ -164,17 +164,17 @@ describe('questionGenerator utilities', () => {
       }
     });
 
-    it('全学年で汎用フォールバックに頼らず既存例文から問題を生成する', () => {
+    it('既存例文を安全に簡略化できない場合も、汎用フォールバックで完結した文を生成する', () => {
       const fallbackKanji = ([1, 2, 3, 4, 5, 6] as const).flatMap((grade) =>
         generateQuestions(grade, 1000, false)
           .filter((question) => question.sentence?.startsWith('「'))
           .map((question) => `${grade}年:${question.kanji.char}`),
       );
 
-      expect([...new Set(fallbackKanji)]).toEqual([]);
+      expect([...new Set(fallbackKanji)]).toEqual(['3年:式', '5年:状']);
     });
 
-    it('従来フォールバックしていた全10字を、それぞれ完結した例文へ変換する', () => {
+    it('フォールバック対象の全11字を、それぞれ完結した例文へ変換する', () => {
       const expectedSentences = new Map<string, RegExp>([
         ['日', /^日ようびは休み。$/],
         ['名', /^名まえをかく。$/],
@@ -183,8 +183,9 @@ describe('questionGenerator utilities', () => {
         ['友', /^友だち(?:とあそぶ|が多い)。$/],
         ['理', /^(?:理ゆうを聞く|りょう理を作る)。$/],
         ['局', /^(?:ゆうびん局に行く|けっ局そうなった)。$/],
-        ['式', /^(?:そつぎょう|けっこん)式がある。$/],
+        ['式', /^「式」の字をかく。$/],
         ['芸', /^芸じゅつを楽しむ。$/],
+        ['状', /^「状」の字をかく。$/],
         ['砂', /^砂(?:ばくを旅する|はまで遊ぶ)。$/],
       ]);
 
@@ -205,6 +206,31 @@ describe('questionGenerator utilities', () => {
           sentences.every((sentence) => expected.test(sentence)),
           `${char}: ${sentences}`,
         ).toBe(true);
+      }
+    });
+
+    it('未習漢字を簡略化して名詞句の断片を生成候補へ昇格させない', () => {
+      const fragmentPatterns = [
+        /^ちゅう臣。$/,
+        /^しょうぼう隊。$/,
+        /^整理整頓がある。$/,
+        /^老じゃく男女がある。$/,
+      ];
+
+      for (const randomValue of [0, 0.999]) {
+        const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(randomValue);
+        const sentences = ([1, 2, 3, 4, 5, 6] as const).flatMap((grade) =>
+          generateQuestions(grade, 1000, false).map((question) =>
+            getSentencePlainText(question.sentence ?? ''),
+          ),
+        );
+        randomSpy.mockRestore();
+
+        expect(
+          sentences.filter((sentence) =>
+            fragmentPatterns.some((pattern) => pattern.test(sentence)),
+          ),
+        ).toEqual([]);
       }
     });
 

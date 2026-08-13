@@ -18,7 +18,6 @@ interface QuestionCandidate {
 
 const HIRAGANA_READING_PATTERN = /^[\u3041-\u3096\u30FC]+$/;
 const RUBY_ANNOTATION_PATTERN = /\{([^|{}]+)\|([^|{}]+)\}/g;
-const SINGLE_RUBY_NOUN_PATTERN = /^\{[^|{}]+\|[^|{}]+\}。$/;
 
 /**
  * 指定学年までに学習済みの漢字セットを生成
@@ -127,29 +126,28 @@ function createGradeAppropriateSentence(
   allowedKanji: Set<string>,
 ): string | undefined {
   let losesTargetKanji = false;
-  let splitsTargetRuby = false;
-  let simplified = sentence.replace(
+  let simplifiesRuby = false;
+  const simplified = sentence.replace(
     RUBY_ANNOTATION_PATTERN,
     (annotation, annotatedWord: string, reading: string) => {
       if (containsOnlyAllowedKanji(annotatedWord, allowedKanji)) return annotation;
       if (annotatedWord.includes(kanji.char)) {
         const preserved = preserveTargetKanjiInRuby(annotation, annotatedWord, reading, kanji);
         if (preserved) {
-          splitsTargetRuby ||= preserved !== annotation;
+          simplifiesRuby ||= preserved !== annotation;
           return preserved;
         }
         losesTargetKanji = true;
         return annotation;
       }
+      simplifiesRuby = true;
       return reading;
     },
   );
 
   if (losesTargetKanji) return undefined;
-  if (splitsTargetRuby && SINGLE_RUBY_NOUN_PATTERN.test(sentence)) {
-    simplified = `${simplified.slice(0, -1)}がある。`;
-  } else if (splitsTargetRuby && sentence.endsWith('}。')) {
-    // 熟語を分割した結果が名詞句の断片になる場合は、別の完結した例文を優先する。
+  if (simplifiesRuby && sentence.endsWith('}。')) {
+    // 未習漢字の簡略化で名詞句の断片が候補に昇格するのを防ぐ。
     return undefined;
   }
 
