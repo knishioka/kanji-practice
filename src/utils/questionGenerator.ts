@@ -18,6 +18,9 @@ interface QuestionCandidate {
 
 const HIRAGANA_READING_PATTERN = /^[\u3041-\u3096\u30FC]+$/;
 const RUBY_ANNOTATION_PATTERN = /\{([^|{}]+)\|([^|{}]+)\}/g;
+const FINAL_RUBY_PHRASE_PATTERN = /\{[^|{}]+\|[^|{}]+\}[\u3041-\u3096\u30FC]*。$/;
+const SENTENCE_PARTICLE_PATTERN = /[はがをにへでと]/;
+const PREDICATE_ENDING_PATTERN = /(?:い|う|く|ぐ|す|つ|ぬ|ぶ|む|る|た|ない|ます|です|だ)$/;
 
 /**
  * 指定学年までに学習済みの漢字セットを生成
@@ -146,12 +149,19 @@ function createGradeAppropriateSentence(
   );
 
   if (losesTargetKanji) return undefined;
-  if (simplifiesRuby && sentence.endsWith('}。')) {
+  const textOutsideRuby = sentence.replace(RUBY_ANNOTATION_PATTERN, '');
+  const plainText = getSentencePlainText(simplified);
+  const textWithoutPunctuation = plainText.slice(0, -1);
+  if (
+    simplifiesRuby &&
+    FINAL_RUBY_PHRASE_PATTERN.test(sentence) &&
+    !SENTENCE_PARTICLE_PATTERN.test(textOutsideRuby) &&
+    !PREDICATE_ENDING_PATTERN.test(textWithoutPunctuation)
+  ) {
     // 未習漢字の簡略化で名詞句の断片が候補に昇格するのを防ぐ。
     return undefined;
   }
 
-  const plainText = getSentencePlainText(simplified);
   if (!plainText.includes(kanji.char) || !containsOnlyAllowedKanji(plainText, allowedKanji)) {
     return undefined;
   }
