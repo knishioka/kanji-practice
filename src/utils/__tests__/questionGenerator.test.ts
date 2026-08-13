@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { allKanji } from '../../data/kanji';
 import type { Grade } from '../../types';
 import { canGenerateQuestions, generateQuestions } from '../questionGenerator';
@@ -123,27 +123,89 @@ describe('questionGenerator utilities', () => {
 
       const dayQuestion = questions.find((question) => question.kanji.char === '日');
       expect(dayQuestion?.example).toEqual({ word: '日', reading: 'にち' });
-      expect(dayQuestion?.sentence).toBe('{日|にち}');
+      expect(dayQuestion?.sentence).toBe('{日|にち}ようびは{休|やす}み。');
       expect(getSentencePlainText(dayQuestion?.sentence ?? '')).toContain('日');
       expect(parseRubySentence(dayQuestion?.sentence ?? '')?.groups).toEqual([
         { start: 0, length: 1, reading: 'にち' },
+        { start: 5, length: 1, reading: 'やす' },
       ]);
     });
 
-    it('単独漢字のフォールバックには送り仮名を必要としない音読みを使う', () => {
-      const grade1Questions = generateQuestions(1, 500, false);
-      const grade2Questions = generateQuestions(2, 500, false);
+    it('未習漢字だけをひらがなに置き換え、対象漢字を含む自然な例文を維持する', () => {
+      const grade2Questions = generateQuestions(2, 1000, false);
+      const arrowSentences = grade2Questions
+        .filter((question) => question.kanji.char === '矢')
+        .map((question) => question.sentence);
+      const companySentences = grade2Questions
+        .filter((question) => question.kanji.char === '社')
+        .map((question) => question.sentence);
 
-      expect(grade1Questions.find((question) => question.kanji.char === '休')?.sentence).toBe(
-        '{休|きゅう}',
+      expect(arrowSentences.length).toBeGreaterThan(0);
+      expect(
+        arrowSentences.every((sentence) =>
+          /^(?:\{矢\|や\}をはなつ。|\{弓矢\|ゆみや\}をつかう。)$/.test(sentence ?? ''),
+        ),
+      ).toBe(true);
+      expect(companySentences.length).toBeGreaterThan(0);
+      expect(companySentences.every((sentence) => sentence === '{会社|かいしゃ}ではたらく。')).toBe(
+        true,
       );
-      expect(grade1Questions.find((question) => question.kanji.char === '小')?.sentence).toBe(
-        '{小|しょう}',
+    });
+
+    it('例文は対象漢字1文字だけにフォールバックせず、文として終わる', () => {
+      for (const grade of [1, 2, 3, 4, 5, 6] as const) {
+        const questions = generateQuestions(grade, 1000, false);
+        for (const question of questions) {
+          const sentence = getSentencePlainText(question.sentence ?? '');
+          expect(sentence).toContain(question.kanji.char);
+          expect(Array.from(sentence).length).toBeGreaterThan(1);
+          expect(sentence).toMatch(/[。！？]$/);
+        }
+      }
+    });
+
+    it('全学年で汎用フォールバックに頼らず既存例文から問題を生成する', () => {
+      const fallbackKanji = ([1, 2, 3, 4, 5, 6] as const).flatMap((grade) =>
+        generateQuestions(grade, 1000, false)
+          .filter((question) => question.sentence?.startsWith('「'))
+          .map((question) => `${grade}年:${question.kanji.char}`),
       );
-      expect(grade2Questions.find((question) => question.kanji.char === '用')?.example).toEqual({
-        word: '用',
-        reading: 'よう',
+
+      expect([...new Set(fallbackKanji)]).toEqual([]);
+    });
+
+    it('従来フォールバックしていた全10字を、それぞれ完結した例文へ変換する', () => {
+      const expectedSentences = new Map<string, RegExp>([
+        ['日', /^日ようびは休み。$/],
+        ['名', /^名まえをかく。$/],
+        ['王', /^王(?:さまがいる|こくをおさめる)。$/],
+        ['場', /^場しょをきめる。$/],
+        ['友', /^友だち(?:とあそぶ|が多い)。$/],
+        ['理', /^(?:理ゆうを聞く|りょう理を作る)。$/],
+        ['局', /^(?:ゆうびん局に行く|けっ局そうなった)。$/],
+        ['式', /^(?:そつぎょう|けっこん)式がある。$/],
+        ['芸', /^芸じゅつを楽しむ。$/],
+        ['砂', /^砂(?:ばくを旅する|はまで遊ぶ)。$/],
+      ]);
+
+      const questions = [0, 0.999].flatMap((randomValue) => {
+        const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(randomValue);
+        const generated = ([1, 2, 3, 4, 5, 6] as const).flatMap((grade) =>
+          generateQuestions(grade, 1000, false),
+        );
+        randomSpy.mockRestore();
+        return generated;
       });
+      for (const [char, expected] of expectedSentences) {
+        const sentences = questions
+          .filter((question) => question.kanji.char === char)
+          .map((question) => getSentencePlainText(question.sentence ?? ''));
+        expect(sentences.length, `${char}の例文が生成されていない`).toBeGreaterThan(0);
+        expect(
+          sentences.every((sentence) => expected.test(sentence)),
+          `${char}: ${sentences}`,
+        ).toBe(true);
+      }
     });
 
     it.each([

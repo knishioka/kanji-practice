@@ -5,7 +5,7 @@
 
 import { allKanji, getKanjiByGradeFiltered } from '../data/kanji';
 import type { Grade, Kanji, Question } from '../types';
-import { isKanjiChar } from './sentenceRuby';
+import { getSentencePlainText, isKanjiChar } from './sentenceRuby';
 
 /**
  * 問題候補の型
@@ -17,6 +17,8 @@ interface QuestionCandidate {
 }
 
 const HIRAGANA_READING_PATTERN = /^[\u3041-\u3096\u30FC]+$/;
+const RUBY_ANNOTATION_PATTERN = /\{([^|{}]+)\|([^|{}]+)\}/g;
+const SINGLE_RUBY_NOUN_PATTERN = /^\{[^|{}]+\|[^|{}]+\}。$/;
 
 /**
  * 指定学年までに学習済みの漢字セットを生成
@@ -54,6 +56,12 @@ function normalizeReadingForRuby(reading: string): string | undefined {
  * 熟語全体の読みを流用せず、対象漢字自身の読みから安全な読みを選ぶ。
  */
 function getFallbackReading(kanji: Kanji): string | undefined {
+  const standaloneExample = kanji.examples.find((example) => example.word === kanji.char);
+  const standaloneReading = standaloneExample
+    ? normalizeReadingForRuby(standaloneExample.reading)
+    : undefined;
+  if (standaloneReading) return standaloneReading;
+
   // 単独の漢字に送り仮名込みの訓読みを付けると表示と読みが一致しないため、
   // まず単独でも成立する音読みを優先する。
   for (const reading of [...kanji.readings.on, ...kanji.readings.kun]) {
@@ -65,6 +73,43 @@ function getFallbackReading(kanji: Kanji): string | undefined {
 }
 
 /**
+ * 熟語ルビの先頭または末尾にある対象漢字を残し、残りを読みに置き換える。
+ * 例: `{日曜日|にちようび}` → `{日|にち}ようび`
+ */
+function preserveTargetKanjiInRuby(
+  annotation: string,
+  annotatedWord: string,
+  reading: string,
+  kanji: Kanji,
+): string | undefined {
+  const wordChars = Array.from(annotatedWord);
+  const normalizedReadings = [
+    ...kanji.examples
+      .filter((example) => example.word === kanji.char)
+      .map((example) => normalizeReadingForRuby(example.reading)),
+    ...[...kanji.readings.on, ...kanji.readings.kun].map(normalizeReadingForRuby),
+  ]
+    .filter((candidate): candidate is string => candidate !== undefined)
+    .filter((candidate, index, candidates) => candidates.indexOf(candidate) === index)
+    .sort((a, b) => b.length - a.length);
+
+  if (wordChars[0] === kanji.char) {
+    const targetReading = normalizedReadings.find((candidate) => reading.startsWith(candidate));
+    if (targetReading)
+      return `{${kanji.char}|${targetReading}}${reading.slice(targetReading.length)}`;
+  }
+
+  if (wordChars[wordChars.length - 1] === kanji.char) {
+    const targetReading = normalizedReadings.find((candidate) => reading.endsWith(candidate));
+    if (targetReading) {
+      return `${reading.slice(0, -targetReading.length)}{${kanji.char}|${targetReading}}`;
+    }
+  }
+
+  return annotation === `{${kanji.char}|${reading}}` ? annotation : undefined;
+}
+
+/**
  * 安全な例語がない場合も書き練習の対象漢字を残せるよう、
  * 対象漢字単体とかなの読みへフォールバックする。
  */
@@ -73,12 +118,56 @@ function createFallbackExample(kanji: Kanji): QuestionCandidate['example'] {
 }
 
 /**
- * 例文候補がない場合も例文写経で対象漢字を表示できるよう、
- * 対象漢字単体のルビ表記へフォールバックする。
+ * 未習漢字を含むルビをひらがなに置き換え、元の自然な例文を活用する。
+ * 対象漢字と未習漢字が同じルビグループの場合は、対象漢字まで消えるため採用しない。
+ */
+function createGradeAppropriateSentence(
+  sentence: string,
+  kanji: Kanji,
+  allowedKanji: Set<string>,
+): string | undefined {
+  let losesTargetKanji = false;
+  let splitsTargetRuby = false;
+  let simplified = sentence.replace(
+    RUBY_ANNOTATION_PATTERN,
+    (annotation, annotatedWord: string, reading: string) => {
+      if (containsOnlyAllowedKanji(annotatedWord, allowedKanji)) return annotation;
+      if (annotatedWord.includes(kanji.char)) {
+        const preserved = preserveTargetKanjiInRuby(annotation, annotatedWord, reading, kanji);
+        if (preserved) {
+          splitsTargetRuby ||= preserved !== annotation;
+          return preserved;
+        }
+        losesTargetKanji = true;
+        return annotation;
+      }
+      return reading;
+    },
+  );
+
+  if (losesTargetKanji) return undefined;
+  if (splitsTargetRuby && SINGLE_RUBY_NOUN_PATTERN.test(sentence)) {
+    simplified = `${simplified.slice(0, -1)}がある。`;
+  } else if (splitsTargetRuby && sentence.endsWith('}。')) {
+    // 熟語を分割した結果が名詞句の断片になる場合は、別の完結した例文を優先する。
+    return undefined;
+  }
+
+  const plainText = getSentencePlainText(simplified);
+  if (!plainText.includes(kanji.char) || !containsOnlyAllowedKanji(plainText, allowedKanji)) {
+    return undefined;
+  }
+
+  return simplified;
+}
+
+/**
+ * 利用できる例文がない場合も、1文字だけではなく完結した書写文を生成する。
  */
 function createFallbackSentence(kanji: Kanji): string {
   const reading = getFallbackReading(kanji);
-  return reading ? `{${kanji.char}|${reading}}` : kanji.char;
+  const annotatedKanji = reading ? `{${kanji.char}|${reading}}` : kanji.char;
+  return `「${annotatedKanji}」の{字|じ}をかく。`;
 }
 
 /**
@@ -93,9 +182,9 @@ function createQuestionPool(kanjiPool: Kanji[], allowedKanji: Set<string>): Ques
       containsOnlyAllowedKanji(example.word, allowedKanji),
     );
     const examples = safeExamples.length > 0 ? safeExamples : [createFallbackExample(kanji)];
-    const safeSentences = kanji.sentences.filter((sentence) =>
-      containsOnlyAllowedKanji(sentence, allowedKanji),
-    );
+    const safeSentences = kanji.sentences
+      .map((sentence) => createGradeAppropriateSentence(sentence, kanji, allowedKanji))
+      .filter((sentence): sentence is string => sentence !== undefined);
 
     for (const example of examples) {
       // 例文がある場合はランダムに1つ選択
