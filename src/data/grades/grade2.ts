@@ -277,7 +277,7 @@ export const grade2: Kanji[] = [
       { word: '汽車', reading: 'きしゃ' },
       { word: '汽船', reading: 'きせん' },
     ],
-    sentences: ['{汽車|きしゃ}に{乗|の}る。', '{汽|き}{笛|ふえ}が{鳴|な}る。'],
+    sentences: ['{汽車|きしゃ}に{乗|の}る。', '{汽|き}{笛|てき}が{鳴|な}る。'],
   },
   {
     char: '記',
@@ -486,7 +486,7 @@ export const grade2: Kanji[] = [
       { word: '午前', reading: 'ごぜん' },
       { word: '午後', reading: 'ごご' },
     ],
-    sentences: ['{午前|ごぜん}{中|なか}に{行|い}く。', '{午後|ごご}から{雨|あめ}。'],
+    sentences: ['{午前|ごぜん}{中|ちゅう}に{行|い}く。', '{午後|ごご}から{雨|あめ}。'],
   },
   {
     char: '後',
@@ -1616,7 +1616,7 @@ export const grade2: Kanji[] = [
       { word: '分ける', reading: 'わける' },
       { word: '十分', reading: 'じゅっぷん' },
     ],
-    sentences: ['{二|ふた}つに{分|わ}ける。', '{五|ご}{分|ぶん}{待|ま}つ。'],
+    sentences: ['{二|ふた}つに{分|わ}ける。', '{五|ご}{分|ふん}{待|ま}つ。'],
     okuriganaExamples: [{ stem: '分', okurigana: 'ける', word: '分ける', reading: 'わける' }],
   },
   {

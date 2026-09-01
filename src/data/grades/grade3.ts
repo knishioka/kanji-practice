@@ -313,7 +313,7 @@ export const grade3: Kanji[] = [
       { word: '海岸', reading: 'かいがん' },
       { word: '岸', reading: 'きし' },
     ],
-    sentences: ['{海岸|かいがん}を{歩|ある}く。', '{川|かわ}{岸|きし}に{立|た}つ。'],
+    sentences: ['{海岸|かいがん}を{歩|ある}く。', '{川|かわ}{岸|ぎし}に{立|た}つ。'],
   },
   {
     char: '起',
@@ -336,7 +336,7 @@ export const grade3: Kanji[] = [
       { word: '時期', reading: 'じき' },
       { word: '期間', reading: 'きかん' },
     ],
-    sentences: ['{時期|じき}を{決|き}める。', '{学|がく}{期|き}が{始|はじ}まる。'],
+    sentences: ['{時期|じき}を{決|き}める。', '{学|がっ}{期|き}が{始|はじ}まる。'],
   },
   {
     char: '客',
@@ -586,7 +586,7 @@ export const grade3: Kanji[] = [
     ],
     sentences: [
       '{東京都|とうきょうと}と{神奈川県|かながわけん}。',
-      '{県|けん}{立|た}{高校|こうこう}。',
+      '{県|けん}{立|りつ}{高校|こうこう}。',
     ],
   },
   {
@@ -665,7 +665,7 @@ export const grade3: Kanji[] = [
       { word: '根', reading: 'ね' },
       { word: '根本', reading: 'こんぽん' },
     ],
-    sentences: ['{木|き}の{根|ね}。', '{根|ね}{気|き}よく{続|つづ}ける。'],
+    sentences: ['{木|き}の{根|ね}。', '{根|こん}{気|き}よく{続|つづ}ける。'],
   },
   {
     char: '祭',
@@ -896,7 +896,7 @@ export const grade3: Kanji[] = [
       { word: 'お酒', reading: 'おさけ' },
       { word: '日本酒', reading: 'にほんしゅ' },
     ],
-    sentences: ['お{酒|さけ}を{飲|の}む。', '{酒|しゅ}{屋|おく}さん。'],
+    sentences: ['お{酒|さけ}を{飲|の}む。', '{酒|さか}{屋|や}さん。'],
   },
   {
     char: '受',
@@ -942,7 +942,7 @@ export const grade3: Kanji[] = [
       { word: '終わる', reading: 'おわる' },
       { word: '終了', reading: 'しゅうりょう' },
     ],
-    sentences: ['{授業|じゅぎょう}が{終|お}わる。', '{終|お}{点|てん}で{降|お}りる。'],
+    sentences: ['{授業|じゅぎょう}が{終|お}わる。', '{終|しゅう}{点|てん}で{降|お}りる。'],
     okuriganaExamples: [{ stem: '終', okurigana: 'わる', word: '終わる', reading: 'おわる' }],
     antonyms: ['始'],
   },
@@ -1169,7 +1169,7 @@ export const grade3: Kanji[] = [
       { word: '写真', reading: 'しゃしん' },
       { word: '真実', reading: 'しんじつ' },
     ],
-    sentences: ['{真|ま}っ{白|しろ}。', '{真|ま}{面|めん}{目|め}な{人|ひと}。'],
+    sentences: ['{真|ま}っ{白|しろ}。', '{真面目|まじめ}な{人|ひと}。'],
   },
   {
     char: '深',
@@ -1205,7 +1205,7 @@ export const grade3: Kanji[] = [
       { word: '世界', reading: 'せかい' },
       { word: '世の中', reading: 'よのなか' },
     ],
-    sentences: ['{世界|せかい}{中|なか}。', '{世|よ}の{中|なか}は{広|ひろ}い。'],
+    sentences: ['{世界|せかい}{中|じゅう}。', '{世|よ}の{中|なか}は{広|ひろ}い。'],
   },
   {
     char: '整',
@@ -1261,7 +1261,7 @@ export const grade3: Kanji[] = [
       { word: '送る', reading: 'おくる' },
       { word: '送料', reading: 'そうりょう' },
     ],
-    sentences: ['{手|て}{紙|かみ}を{送|おく}る。', '{見|み}{送|おく}る。'],
+    sentences: ['{手|て}{紙|がみ}を{送|おく}る。', '{見|み}{送|おく}る。'],
     okuriganaExamples: [{ stem: '送', okurigana: 'る', word: '送る', reading: 'おくる' }],
   },
   {
@@ -1398,7 +1398,7 @@ export const grade3: Kanji[] = [
       { word: '炭', reading: 'すみ' },
       { word: '石炭', reading: 'せきたん' },
     ],
-    sentences: ['{炭|すみ}を{使|つか}う。', '{木|き}{炭|すみ}{画|が}。'],
+    sentences: ['{炭|すみ}を{使|つか}う。', '{木|もく}{炭|たん}{画|が}。'],
   },
   {
     char: '短',
@@ -1544,7 +1544,7 @@ export const grade3: Kanji[] = [
       { word: '笛', reading: 'ふえ' },
       { word: '口笛', reading: 'くちぶえ' },
     ],
-    sentences: ['{笛|ふえ}を{吹|ふ}く。', '{汽|き}{笛|ふえ}が{鳴|な}る。'],
+    sentences: ['{笛|ふえ}を{吹|ふ}く。', '{汽|き}{笛|てき}が{鳴|な}る。'],
   },
   {
     char: '鉄',
@@ -1694,7 +1694,7 @@ export const grade3: Kanji[] = [
       { word: '農業', reading: 'のうぎょう' },
       { word: '農家', reading: 'のうか' },
     ],
-    sentences: ['{農業|のうぎょう}をする。', '{農|のう}{村|むら}に{住|す}む。'],
+    sentences: ['{農業|のうぎょう}をする。', '{農|のう}{村|そん}に{住|す}む。'],
   },
   {
     char: '波',
@@ -1884,7 +1884,7 @@ export const grade3: Kanji[] = [
       { word: '秒', reading: 'びょう' },
       { word: '秒速', reading: 'びょうそく' },
     ],
-    sentences: ['{十|とお}{秒|びょう}。', '{秒|びょう}{針|はり}が{動|うご}く。'],
+    sentences: ['{十|じゅう}{秒|びょう}。', '{秒|びょう}{針|しん}が{動|うご}く。'],
   },
   {
     char: '病',
@@ -2042,7 +2042,7 @@ export const grade3: Kanji[] = [
       { word: '面', reading: 'めん' },
       { word: '表面', reading: 'ひょうめん' },
     ],
-    sentences: ['{面|めん}{白|しろ}い。', '{正|ただ}{面|めん}を{見|み}る。'],
+    sentences: ['{面|おも}{白|しろ}い。', '{正|しょう}{面|めん}を{見|み}る。'],
   },
   {
     char: '問',
@@ -2108,7 +2108,7 @@ export const grade3: Kanji[] = [
       { word: '有名', reading: 'ゆうめい' },
       { word: '有る', reading: 'ある' },
     ],
-    sentences: ['{有名|ゆうめい}な{人|ひと}。', '{所|ところ}{有|ある}する。'],
+    sentences: ['{有名|ゆうめい}な{人|ひと}。', '{所|しょ}{有|ゆう}する。'],
   },
   {
     char: '遊',
@@ -2232,7 +2232,7 @@ export const grade3: Kanji[] = [
       { word: '両手', reading: 'りょうて' },
       { word: '両親', reading: 'りょうしん' },
     ],
-    sentences: ['{両手|りょうて}を{上|あ}げる。', '{両|りょう}{方|かた}{見|み}る。'],
+    sentences: ['{両手|りょうて}を{上|あ}げる。', '{両|りょう}{方|ほう}{見|み}る。'],
   },
   {
     char: '緑',
@@ -2265,7 +2265,7 @@ export const grade3: Kanji[] = [
       { word: '列', reading: 'れつ' },
       { word: '行列', reading: 'ぎょうれつ' },
     ],
-    sentences: ['{列|れつ}に{並|なら}ぶ。', '{一|ひと}{列|れつ}に{並|なら}ぶ。'],
+    sentences: ['{列|れつ}に{並|なら}ぶ。', '{一|いち}{列|れつ}に{並|なら}ぶ。'],
   },
   {
     char: '練',
