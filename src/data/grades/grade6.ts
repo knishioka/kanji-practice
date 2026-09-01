@@ -183,7 +183,7 @@ export const grade6: Kanji[] = [
       { word: '分割', reading: 'ぶんかつ' },
       { word: '割る', reading: 'わる' },
     ],
-    sentences: ['{土|つち}{地|ち}を{分割|ぶんかつ}する。', 'スイカを{割|わ}る。'],
+    sentences: ['{土|と}{地|ち}を{分割|ぶんかつ}する。', 'スイカを{割|わ}る。'],
     okuriganaExamples: [
       { stem: '割', okurigana: 'る', word: '割る', reading: 'わる' },
       { stem: '割', okurigana: 'れる', word: '割れる', reading: 'われる' },
@@ -227,7 +227,7 @@ export const grade6: Kanji[] = [
       { word: '巻物', reading: 'まきもの' },
       { word: '巻く', reading: 'まく' },
     ],
-    sentences: ['{第一|だいいち}{巻|ま}を{読|よ}む。', 'マフラーを{首|くび}に{巻|ま}く。'],
+    sentences: ['{第|だい}{一|いっ}{巻|かん}を{読|よ}む。', 'マフラーを{首|くび}に{巻|ま}く。'],
     okuriganaExamples: [{ stem: '巻', okurigana: 'く', word: '巻く', reading: 'まく' }],
   },
   {
@@ -278,7 +278,7 @@ export const grade6: Kanji[] = [
     ],
     sentences: [
       '{机上|きじょう}の{空論|くうろん}だ。',
-      '{机|つくえ}の{上|うえ}を{片|かた}{付|つ}ける。',
+      '{机|つくえ}の{上|うえ}を{片|かた}{付|づ}ける。',
     ],
   },
   {
@@ -290,7 +290,7 @@ export const grade6: Kanji[] = [
       { word: '指揮', reading: 'しき' },
       { word: '発揮', reading: 'はっき' },
     ],
-    sentences: ['オーケストラを{指揮|しき}する。', '{実|み}{力|ちから}を{発揮|はっき}する。'],
+    sentences: ['オーケストラを{指揮|しき}する。', '{実|じつ}{力|りょく}を{発揮|はっき}する。'],
   },
   {
     char: '貴',
@@ -547,7 +547,7 @@ export const grade6: Kanji[] = [
       { word: '呼吸', reading: 'こきゅう' },
       { word: '呼ぶ', reading: 'よぶ' },
     ],
-    sentences: ['{深|ふか}{呼吸|こきゅう}をする。', '{友達|ともだち}を{呼|よ}ぶ。'],
+    sentences: ['{深|しん}{呼吸|こきゅう}をする。', '{友達|ともだち}を{呼|よ}ぶ。'],
     okuriganaExamples: [{ stem: '呼', okurigana: 'ぶ', word: '呼ぶ', reading: 'よぶ' }],
   },
   {
@@ -586,7 +586,7 @@ export const grade6: Kanji[] = [
       { word: '孝行', reading: 'こうこう' },
       { word: '親孝行', reading: 'おやこうこう' },
     ],
-    sentences: ['{親孝行|おやこうこう}をする。', '{孝行|こうこう}{息|いき}{子|こ}だ。'],
+    sentences: ['{親孝行|おやこうこう}をする。', '{孝行|こうこう}{息子|むすこ}だ。'],
   },
   {
     char: '皇',
@@ -1695,7 +1695,7 @@ export const grade6: Kanji[] = [
       { word: '展示', reading: 'てんじ' },
       { word: '発展', reading: 'はってん' },
     ],
-    sentences: ['{作|さく}{品|ひん}を{展|てん}{示|しめ}する。', '{街|まち}が{発展|はってん}する。'],
+    sentences: ['{作|さく}{品|ひん}を{展|てん}{示|じ}する。', '{街|まち}が{発展|はってん}する。'],
   },
   {
     char: '討',
@@ -1746,7 +1746,7 @@ export const grade6: Kanji[] = [
       { word: '届ける', reading: 'とどける' },
       { word: '届く', reading: 'とどく' },
     ],
-    sentences: ['{荷物|にもつ}を{届|とど}ける。', '{手|て}{紙|かみ}が{届|とど}く。'],
+    sentences: ['{荷物|にもつ}を{届|とど}ける。', '{手|て}{紙|がみ}が{届|とど}く。'],
     okuriganaExamples: [
       { stem: '届', okurigana: 'く', word: '届く', reading: 'とどく' },
       { stem: '届', okurigana: 'ける', word: '届ける', reading: 'とどける' },
@@ -1786,7 +1786,7 @@ export const grade6: Kanji[] = [
       { word: '認める', reading: 'みとめる' },
       { word: '確認', reading: 'かくにん' },
     ],
-    sentences: ['{才能|さいのう}を{認|みと}める。', '{事|こと}{実|み}を{確認|かくにん}する。'],
+    sentences: ['{才能|さいのう}を{認|みと}める。', '{事|じ}{実|じつ}を{確認|かくにん}する。'],
     okuriganaExamples: [{ stem: '認', okurigana: 'める', word: '認める', reading: 'みとめる' }],
     antonyms: ['否'],
   },
@@ -2024,7 +2024,7 @@ export const grade6: Kanji[] = [
       { word: '補助', reading: 'ほじょ' },
       { word: '補う', reading: 'おぎなう' },
     ],
-    sentences: ['{補助金|ほじょきん}を{申請|しんせい}する。', '{不|ふ}{足|あし}を{補|おぎな}う。'],
+    sentences: ['{補助金|ほじょきん}を{申請|しんせい}する。', '{不|ふ}{足|そく}を{補|おぎな}う。'],
     okuriganaExamples: [{ stem: '補', okurigana: 'う', word: '補う', reading: 'おぎなう' }],
   },
   {
@@ -2065,7 +2065,7 @@ export const grade6: Kanji[] = [
     ],
     sentences: [
       '{友人|ゆうじん}の{家|いえ}を{訪問|ほうもん}する。',
-      '{祖父|そふ}{母|はは}を{訪|たず}ねる。',
+      '{祖父|そふ}{母|ぼ}を{訪|たず}ねる。',
     ],
     okuriganaExamples: [
       { stem: '訪', okurigana: 'ねる', word: '訪ねる', reading: 'たずねる' },
@@ -2146,7 +2146,7 @@ export const grade6: Kanji[] = [
       { word: '秘密', reading: 'ひみつ' },
       { word: '密度', reading: 'みつど' },
     ],
-    sentences: ['{秘密|ひみつ}を{守|まも}る。', '{人|ひと}{口|くち}{密度|みつど}が{高|たか}い。'],
+    sentences: ['{秘密|ひみつ}を{守|まも}る。', '{人|じん}{口|こう}{密度|みつど}が{高|たか}い。'],
   },
   {
     char: '盟',
@@ -2168,7 +2168,7 @@ export const grade6: Kanji[] = [
       { word: '模様', reading: 'もよう' },
       { word: '規模', reading: 'きぼ' },
     ],
-    sentences: ['{美|うつく}しい{模様|もよう}がある。', '{大|おお}{規模|きぼ}なイベントだ。'],
+    sentences: ['{美|うつく}しい{模様|もよう}がある。', '{大|だい}{規模|きぼ}なイベントだ。'],
   },
   {
     char: '訳',

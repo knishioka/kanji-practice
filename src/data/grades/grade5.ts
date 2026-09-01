@@ -56,7 +56,7 @@ export const grade5: Kanji[] = [
       { word: '営業', reading: 'えいぎょう' },
       { word: '経営', reading: 'けいえい' },
     ],
-    sentences: ['{営業|えいぎょう}{中|なか}です。', '{会社|かいしゃ}を{経営|けいえい}する。'],
+    sentences: ['{営業|えいぎょう}{中|ちゅう}です。', '{会社|かいしゃ}を{経営|けいえい}する。'],
     okuriganaExamples: [{ stem: '営', okurigana: 'む', word: '営む', reading: 'いとなむ' }],
   },
   {
@@ -266,7 +266,7 @@ export const grade5: Kanji[] = [
       { word: '幹', reading: 'みき' },
       { word: '幹部', reading: 'かんぶ' },
     ],
-    sentences: ['{木|き}の{幹|みき}。', '{幹|みき}{線|せん}{道路|どうろ}。'],
+    sentences: ['{木|き}の{幹|みき}。', '{幹|かん}{線|せん}{道路|どうろ}。'],
   },
   {
     char: '慣',
@@ -378,7 +378,7 @@ export const grade5: Kanji[] = [
       { word: '旧友', reading: 'きゅうゆう' },
       { word: '復旧', reading: 'ふっきゅう' },
     ],
-    sentences: ['{旧友|きゅうゆう}に{会|あ}う。', '{旧|ふるい}{式|しき}の{機械|きかい}。'],
+    sentences: ['{旧友|きゅうゆう}に{会|あ}う。', '{旧|きゅう}{式|しき}の{機械|きかい}。'],
     antonyms: ['新'],
   },
   {
@@ -688,7 +688,7 @@ export const grade5: Kanji[] = [
       { word: '妻', reading: 'つま' },
       { word: '夫妻', reading: 'ふさい' },
     ],
-    sentences: ['{妻|つま}と{買|か}い{物|もの}。', '{愛|あい}{妻|つま}{家|いえ}。'],
+    sentences: ['{妻|つま}と{買|か}い{物|もの}。', '{愛|あい}{妻|さい}{家|か}。'],
     antonyms: ['夫'],
   },
   {
@@ -745,7 +745,7 @@ export const grade5: Kanji[] = [
       { word: '罪', reading: 'つみ' },
       { word: '犯罪', reading: 'はんざい' },
     ],
-    sentences: ['{罪|つみ}を{犯|おか}す。', '{無|ない}{罪|つみ}を{主張|しゅちょう}。'],
+    sentences: ['{罪|つみ}を{犯|おか}す。', '{無|む}{罪|ざい}を{主張|しゅちょう}。'],
   },
   {
     char: '雑',
@@ -1097,7 +1097,7 @@ export const grade5: Kanji[] = [
       { word: '政治', reading: 'せいじ' },
       { word: '政府', reading: 'せいふ' },
     ],
-    sentences: ['{政治|せいじ}に{関心|かんしん}。', '{行|こう}{政|せい}{機|き}{関|かん}。'],
+    sentences: ['{政治|せいじ}に{関心|かんしん}。', '{行|ぎょう}{政|せい}{機|き}{関|かん}。'],
   },
   {
     char: '勢',
@@ -1165,7 +1165,7 @@ export const grade5: Kanji[] = [
       { word: '成績', reading: 'せいせき' },
       { word: '業績', reading: 'ぎょうせき' },
     ],
-    sentences: ['{成績|せいせき}が{上|あ}がる。', '{実|み}{績|せき}を{残|のこ}す。'],
+    sentences: ['{成績|せいせき}が{上|あ}がる。', '{実|じっ}{績|せき}を{残|のこ}す。'],
   },
   {
     char: '接',
@@ -1245,7 +1245,7 @@ export const grade5: Kanji[] = [
       { word: '増える', reading: 'ふえる' },
       { word: '増加', reading: 'ぞうか' },
     ],
-    sentences: ['{人|ひと}{口|くち}が{増|ふ}える。', '{増|ぞう}{税|ぜい}する。'],
+    sentences: ['{人|じん}{口|こう}が{増|ふ}える。', '{増|ぞう}{税|ぜい}する。'],
     okuriganaExamples: [{ stem: '増', okurigana: 'える', word: '増える', reading: 'ふえる' }],
     antonyms: ['減'],
   },
@@ -1315,7 +1315,7 @@ export const grade5: Kanji[] = [
       { word: '態度', reading: 'たいど' },
       { word: '状態', reading: 'じょうたい' },
     ],
-    sentences: ['{態度|たいど}を{改|あらた}める。', '{事|じ}{態|たい}が{悪|あく}{化|か}。'],
+    sentences: ['{態度|たいど}を{改|あらた}める。', '{事|じ}{態|たい}が{悪|あっ}{化|か}。'],
   },
   {
     char: '団',
@@ -1350,7 +1350,7 @@ export const grade5: Kanji[] = [
       { word: '築く', reading: 'きずく' },
       { word: '建築', reading: 'けんちく' },
     ],
-    sentences: ['{信頼|しんらい}を{築|きず}く。', '{建築|けんちく}{家|いえ}。'],
+    sentences: ['{信頼|しんらい}を{築|きず}く。', '{建築|けんちく}{家|か}。'],
     okuriganaExamples: [{ stem: '築', okurigana: 'く', word: '築く', reading: 'きずく' }],
   },
   {
@@ -1477,7 +1477,7 @@ export const grade5: Kanji[] = [
       { word: '犯す', reading: 'おかす' },
       { word: '犯人', reading: 'はんにん' },
     ],
-    sentences: ['{罪|つみ}を{犯|おか}す。', '{犯罪|はんざい}{者|もの}。'],
+    sentences: ['{罪|つみ}を{犯|おか}す。', '{犯罪|はんざい}{者|しゃ}。'],
     okuriganaExamples: [{ stem: '犯', okurigana: 'す', word: '犯す', reading: 'おかす' }],
   },
   {
@@ -1500,7 +1500,7 @@ export const grade5: Kanji[] = [
       { word: '出版', reading: 'しゅっぱん' },
       { word: '版画', reading: 'はんが' },
     ],
-    sentences: ['{出版|しゅっぱん}する。', '{新|しん}{版|はん}が{出|で}る。'],
+    sentences: ['{出版|しゅっぱん}する。', '{新|しん}{版|ぱん}が{出|で}る。'],
   },
   {
     char: '比',
@@ -1511,7 +1511,7 @@ export const grade5: Kanji[] = [
       { word: '比べる', reading: 'くらべる' },
       { word: '比較', reading: 'ひかく' },
     ],
-    sentences: ['{二|ふた}つを{比|くら}べる。', '{比|くら}{例|れい}する。'],
+    sentences: ['{二|ふた}つを{比|くら}べる。', '{比|ひ}{例|れい}する。'],
     okuriganaExamples: [{ stem: '比', okurigana: 'べる', word: '比べる', reading: 'くらべる' }],
   },
   {
@@ -1535,7 +1535,7 @@ export const grade5: Kanji[] = [
       { word: '非常', reading: 'ひじょう' },
       { word: '非難', reading: 'ひなん' },
     ],
-    sentences: ['{非常|ひじょう}{口|くち}。', '{是非|ぜひ}{来|き}て。'],
+    sentences: ['{非常|ひじょう}{口|ぐち}。', '{是非|ぜひ}{来|き}て。'],
   },
   {
     char: '備',
@@ -1571,7 +1571,7 @@ export const grade5: Kanji[] = [
       { word: '布', reading: 'ぬの' },
       { word: '毛布', reading: 'もうふ' },
     ],
-    sentences: ['{布|ぬの}を{買|か}う。', '{配|くば}{布|ぬの}する。'],
+    sentences: ['{布|ぬの}を{買|か}う。', '{配|はい}{布|ふ}する。'],
   },
   {
     char: '婦',
@@ -1662,7 +1662,7 @@ export const grade5: Kanji[] = [
       { word: '墓', reading: 'はか' },
       { word: '墓地', reading: 'ぼち' },
     ],
-    sentences: ['{墓参|はかまい}りをする。', '{先|さき}{祖|そ}の{墓|はか}。'],
+    sentences: ['{墓参|はかまい}りをする。', '{先|せん}{祖|ぞ}の{墓|はか}。'],
   },
   {
     char: '報',
@@ -1765,7 +1765,7 @@ export const grade5: Kanji[] = [
       { word: '綿', reading: 'わた' },
       { word: '木綿', reading: 'もめん' },
     ],
-    sentences: ['{綿|わた}の{服|ふく}。', '{綿|わた}{密|みつ}に{計|けい}{画|が}。'],
+    sentences: ['{綿|わた}の{服|ふく}。', '{綿|めん}{密|みつ}に{計|けい}{画|かく}。'],
   },
   {
     char: '輸',
@@ -1776,7 +1776,7 @@ export const grade5: Kanji[] = [
       { word: '輸出', reading: 'ゆしゅつ' },
       { word: '輸入', reading: 'ゆにゅう' },
     ],
-    sentences: ['{輸|ゆ}{出|だ}する。', '{運|うん}{輸|ゆ}{業|ぎょう}。'],
+    sentences: ['{輸|ゆ}{出|しゅつ}する。', '{運|うん}{輸|ゆ}{業|ぎょう}。'],
   },
   {
     char: '余',
@@ -1869,7 +1869,7 @@ export const grade5: Kanji[] = [
       { word: '救う', reading: 'すくう' },
       { word: '救急', reading: 'きゅうきゅう' },
     ],
-    sentences: ['{命|いのち}を{救|すく}う。', '{救急|きゅうきゅう}{車|くるま}を{呼|よ}ぶ。'],
+    sentences: ['{命|いのち}を{救|すく}う。', '{救急|きゅうきゅう}{車|しゃ}を{呼|よ}ぶ。'],
     okuriganaExamples: [{ stem: '救', okurigana: 'う', word: '救う', reading: 'すくう' }],
   },
   {
@@ -1881,7 +1881,7 @@ export const grade5: Kanji[] = [
       { word: '型', reading: 'かた' },
       { word: '模型', reading: 'もけい' },
     ],
-    sentences: ['{血液型|けつえきがた}を{調|しら}べる。', '{新|あたら}{型|かた}の{車|くるま}。'],
+    sentences: ['{血液型|けつえきがた}を{調|しら}べる。', '{新|しん}{型|がた}の{車|くるま}。'],
   },
   {
     char: '航',
@@ -1892,7 +1892,7 @@ export const grade5: Kanji[] = [
       { word: '航空', reading: 'こうくう' },
       { word: '航海', reading: 'こうかい' },
     ],
-    sentences: ['{航空|こうくう}{便|たより}で{送|おく}る。', '{航海|こうかい}に{出|で}る。'],
+    sentences: ['{航空|こうくう}{便|びん}で{送|おく}る。', '{航海|こうかい}に{出|で}る。'],
   },
   {
     char: '告',
@@ -1927,7 +1927,7 @@ export const grade5: Kanji[] = [
       { word: '弁護士', reading: 'べんごし' },
       { word: '武士', reading: 'ぶし' },
     ],
-    sentences: ['{弁護士|べんごし}に{相談|そうだん}する。', '{武士|ぶし}{道|みち}。'],
+    sentences: ['{弁護士|べんごし}に{相談|そうだん}する。', '{武士|ぶし}{道|どう}。'],
   },
   {
     char: '史',
@@ -1960,7 +1960,7 @@ export const grade5: Kanji[] = [
       { word: '賞品', reading: 'しょうひん' },
       { word: '受賞', reading: 'じゅしょう' },
     ],
-    sentences: ['{賞|しょう}を{受|う}ける。', '{賞|しょう}{金|かね}を{得|え}る。'],
+    sentences: ['{賞|しょう}を{受|う}ける。', '{賞|しょう}{金|きん}を{得|え}る。'],
   },
   {
     char: '貯',
@@ -2005,7 +2005,7 @@ export const grade5: Kanji[] = [
       { word: '得る', reading: 'える' },
       { word: '得意', reading: 'とくい' },
     ],
-    sentences: ['{知識|ちしき}を{得|え}る。', '{得意|とくい}な{科|か}{目|め}。'],
+    sentences: ['{知識|ちしき}を{得|え}る。', '{得意|とくい}な{科|か}{目|もく}。'],
     okuriganaExamples: [{ stem: '得', okurigana: 'る', word: '得る', reading: 'える' }],
     antonyms: ['損'],
   },
@@ -2018,7 +2018,7 @@ export const grade5: Kanji[] = [
       { word: '毒', reading: 'どく' },
       { word: '中毒', reading: 'ちゅうどく' },
     ],
-    sentences: ['{毒|どく}を{持|も}つ。', '{食|た}{中毒|ちゅうどく}に{注意|ちゅうい}。'],
+    sentences: ['{毒|どく}を{持|も}つ。', '{食|しょく}{中毒|ちゅうどく}に{注意|ちゅうい}。'],
   },
   {
     char: '費',
@@ -2121,7 +2121,7 @@ export const grade5: Kanji[] = [
       { word: '証明', reading: 'しょうめい' },
       { word: '証拠', reading: 'しょうこ' },
     ],
-    sentences: ['{身|しん}{分|ぶん}を{証明|しょうめい}する。', '{証拠|しょうこ}を{集|あつ}める。'],
+    sentences: ['{身|み}{分|ぶん}を{証明|しょうめい}する。', '{証拠|しょうこ}を{集|あつ}める。'],
   },
   {
     char: '絶',
@@ -2148,7 +2148,7 @@ export const grade5: Kanji[] = [
       { word: '祖父', reading: 'そふ' },
       { word: '祖母', reading: 'そぼ' },
     ],
-    sentences: ['{祖父|そふ}{母|はは}の{家|いえ}。', '{先|さき}{祖|そ}を{敬|うやま}う。'],
+    sentences: ['{祖父|そふ}{母|ぼ}の{家|いえ}。', '{先|せん}{祖|ぞ}を{敬|うやま}う。'],
   },
   {
     char: '貸',
@@ -2194,7 +2194,7 @@ export const grade5: Kanji[] = [
       { word: '評価', reading: 'ひょうか' },
       { word: '批評', reading: 'ひひょう' },
     ],
-    sentences: ['{評価|ひょうか}が{高|たか}い。', '{評|ひょう}{判|はん}が{良|よ}い。'],
+    sentences: ['{評価|ひょうか}が{高|たか}い。', '{評|ひょう}{判|ばん}が{良|よ}い。'],
   },
   {
     char: '武',
@@ -2205,7 +2205,7 @@ export const grade5: Kanji[] = [
       { word: '武士', reading: 'ぶし' },
       { word: '武器', reading: 'ぶき' },
     ],
-    sentences: ['{武士|ぶし}{道|みち}を{学|まな}ぶ。', '{武|ぶ}{道|みち}を{習|なら}う。'],
+    sentences: ['{武士|ぶし}{道|どう}を{学|まな}ぶ。', '{武|ぶ}{道|どう}を{習|なら}う。'],
   },
   {
     char: '容',
@@ -2216,6 +2216,6 @@ export const grade5: Kanji[] = [
       { word: '容易', reading: 'ようい' },
       { word: '内容', reading: 'ないよう' },
     ],
-    sentences: ['{内容|ないよう}を{確認|かくにん}する。', '{容|よう}{器|うつわ}に{入|い}れる。'],
+    sentences: ['{内容|ないよう}を{確認|かくにん}する。', '{容|よう}{器|き}に{入|い}れる。'],
   },
 ];

@@ -237,6 +237,28 @@ describe('questionGenerator utilities', () => {
       }
     });
 
+    it('未習漢字のかな置換で熟語の読みが崩れた表記を生成しない', () => {
+      // 「汽笛」の 笛 に単体の訓読み「ふえ」を振っていたため、2年生では 笛 がかなへ置換され
+      // 「汽ふえが鳴る。」と出力されていた。熟語の読み（きてき）を保った表記になること。
+      const brokenCompounds = ['汽ふえ', 'ごぜんなか', '午前なか', '面しろ', 'ゆだ', '輸だ'];
+
+      for (const randomValue of [0, 0.999]) {
+        const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(randomValue);
+        const sentences = ([1, 2, 3, 4, 5, 6] as const).flatMap((grade) =>
+          generateQuestions(grade, 1000, false).map((question) =>
+            getSentencePlainText(question.sentence ?? ''),
+          ),
+        );
+        randomSpy.mockRestore();
+
+        expect(
+          sentences.filter((sentence) =>
+            brokenCompounds.some((fragment) => sentence.includes(fragment)),
+          ),
+        ).toEqual([]);
+      }
+    });
+
     it.each([
       2, 3, 4, 5, 6,
     ] as const)('%i年生では対象漢字を指定学年に限定し、例語・例文を学習済み漢字だけで構成する', (grade) => {
