@@ -48,6 +48,9 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
         className="relative w-full max-w-2xl max-h-[80vh] flex flex-col rounded-2xl shadow-xl"
         style={{ backgroundColor: 'var(--color-bg)' }}
       >

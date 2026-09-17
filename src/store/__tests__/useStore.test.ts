@@ -26,6 +26,52 @@ vi.stubGlobal('localStorage', stubLocalStorage);
 // stub設定後に動的importで store を読み込む
 const { useStore } = await import('../useStore');
 
+describe('useStore - focus kanji', () => {
+  beforeEach(() => {
+    useStore.setState({ focusKanji: {}, excludedKanji: {} });
+    useStore.getState().resetSettings();
+  });
+
+  it('学年別に選択を保存・復元し、解除は現在の学年だけに適用する', async () => {
+    useStore.getState().setFocusKanji(1, ['一', '二']);
+    useStore.getState().setFocusKanji(2, ['海']);
+    await useStore.persist.rehydrate();
+    expect(useStore.getState().focusKanji).toEqual({ 1: ['一', '二'], 2: ['海'] });
+    useStore.getState().clearFocusKanji(1);
+    expect(useStore.getState().focusKanji).toEqual({ 1: [], 2: ['海'] });
+  });
+
+  it.each([0, 5])('旧バージョン %s を移行して既存設定と除外・履歴を維持する', async (version) => {
+    useStore.getState().addPracticeHistory(8);
+    const history = useStore.getState().practiceHistory;
+    const settings =
+      version === 0 ? { grades: [2], count: 10 } : { ...useStore.getState().settings, grade: 2 };
+    localStorage.setItem(
+      'kanji-practice-settings',
+      JSON.stringify({
+        state: { settings, excludedKanji: { 2: ['海'] }, practiceHistory: history },
+        version,
+      }),
+    );
+    await useStore.persist.rehydrate();
+    expect(useStore.getState().focusKanji).toEqual({});
+    expect(useStore.getState().settings).toMatchObject({ grade: 2, pageCount: 1 });
+    expect(useStore.getState().excludedKanji).toEqual({ 2: ['海'] });
+    expect(useStore.getState().practiceHistory).toEqual(history);
+  });
+
+  it('設定や履歴の復元で学年別の選択・除外を上書きしない', () => {
+    useStore.getState().setFocusKanji(1, ['一']);
+    useStore.getState().setExcludedKanji(1, ['二']);
+    useStore.getState().addPracticeHistory(8);
+    const entry = useStore.getState().practiceHistory[0];
+    useStore.getState().setSettings({ grade: 2, mode: 'reading' });
+    useStore.getState().restorePracticeHistory(entry);
+    expect(useStore.getState().focusKanji).toEqual({ 1: ['一'] });
+    expect(useStore.getState().excludedKanji).toEqual({ 1: ['二'] });
+  });
+});
+
 describe('useStore - sentencePracticeRows', () => {
   beforeAll(() => {
     // localStorage が確実に存在することを確認
