@@ -168,13 +168,16 @@ npm run preview  # ビルド結果を確認
 | カテゴリ | 技術 |
 |----------|------|
 | フレームワーク | React 19 + TypeScript |
-| ビルドツール | Vite 7 |
+| ビルドツール | Vite 8 |
 | スタイリング | Tailwind CSS v4 |
 | 状態管理 | Zustand (localStorage永続化) |
 | PDF生成 | jsPDF + html2canvas |
 | 書き順データ | [KanjiVG](https://kanjivg.tagaini.net/) (CC BY-SA 3.0) |
 | リンター/フォーマッター | Biome |
 | テスト | Vitest (unit) + Playwright (e2e) |
+
+Vite 8 / `@vitejs/plugin-react` 6 と互換性のある `@tailwindcss/vite` 4.3 を使用します。
+GitHub Pages 向けの base path は `/kanji-practice/` のままです。
 
 ### 開発コマンド
 

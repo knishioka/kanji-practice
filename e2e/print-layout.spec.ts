@@ -10,6 +10,17 @@ async function disableRandomQuestions(page: import('@playwright/test').Page) {
   await page.getByLabel('ランダム出題').uncheck();
 }
 
+async function stabilizeSnapshot(page: import('@playwright/test').Page) {
+  await page.clock.setFixedTime(new Date('2026-01-01T12:00:00Z'));
+  await page.addInitScript(() => {
+    let seed = 43;
+    Math.random = () => {
+      seed = (seed * 16807) % 2147483647;
+      return (seed - 1) / 2147483646;
+    };
+  });
+}
+
 test.describe('印刷レイアウトテスト', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
@@ -158,6 +169,7 @@ test.describe('印刷プレビューテスト', () => {
 
 test.describe('ビジュアルリグレッションテスト', () => {
   test('A4ページのスクリーンショット', async ({ page }) => {
+    await stabilizeSnapshot(page);
     await page.goto('/');
 
     // 設定を固定（再現性のため）
@@ -173,6 +185,7 @@ test.describe('ビジュアルリグレッションテスト', () => {
   });
 
   test('設定変更後のスクリーンショット', async ({ page }) => {
+    await stabilizeSnapshot(page);
     await page.goto('/');
 
     // 書き練習モードに変更（buttonに変更）
