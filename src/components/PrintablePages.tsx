@@ -74,7 +74,7 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
     return (
       <div ref={ref} className="a4-page mx-auto shadow-lg">
         <div className="flex items-center justify-center h-64 text-gray-400">
-          「問題を生成」をクリックしてください
+          出題できる問題がありません。漢字の選択・学年・モードを変更してください。
         </div>
       </div>
     );

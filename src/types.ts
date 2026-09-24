@@ -6,6 +6,9 @@ export type ExcludedKanjiMap = {
   [key in Grade]?: string[];
 };
 
+// 重点漢字マップ（空の学年は全漢字を出題対象にする）
+export type FocusKanjiMap = Partial<Record<Grade, string[]>>;
+
 // 漢字データ
 export interface Kanji {
   char: string;

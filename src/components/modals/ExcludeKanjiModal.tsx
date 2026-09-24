@@ -9,10 +9,19 @@ interface ExcludeKanjiModalProps {
   isOpen: boolean;
   onClose: () => void;
   grade: Grade;
+  selectionMode?: 'exclude' | 'focus';
 }
 
-export function ExcludeKanjiModal({ isOpen, onClose, grade }: ExcludeKanjiModalProps) {
-  const { excludedKanji, setExcludedKanji } = useStore();
+export function ExcludeKanjiModal({
+  isOpen,
+  onClose,
+  grade,
+  selectionMode = 'exclude',
+}: ExcludeKanjiModalProps) {
+  const store = useStore();
+  const isFocus = selectionMode === 'focus';
+  const excludedKanji = isFocus ? store.focusKanji : store.excludedKanji;
+  const setExcludedKanji = isFocus ? store.setFocusKanji : store.setExcludedKanji;
 
   // 現在の学年の漢字一覧
   const kanjiList = useMemo(() => getKanjiByGrade([grade]), [grade]);
@@ -68,10 +77,14 @@ export function ExcludeKanjiModal({ isOpen, onClose, grade }: ExcludeKanjiModalP
 
   const excludedCount = tempExcluded.size;
   const totalCount = kanjiList.length;
-  const availableCount = totalCount - excludedCount;
+  const availableCount = isFocus ? excludedCount || totalCount : totalCount - excludedCount;
 
   return (
-    <Modal isOpen={isOpen} onClose={handleCancel} title={`除外漢字の設定 - ${gradeLabel}`}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleCancel}
+      title={`${isFocus ? '重点漢字' : '除外漢字'}の設定 - ${gradeLabel}`}
+    >
       {/* サマリー */}
       <div
         className="px-4 py-3 border-b"
@@ -85,7 +98,10 @@ export function ExcludeKanjiModal({ isOpen, onClose, grade }: ExcludeKanjiModalP
             </span>{' '}
             / {totalCount}字
             {excludedCount > 0 && (
-              <span style={{ color: 'var(--color-primary)' }}> ({excludedCount}字を除外中)</span>
+              <span style={{ color: 'var(--color-primary)' }}>
+                {' '}
+                ({excludedCount}字を{isFocus ? '選択中' : '除外中'})
+              </span>
             )}
           </div>
           <div className="flex gap-2">
@@ -98,7 +114,7 @@ export function ExcludeKanjiModal({ isOpen, onClose, grade }: ExcludeKanjiModalP
                 color: 'var(--color-text-muted)',
               }}
             >
-              全て除外
+              {isFocus ? '全て選択' : '全て除外'}
             </button>
             <button
               type="button"
@@ -113,6 +129,11 @@ export function ExcludeKanjiModal({ isOpen, onClose, grade }: ExcludeKanjiModalP
             </button>
           </div>
         </div>
+        {isFocus && (
+          <p className="mt-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            選んだ漢字だけを出題します。未選択なら全漢字が対象です。除外漢字の設定が優先されます。
+          </p>
+        )}
         {availableCount < 5 && (
           <div
             className="mt-2 text-xs px-2 py-1 rounded"
@@ -128,23 +149,26 @@ export function ExcludeKanjiModal({ isOpen, onClose, grade }: ExcludeKanjiModalP
         <div className="grid grid-cols-6 gap-2">
           {kanjiList.map((kanji) => {
             const isExcluded = tempExcluded.has(kanji.char);
+            const isAvailable = isFocus ? isExcluded : !isExcluded;
             return (
               <button
                 key={kanji.char}
                 type="button"
+                aria-label={kanji.char}
+                aria-pressed={isExcluded}
                 onClick={() => handleToggle(kanji.char)}
                 className="relative p-2 rounded-lg text-center transition-all"
                 style={{
-                  border: `2px solid ${isExcluded ? 'var(--color-border)' : 'var(--color-primary)'}`,
-                  backgroundColor: isExcluded ? 'var(--color-bg-muted)' : 'white',
-                  opacity: isExcluded ? 0.5 : 1,
+                  border: `2px solid ${isAvailable ? 'var(--color-primary)' : 'var(--color-border)'}`,
+                  backgroundColor: isAvailable ? 'white' : 'var(--color-bg-muted)',
+                  opacity: isAvailable ? 1 : 0.5,
                 }}
               >
                 <span
                   className="text-xl font-bold"
                   style={{
-                    color: isExcluded ? 'var(--color-text-muted)' : 'var(--color-text)',
-                    textDecoration: isExcluded ? 'line-through' : 'none',
+                    color: isAvailable ? 'var(--color-text)' : 'var(--color-text-muted)',
+                    textDecoration: !isFocus && isExcluded ? 'line-through' : 'none',
                   }}
                 >
                   {kanji.char}
@@ -154,7 +178,7 @@ export function ExcludeKanjiModal({ isOpen, onClose, grade }: ExcludeKanjiModalP
                     className="absolute top-0.5 right-0.5 w-4 h-4 rounded-full flex items-center justify-center text-xs"
                     style={{ backgroundColor: 'var(--color-text-muted)', color: 'white' }}
                   >
-                    ×
+                    {isFocus ? '✓' : '×'}
                   </div>
                 )}
               </button>
