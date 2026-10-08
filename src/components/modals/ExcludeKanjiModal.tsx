@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { getKanjiByGrade } from '../../data/kanji';
 import { useStore } from '../../store/useStore';
 import type { Grade } from '../../types';
+import { countEffectiveKanji } from '../../utils/questionGenerator';
 import { grades } from '../settings/config';
 import { Modal } from './Modal';
 
@@ -77,7 +78,15 @@ export function ExcludeKanjiModal({
 
   const excludedCount = tempExcluded.size;
   const totalCount = kanjiList.length;
-  const availableCount = isFocus ? excludedCount || totalCount : totalCount - excludedCount;
+  // 編集中の選択に、もう一方の保存済み設定 (除外 or 重点) を組み合わせて実際の出題対象数を出す
+  const storedExcluded = store.excludedKanji[grade];
+  const storedFocus = store.focusKanji[grade];
+  const availableCount = useMemo(() => {
+    const editing = Array.from(tempExcluded);
+    return isFocus
+      ? countEffectiveKanji(grade, storedExcluded, editing)
+      : countEffectiveKanji(grade, editing, storedFocus);
+  }, [grade, isFocus, tempExcluded, storedExcluded, storedFocus]);
 
   return (
     <Modal

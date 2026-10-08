@@ -38,6 +38,18 @@ export function getEffectiveExcludedChars(
   return [...new Set([...outsideFocus, ...excludedChars])];
 }
 
+/** 重点漢字と除外を適用した後に出題対象として残る、指定学年の漢字数。 */
+export function countEffectiveKanji(
+  grade: Grade,
+  excludedChars: string[] = [],
+  focusChars: string[] = [],
+): number {
+  return getKanjiByGradeFiltered(
+    [grade],
+    getEffectiveExcludedChars(grade, excludedChars, focusChars),
+  ).length;
+}
+
 /**
  * 指定学年までに学習済みの漢字セットを生成
  */

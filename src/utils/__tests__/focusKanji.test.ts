@@ -5,6 +5,7 @@ import { generateHomophoneQuestions } from '../homophoneQuestionGenerator';
 import { generateOkuriganaQuestions } from '../okuriganaQuestionGenerator';
 import {
   canGenerateQuestions,
+  countEffectiveKanji,
   generateQuestions,
   getEffectiveExcludedChars,
 } from '../questionGenerator';
@@ -26,6 +27,18 @@ describe('重点漢字の出題対象', () => {
     expect(canGenerateQuestions(1, ['一'], ['一'])).toBe(false);
     expect(generateQuestions(1, 30, random, ['一'], ['一'])).toEqual([]);
     expect(canGenerateQuestions(1, [], ['海'])).toBe(false);
+  });
+
+  it('出題対象数は重点漢字から除外を差し引いた数になる', () => {
+    const grade1Total = allKanji.filter((k) => k.grade === 1).length;
+    expect(countEffectiveKanji(1)).toBe(grade1Total);
+    expect(countEffectiveKanji(1, ['一'])).toBe(grade1Total - 1);
+    expect(countEffectiveKanji(1, [], ['一', '二', '三'])).toBe(3);
+    expect(countEffectiveKanji(1, ['一'], ['一', '二', '三'])).toBe(2);
+    // 重点漢字がすべて除外されていれば 0 (生成も行われない)
+    expect(countEffectiveKanji(1, ['一', '二'], ['一', '二'])).toBe(0);
+    // 他学年の漢字は数えない
+    expect(countEffectiveKanji(1, [], ['海'])).toBe(0);
   });
 
   it.each([

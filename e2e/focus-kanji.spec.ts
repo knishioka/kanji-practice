@@ -34,6 +34,12 @@ test('重点漢字を選択・保存し、除外優先の空状態から全解�
   for (const name of ['問題を生成', '印刷', 'PDF保存']) {
     await expect(page.getByRole('button', { name, exact: true })).toBeDisabled();
   }
+  // 重点漢字モーダルの出題対象数も除外を反映する
+  await page.getByRole('button', { name: '重点漢字を選ぶ (1字を選択中)', exact: true }).click();
+  await expect(dialog).toContainText('出題対象: 0字');
+  await expect(dialog).toContainText('出題対象が少なすぎます');
+  await dialog.getByRole('button', { name: 'キャンセル', exact: true }).click();
+  await expect(dialog).toHaveCount(0);
   await testInfo.attach('重点漢字と除外の重複時の案内', {
     body: await page.screenshot(),
     contentType: 'image/png',
