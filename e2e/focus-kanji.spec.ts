@@ -56,9 +56,15 @@ test('学年ごとに選択を保持し、キャンセルは保存しない', as
   );
   await dialog.getByRole('button', { name: '一', exact: true }).click();
   await dialog.getByRole('button', { name: '適用', exact: true }).click();
-  await page.getByRole('button', { name: /9級/ }).click();
+  // 学習プリセットのボタンも「2年生 (9級)」などの学年ラベルを含むため、
+  // 対象級ボタンのアクセシブルネーム (番号バッジ + ラベル) に完全一致で絞り込む
+  const grade2Button = page.getByRole('button', { name: '2 2年生 (9級)', exact: true });
+  const grade1Button = page.getByRole('button', { name: '1 1年生 (10級)', exact: true });
+  await grade2Button.click();
+  await expect(grade2Button).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('button', { name: '重点漢字を選ぶ', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: /10級/ }).click();
+  await grade1Button.click();
+  await expect(grade1Button).toHaveAttribute('aria-pressed', 'true');
   await expect(
     page.getByRole('button', { name: '重点漢字を選ぶ (1字を選択中)', exact: true }),
   ).toBeVisible();
