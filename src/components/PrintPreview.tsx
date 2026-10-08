@@ -56,7 +56,11 @@ export const PrintPreview = forwardRef<HTMLDivElement, Props>(function PrintPrev
     <div className="space-y-4">
       {/* コントロールボタン */}
       <div className="flex flex-wrap gap-3 no-print">
-        <button onClick={onGenerate} className="btn-primary flex items-center gap-2">
+        <button
+          onClick={onGenerate}
+          disabled={questions.length === 0}
+          className="btn-primary flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"

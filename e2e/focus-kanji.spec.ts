@@ -1,0 +1,77 @@
+import { expect, test } from '@playwright/test';
+
+test('重点漢字を選択・保存し、除外優先の空状態から全解除で復帰する', async ({ page }, testInfo) => {
+  await page.goto('./');
+  await page.getByRole('button', { name: '重点漢字を選ぶ', exact: true }).click();
+  const dialog = page.getByRole('dialog');
+  await dialog.getByRole('button', { name: '一', exact: true }).click();
+  await expect(dialog.getByRole('button', { name: '一', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await dialog.getByRole('button', { name: '適用', exact: true }).click();
+  await expect(
+    page.getByRole('button', { name: '重点漢字を選ぶ (1字を選択中)', exact: true }),
+  ).toBeVisible();
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const saved = JSON.parse(localStorage.getItem('kanji-practice-settings') || '{}');
+        return [
+          ...new Set(saved.state.questions.map((q: { kanji: { char: string } }) => q.kanji.char)),
+        ];
+      }),
+    )
+    .toEqual(['一']);
+  await page.reload();
+  await expect(
+    page.getByRole('button', { name: '重点漢字を選ぶ (1字を選択中)', exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: '除外漢字を設定', exact: true }).click();
+  await dialog.getByRole('button', { name: '一', exact: true }).click();
+  await dialog.getByRole('button', { name: '適用', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('出題できる問題がありません');
+  for (const name of ['問題を生成', '印刷', 'PDF保存']) {
+    await expect(page.getByRole('button', { name, exact: true })).toBeDisabled();
+  }
+  // 重点漢字モーダルの出題対象数も除外を反映する
+  await page.getByRole('button', { name: '重点漢字を選ぶ (1字を選択中)', exact: true }).click();
+  await expect(dialog).toContainText('出題対象: 0字');
+  await expect(dialog).toContainText('出題対象が少なすぎます');
+  await dialog.getByRole('button', { name: 'キャンセル', exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  await testInfo.attach('重点漢字と除外の重複時の案内', {
+    body: await page.screenshot(),
+    contentType: 'image/png',
+  });
+  await page.getByRole('button', { name: '重点漢字を全解除', exact: true }).click();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '問題を生成', exact: true })).toBeEnabled();
+});
+
+test('学年ごとに選択を保持し、キャンセルは保存しない', async ({ page }) => {
+  await page.goto('./');
+  await page.getByRole('button', { name: '重点漢字を選ぶ', exact: true }).click();
+  const dialog = page.getByRole('dialog');
+  await dialog.getByRole('button', { name: '一', exact: true }).click();
+  await dialog.getByRole('button', { name: 'キャンセル', exact: true }).click();
+  await page.getByRole('button', { name: '重点漢字を選ぶ', exact: true }).click();
+  await expect(dialog.getByRole('button', { name: '一', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'false',
+  );
+  await dialog.getByRole('button', { name: '一', exact: true }).click();
+  await dialog.getByRole('button', { name: '適用', exact: true }).click();
+  // 学習プリセットのボタンも「2年生 (9級)」などの学年ラベルを含むため、
+  // 対象級ボタンのアクセシブルネーム (番号バッジ + ラベル) に完全一致で絞り込む
+  const grade2Button = page.getByRole('button', { name: '2 2年生 (9級)', exact: true });
+  const grade1Button = page.getByRole('button', { name: '1 1年生 (10級)', exact: true });
+  await grade2Button.click();
+  await expect(grade2Button).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('button', { name: '重点漢字を選ぶ', exact: true })).toBeVisible();
+  await grade1Button.click();
+  await expect(grade1Button).toHaveAttribute('aria-pressed', 'true');
+  await expect(
+    page.getByRole('button', { name: '重点漢字を選ぶ (1字を選択中)', exact: true }),
+  ).toBeVisible();
+});

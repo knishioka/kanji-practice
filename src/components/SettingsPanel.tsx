@@ -18,7 +18,11 @@ import {
   canGenerateOkuriganaQuestions,
   generateOkuriganaQuestions,
 } from '../utils/okuriganaQuestionGenerator';
-import { canGenerateQuestions, generateQuestions } from '../utils/questionGenerator';
+import {
+  canGenerateQuestions,
+  generateQuestions,
+  getEffectiveExcludedChars,
+} from '../utils/questionGenerator';
 import {
   canGenerateRadicalQuestions,
   generateRadicalQuestions,
@@ -34,8 +38,28 @@ import {
 } from './settings';
 
 export function SettingsPanel() {
-  const { settings, setSettings, setQuestions, excludedKanji, generationCounter } = useStore();
+  const {
+    settings,
+    setSettings,
+    setQuestions,
+    excludedKanji,
+    focusKanji,
+    clearFocusKanji,
+    generationCounter,
+  } = useStore();
   const [isExcludeModalOpen, setIsExcludeModalOpen] = useState(false);
+  const [isFocusModalOpen, setIsFocusModalOpen] = useState(false);
+  const [generationError, setGenerationError] = useState(false);
+  const currentFocus = focusKanji[settings.grade] || [];
+  const effectiveExcluded = useMemo(
+    () =>
+      getEffectiveExcludedChars(
+        settings.grade,
+        excludedKanji[settings.grade],
+        focusKanji[settings.grade],
+      ),
+    [excludedKanji, focusKanji, settings.grade],
+  );
 
   // 現在の学年の除外漢字（参照安定化のためメモ化）
   const currentExcluded = useMemo(
@@ -106,11 +130,9 @@ export function SettingsPanel() {
         settings.mode,
         totalQuestions,
         settings.random,
-        currentExcluded,
+        effectiveExcluded,
       );
-      if (questions.length === 0) {
-        alert('選択した学年・モードに対応するデータがありません。設定を変更してください。');
-      }
+      setGenerationError(questions.length === 0);
       setQuestions(questions);
     }
   }, [
@@ -118,7 +140,7 @@ export function SettingsPanel() {
     settings.mode,
     totalQuestions,
     settings.random,
-    currentExcluded,
+    effectiveExcluded,
     generationCounter,
     setQuestions,
     generateQuestionsForMode,
@@ -151,6 +173,30 @@ export function SettingsPanel() {
         onOpenExcludeModal={() => setIsExcludeModalOpen(true)}
       />
 
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          className="flex-1 p-2 rounded-lg text-sm"
+          style={{ border: '1px dashed var(--color-border)', color: 'var(--color-primary)' }}
+          onClick={() => setIsFocusModalOpen(true)}
+        >
+          {currentFocus.length > 0
+            ? `重点漢字を選ぶ (${currentFocus.length}字を選択中)`
+            : '重点漢字を選ぶ'}
+        </button>
+        {currentFocus.length > 0 && (
+          <button type="button" className="text-sm" onClick={() => clearFocusKanji(settings.grade)}>
+            重点漢字を全解除
+          </button>
+        )}
+      </div>
+
+      {generationError && (
+        <p role="alert" className="text-sm" style={{ color: 'var(--color-primary)' }}>
+          出題できる問題がありません。重点漢字・除外漢字の選択、学年またはモードを変更してください。
+        </p>
+      )}
+
       <LearningPresetSelector
         settings={settings}
         onSelect={(presetId) => setSettings(getLearningPresetSettings(presetId))}
@@ -168,6 +214,13 @@ export function SettingsPanel() {
       />
 
       <PracticeHistory />
+
+      <ExcludeKanjiModal
+        isOpen={isFocusModalOpen}
+        onClose={() => setIsFocusModalOpen(false)}
+        grade={settings.grade}
+        selectionMode="focus"
+      />
 
       <ExcludeKanjiModal
         isOpen={isExcludeModalOpen}

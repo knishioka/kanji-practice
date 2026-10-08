@@ -1,7 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { CELL_SIZE, SENTENCE_LAYOUT } from '../constants/print';
-import type { ExcludedKanjiMap, Grade, PracticeHistoryEntry, Question, Settings } from '../types';
+import type {
+  ExcludedKanjiMap,
+  FocusKanjiMap,
+  Grade,
+  PracticeHistoryEntry,
+  Question,
+  Settings,
+} from '../types';
 import {
   calculateMaxPracticeColumns,
   calculateMaxSentencePracticeRows,
@@ -12,6 +19,9 @@ export interface Store {
   settings: Settings;
   questions: Question[];
   excludedKanji: ExcludedKanjiMap;
+  focusKanji: FocusKanjiMap;
+  setFocusKanji: (grade: Grade, chars: string[]) => void;
+  clearFocusKanji: (grade: Grade) => void;
   /** 問題再生成トリガー（インクリメントで再生成を要求） */
   generationCounter: number;
   practiceHistory: PracticeHistoryEntry[];
@@ -95,6 +105,11 @@ export const useStore = create<Store>()(
       settings: defaultSettings,
       questions: [],
       excludedKanji: {},
+      focusKanji: {},
+      setFocusKanji: (grade, chars) =>
+        set((state) => ({ focusKanji: { ...state.focusKanji, [grade]: [...new Set(chars)] } })),
+      clearFocusKanji: (grade) =>
+        set((state) => ({ focusKanji: { ...state.focusKanji, [grade]: [] } })),
       generationCounter: 0,
       practiceHistory: [],
       regenerate: () => set((state) => ({ generationCounter: state.generationCounter + 1 })),
@@ -168,6 +183,7 @@ export const useStore = create<Store>()(
         const state = persistedState as {
           settings?: Record<string, unknown>;
           excludedKanji?: ExcludedKanjiMap;
+          focusKanji?: FocusKanjiMap;
           practiceHistory?: PracticeHistoryEntry[];
         };
         if (state?.settings) {
@@ -197,9 +213,13 @@ export const useStore = create<Store>()(
         if (!state.practiceHistory) {
           state.practiceHistory = [];
         }
+        // v5 → v6: 未選択なら従来どおり学年全体から出題
+        if (!state.focusKanji) {
+          state.focusKanji = {};
+        }
         return state;
       },
-      version: 5,
+      version: 6,
     },
   ),
 );

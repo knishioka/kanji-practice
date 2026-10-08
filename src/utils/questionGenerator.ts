@@ -22,6 +22,34 @@ const FINAL_RUBY_PHRASE_PATTERN = /\{[^|{}]+\|[^|{}]+\}[\u3041-\u3096\u30FC]*。
 const NOMINAL_PREDICATE_PARTICLE_PATTERN = /[はが]/;
 const PREDICATE_ENDING_PATTERN = /(?:い|う|く|ぐ|す|つ|ぬ|ぶ|む|る|た|ない|ます|です|だ)$/;
 
+/** 重点漢字に絞り込んでから明示的な除外を適用する（全出題モード共通）。 */
+export function getEffectiveExcludedChars(
+  grade: Grade,
+  excludedChars: string[] = [],
+  focusChars: string[] = [],
+): string[] {
+  const focus = new Set(focusChars);
+  const outsideFocus =
+    focus.size === 0
+      ? []
+      : allKanji
+          .filter((kanji) => kanji.grade === grade && !focus.has(kanji.char))
+          .map((kanji) => kanji.char);
+  return [...new Set([...outsideFocus, ...excludedChars])];
+}
+
+/** 重点漢字と除外を適用した後に出題対象として残る、指定学年の漢字数。 */
+export function countEffectiveKanji(
+  grade: Grade,
+  excludedChars: string[] = [],
+  focusChars: string[] = [],
+): number {
+  return getKanjiByGradeFiltered(
+    [grade],
+    getEffectiveExcludedChars(grade, excludedChars, focusChars),
+  ).length;
+}
+
 /**
  * 指定学年までに学習済みの漢字セットを生成
  */
@@ -273,8 +301,12 @@ export function generateQuestions(
   count: number,
   random: boolean,
   excludedChars: string[] = [],
+  focusChars: string[] = [],
 ): Question[] {
-  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
+  const kanjiPool = getKanjiByGradeFiltered(
+    [grade],
+    getEffectiveExcludedChars(grade, excludedChars, focusChars),
+  );
 
   if (kanjiPool.length === 0) {
     return [];
@@ -293,7 +325,14 @@ export function generateQuestions(
  * @param excludedChars - 除外する漢字の配列
  * @returns 漢字データが存在するか
  */
-export function canGenerateQuestions(grade: Grade, excludedChars: string[] = []): boolean {
-  const kanjiPool = getKanjiByGradeFiltered([grade], excludedChars);
+export function canGenerateQuestions(
+  grade: Grade,
+  excludedChars: string[] = [],
+  focusChars: string[] = [],
+): boolean {
+  const kanjiPool = getKanjiByGradeFiltered(
+    [grade],
+    getEffectiveExcludedChars(grade, excludedChars, focusChars),
+  );
   return kanjiPool.length > 0;
 }
