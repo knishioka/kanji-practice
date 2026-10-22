@@ -61,6 +61,7 @@ export interface Settings {
   // 例文写経モードの練習行数（同じ例文を縦に何回写すか）
   sentencePracticeRows: number;
   showHint: boolean;
+  showAnswerSheet: boolean;
   title: string;
   showNameField: boolean;
   showDateField: boolean;

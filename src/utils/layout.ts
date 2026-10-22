@@ -5,6 +5,7 @@
 
 import {
   A4,
+  ANSWER_SHEET_LAYOUT,
   PRACTICE_COLUMNS,
   SENTENCE_LAYOUT,
   WRITING_MODE_SAFE_WIDTH_MM,
@@ -88,6 +89,25 @@ export function calculateRowsPerPage(
 ): number {
   const availableHeight = A4.SAFE_CONTENT_HEIGHT_MM - A4.HEADER_HEIGHT_MM - A4.FOOTER_HEIGHT_MM;
   return Math.max(1, Math.floor(availableHeight / getRowHeight(cellSize, mode, options)));
+}
+
+/** 問題ページと同じA4安全領域を使う解答一覧の最大行数。 */
+export function calculateAnswerRowsPerPage(title: string): number {
+  // 全角幅で保守的に見積もり、折り返し位置の差に1行分の余裕を持たせる。
+  const titleColumns = Math.floor(
+    A4.SAFE_CONTENT_WIDTH_MM / ANSWER_SHEET_LAYOUT.TITLE_FONT_SIZE_MM,
+  );
+  const titleLines = Math.ceil(Array.from(`解答 — ${title}`).length / titleColumns) + 1;
+  const headerHeight = Math.max(
+    A4.HEADER_HEIGHT_MM,
+    titleLines * ANSWER_SHEET_LAYOUT.TITLE_LINE_HEIGHT_MM + ANSWER_SHEET_LAYOUT.HEADER_SPACING_MM,
+  );
+  const availableHeight =
+    A4.SAFE_CONTENT_HEIGHT_MM -
+    headerHeight -
+    A4.FOOTER_HEIGHT_MM -
+    ANSWER_SHEET_LAYOUT.TABLE_HEADER_HEIGHT_MM;
+  return Math.max(1, Math.floor(availableHeight / ANSWER_SHEET_LAYOUT.ROW_HEIGHT_MM));
 }
 
 /**

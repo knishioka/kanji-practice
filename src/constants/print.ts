@@ -33,6 +33,15 @@ export const PRACTICE_COLUMNS = {
 // お手本1マス + 間隔を考慮した値
 export const WRITING_MODE_SAFE_WIDTH_MM = 175;
 
+// 解答一覧は折り返し用の行高と表見出しの領域を確保する。
+export const ANSWER_SHEET_LAYOUT = {
+  ROW_HEIGHT_MM: 16,
+  TABLE_HEADER_HEIGHT_MM: 8,
+  TITLE_FONT_SIZE_MM: 5,
+  TITLE_LINE_HEIGHT_MM: 7.5,
+  HEADER_SPACING_MM: 14,
+} as const;
+
 // 例文写経モードのレイアウト定数
 // 1問の高さ式: cellSize × (FURIGANA_PADDING_RATIO + EXAMPLE_ROW_RATIO + PRACTICE_ROW_RATIO × N) + BOTTOM_MARGIN_MM
 export const SENTENCE_LAYOUT = {
