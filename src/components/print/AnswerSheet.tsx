@@ -16,7 +16,14 @@ export function AnswerSheet({ rows, settings, currentPage, totalPages }: Props) 
       className="a4-page mx-auto shadow-lg print:shadow-none page-break flex flex-col"
       data-testid="answer-sheet"
     >
-      <div className="border-b" style={{ marginBottom: '4mm', paddingBottom: '3mm' }}>
+      <div
+        className="border-b"
+        style={{
+          marginBottom: `${ANSWER_SHEET_LAYOUT.HEADER_MARGIN_BOTTOM_MM}mm`,
+          paddingBottom: `${ANSWER_SHEET_LAYOUT.HEADER_PADDING_BOTTOM_MM}mm`,
+          borderBottomWidth: `${ANSWER_SHEET_LAYOUT.HEADER_BORDER_WIDTH_PX}px`,
+        }}
+      >
         <h2
           className="font-bold break-words"
           style={{
@@ -26,7 +33,13 @@ export function AnswerSheet({ rows, settings, currentPage, totalPages }: Props) 
         >
           解答 — {settings.title}
         </h2>
-        <p style={{ fontSize: '3.5mm', lineHeight: '5mm', marginTop: '1mm' }}>
+        <p
+          style={{
+            fontSize: `${ANSWER_SHEET_LAYOUT.DESCRIPTION_FONT_SIZE_MM}mm`,
+            lineHeight: `${ANSWER_SHEET_LAYOUT.DESCRIPTION_LINE_HEIGHT_MM}mm`,
+            marginTop: `${ANSWER_SHEET_LAYOUT.DESCRIPTION_MARGIN_TOP_MM}mm`,
+          }}
+        >
           問題ページと問題番号を見て、答えを確認してください。
         </p>
       </div>

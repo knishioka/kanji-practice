@@ -11,6 +11,7 @@ import {
   WRITING_MODE_SAFE_WIDTH_MM,
 } from '../constants/print';
 import type { PrintMode } from '../types';
+import { pxToMm } from './units';
 
 /**
  * レイアウト計算用のオプション
@@ -98,9 +99,15 @@ export function calculateAnswerRowsPerPage(title: string): number {
     A4.SAFE_CONTENT_WIDTH_MM / ANSWER_SHEET_LAYOUT.TITLE_FONT_SIZE_MM,
   );
   const titleLines = Math.ceil(Array.from(`解答 — ${title}`).length / titleColumns) + 1;
+  const headerSpacing =
+    ANSWER_SHEET_LAYOUT.HEADER_MARGIN_BOTTOM_MM +
+    ANSWER_SHEET_LAYOUT.HEADER_PADDING_BOTTOM_MM +
+    Math.ceil(pxToMm(ANSWER_SHEET_LAYOUT.HEADER_BORDER_WIDTH_PX)) +
+    ANSWER_SHEET_LAYOUT.DESCRIPTION_LINE_HEIGHT_MM +
+    ANSWER_SHEET_LAYOUT.DESCRIPTION_MARGIN_TOP_MM;
   const headerHeight = Math.max(
     A4.HEADER_HEIGHT_MM,
-    titleLines * ANSWER_SHEET_LAYOUT.TITLE_LINE_HEIGHT_MM + ANSWER_SHEET_LAYOUT.HEADER_SPACING_MM,
+    titleLines * ANSWER_SHEET_LAYOUT.TITLE_LINE_HEIGHT_MM + headerSpacing,
   );
   const availableHeight =
     A4.SAFE_CONTENT_HEIGHT_MM -
