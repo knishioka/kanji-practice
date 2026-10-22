@@ -1,5 +1,6 @@
 import { CELL_SIZE, SENTENCE_LAYOUT } from '../../constants/print';
 import type { GridStyle, Settings } from '../../types';
+import { supportsAnswerSheet } from '../../utils/answerSheet';
 import { gridStyles, modeSettings } from './config';
 
 interface Props {
@@ -20,6 +21,7 @@ export function PrintOptions({
   onSettingsChange,
 }: Props) {
   const currentModeSettings = modeSettings[settings.mode];
+  const answerSheetSupported = supportsAnswerSheet(settings.mode);
 
   return (
     <div className="space-y-5">
@@ -152,6 +154,30 @@ export function PrintOptions({
 
       {/* オプション */}
       <div className="space-y-3 p-4 rounded-xl" style={{ background: 'var(--color-bg)' }}>
+        <div>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={answerSheetSupported && settings.showAnswerSheet}
+              disabled={!answerSheetSupported}
+              aria-describedby={!answerSheetSupported ? 'answer-sheet-unavailable' : undefined}
+              onChange={(e) => onSettingsChange({ showAnswerSheet: e.target.checked })}
+              className="w-5 h-5 rounded"
+            />
+            <span className="text-sm" style={{ color: 'var(--color-text)' }}>
+              解答ページをつける
+            </span>
+          </label>
+          {!answerSheetSupported && (
+            <p
+              id="answer-sheet-unavailable"
+              className="text-xs mt-2"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              このモードはお手本を使う練習のため、解答ページはありません。
+            </p>
+          )}
+        </div>
         <label className="flex items-center gap-3 cursor-pointer">
           <input
             type="checkbox"

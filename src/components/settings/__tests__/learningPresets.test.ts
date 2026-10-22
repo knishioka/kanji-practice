@@ -18,6 +18,7 @@ const baseSettings: Settings = {
   practiceColumns: 3,
   sentencePracticeRows: SENTENCE_LAYOUT.DEFAULT_PRACTICE_ROWS,
   showHint: false,
+  showAnswerSheet: false,
   title: 'カスタム設定',
   showNameField: false,
   showDateField: false,

@@ -59,6 +59,7 @@ const defaultSettings: Settings = {
   practiceColumns: calculateRecommendedPracticeColumns(CELL_SIZE.DEFAULT),
   sentencePracticeRows: SENTENCE_LAYOUT.DEFAULT_PRACTICE_ROWS,
   showHint: false,
+  showAnswerSheet: false,
   title: '漢字練習プリント',
   showNameField: true,
   showDateField: true,
@@ -172,7 +173,7 @@ export const useStore = create<Store>()(
       clearPracticeHistory: () => set({ practiceHistory: [] }),
       restorePracticeHistory: (entry) =>
         set((state) => ({
-          settings: { ...entry.settings },
+          settings: { ...entry.settings, showAnswerSheet: entry.settings.showAnswerSheet ?? false },
           generationCounter: state.generationCounter + 1,
         })),
     }),
@@ -204,6 +205,10 @@ export const useStore = create<Store>()(
           }
           // v3 → v4: 1ページ目ヘッダーの表示切替とラベルを追加
           applyHeaderDefaults(state.settings);
+          // v6 → v7: 既存プリントには解答ページを追加しない
+          if (!('showAnswerSheet' in state.settings)) {
+            state.settings.showAnswerSheet = false;
+          }
         }
         // excludedKanjiがない場合は空オブジェクトを設定
         if (!state?.excludedKanji) {
@@ -213,13 +218,17 @@ export const useStore = create<Store>()(
         if (!state.practiceHistory) {
           state.practiceHistory = [];
         }
+        state.practiceHistory = state.practiceHistory.map((entry) => ({
+          ...entry,
+          settings: { ...entry.settings, showAnswerSheet: entry.settings.showAnswerSheet ?? false },
+        }));
         // v5 → v6: 未選択なら従来どおり学年全体から出題
         if (!state.focusKanji) {
           state.focusKanji = {};
         }
         return state;
       },
-      version: 6,
+      version: 7,
     },
   ),
 );
