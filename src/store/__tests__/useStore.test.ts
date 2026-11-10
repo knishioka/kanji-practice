@@ -212,3 +212,84 @@ describe('useStore - practice history', () => {
     expect(useStore.getState().practiceHistory).toEqual([]);
   });
 });
+
+describe('useStore - answer sheet settings', () => {
+  beforeEach(() => {
+    useStore.getState().resetSettings();
+    useStore.getState().clearPracticeHistory();
+  });
+
+  it('defaults to disabled and persists the opt-in setting', async () => {
+    expect(useStore.getState().settings.showAnswerSheet).toBe(false);
+    useStore.getState().setSettings({ showAnswerSheet: true });
+    await useStore.persist.rehydrate();
+    expect(useStore.getState().settings.showAnswerSheet).toBe(true);
+    expect(JSON.parse(localStorage.getItem('kanji-practice-settings') || '{}').version).toBe(7);
+    useStore.getState().resetSettings();
+    expect(useStore.getState().settings.showAnswerSheet).toBe(false);
+  });
+
+  it('saves and restores the answer sheet setting in history snapshots', () => {
+    useStore.getState().setSettings({ showAnswerSheet: true });
+    useStore.getState().addPracticeHistory(10);
+    const entry = useStore.getState().practiceHistory[0];
+    expect(entry.settings.showAnswerSheet).toBe(true);
+    useStore.getState().setSettings({ showAnswerSheet: false });
+    useStore.getState().restorePracticeHistory(entry);
+    expect(useStore.getState().settings.showAnswerSheet).toBe(true);
+  });
+
+  it.each([
+    0, 4, 5, 6,
+  ])('migrates version %s settings and history without opting in', async (version) => {
+    useStore.getState().addPracticeHistory(10);
+    const { showAnswerSheet: _flag, ...legacySettings } = useStore.getState().settings;
+    const legacyEntry = { ...useStore.getState().practiceHistory[0], settings: legacySettings };
+    localStorage.setItem(
+      'kanji-practice-settings',
+      JSON.stringify({
+        state: {
+          settings: { ...legacySettings, grade: 2 },
+          practiceHistory: [legacyEntry],
+          excludedKanji: { 2: ['海'] },
+          focusKanji: { 2: ['春'] },
+        },
+        version,
+      }),
+    );
+    await useStore.persist.rehydrate();
+    expect(useStore.getState().settings).toMatchObject({ grade: 2, showAnswerSheet: false });
+    expect(useStore.getState().practiceHistory[0]).toEqual({
+      ...legacyEntry,
+      settings: { ...legacySettings, showAnswerSheet: false },
+    });
+    expect(useStore.getState().excludedKanji).toEqual({ 2: ['海'] });
+    expect(useStore.getState().focusKanji).toEqual({ 2: ['春'] });
+  });
+
+  it('preserves an explicit true value during migration', async () => {
+    useStore.getState().setSettings({ showAnswerSheet: true });
+    useStore.getState().addPracticeHistory(10);
+    const { settings, practiceHistory } = useStore.getState();
+    localStorage.setItem(
+      'kanji-practice-settings',
+      JSON.stringify({ state: { settings, practiceHistory }, version: 6 }),
+    );
+    await useStore.persist.rehydrate();
+    expect(useStore.getState().settings.showAnswerSheet).toBe(true);
+    expect(useStore.getState().practiceHistory[0].settings.showAnswerSheet).toBe(true);
+  });
+
+  it('restores a legacy history entry directly without inheriting an enabled current setting', () => {
+    useStore.getState().addPracticeHistory(10);
+    const { showAnswerSheet: _flag, ...legacySettings } = useStore.getState().settings;
+    const entry = {
+      ...useStore.getState().practiceHistory[0],
+      settings: legacySettings,
+    } as PracticeHistoryEntry;
+    useStore.getState().setSettings({ showAnswerSheet: true });
+    useStore.getState().restorePracticeHistory(entry);
+    expect(useStore.getState().settings.showAnswerSheet).toBe(false);
+    expect(entry.settings).not.toHaveProperty('showAnswerSheet');
+  });
+});

@@ -1,6 +1,8 @@
 import { forwardRef, useMemo } from 'react';
 import type { Question, Settings } from '../types';
+import { generateAnswerRows } from '../utils/answerSheet';
 import {
+  calculateAnswerRowsPerPage,
   calculateColumnsPerRow,
   calculateMaxOkuriganaCells,
   calculateRowsPerPage,
@@ -20,6 +22,7 @@ import {
   StrokeOrderQuestion,
   WritingQuestion,
 } from './print';
+import { AnswerSheet } from './print/AnswerSheet';
 
 interface Props {
   questions: Question[];
@@ -54,6 +57,17 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
   );
 
   const pages = useMemo(() => chunkArray(questions, rowsPerPage), [questions, rowsPerPage]);
+
+  const answerPages = useMemo(
+    () =>
+      settings.showAnswerSheet
+        ? chunkArray(
+            generateAnswerRows(questions, settings.mode, rowsPerPage),
+            calculateAnswerRowsPerPage(settings.title),
+          )
+        : [],
+    [questions, settings.showAnswerSheet, settings.mode, settings.title, rowsPerPage],
+  );
 
   const safePracticeCount = useMemo(
     () => calculateSafePracticeCount(settings.cellSize, settings.practiceColumns),
@@ -225,6 +239,15 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
             mode={settings.mode}
           />
         </div>
+      ))}
+      {answerPages.map((rows, pageIndex) => (
+        <AnswerSheet
+          key={`answer-${pageIndex}`}
+          rows={rows}
+          settings={settings}
+          currentPage={pageIndex + 1}
+          totalPages={answerPages.length}
+        />
       ))}
     </div>
   );
