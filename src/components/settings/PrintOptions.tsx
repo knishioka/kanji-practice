@@ -1,6 +1,7 @@
 import { CELL_SIZE, SENTENCE_LAYOUT } from '../../constants/print';
-import type { GridStyle, Settings } from '../../types';
+import type { GridStyle, ReviewRatio, Settings } from '../../types';
 import { supportsAnswerSheet } from '../../utils/answerSheet';
+import { supportsReview } from '../../utils/reviewKanji';
 import { gridStyles, modeSettings } from './config';
 
 interface Props {
@@ -22,6 +23,7 @@ export function PrintOptions({
 }: Props) {
   const currentModeSettings = modeSettings[settings.mode];
   const answerSheetSupported = supportsAnswerSheet(settings.mode);
+  const reviewSupported = supportsReview(settings.mode);
 
   return (
     <div className="space-y-5">
@@ -154,6 +156,56 @@ export function PrintOptions({
 
       {/* オプション */}
       <div className="space-y-3 p-4 rounded-xl" style={{ background: 'var(--color-bg)' }}>
+        <div>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={reviewSupported && settings.reviewEnabled}
+              disabled={!reviewSupported}
+              aria-describedby={!reviewSupported ? 'review-unavailable' : 'review-description'}
+              onChange={(e) => onSettingsChange({ reviewEnabled: e.target.checked })}
+              className="w-5 h-5 rounded"
+            />
+            <span className="text-sm" style={{ color: 'var(--color-text)' }}>
+              復習を混ぜる
+            </span>
+          </label>
+          {!reviewSupported ? (
+            <p
+              id="review-unavailable"
+              className="text-xs mt-2"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              このモードは複数の漢字や専用の問題を使うため、復習を混ぜる機能には対応していません。
+            </p>
+          ) : (
+            <p
+              id="review-description"
+              className="text-xs mt-2"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              指定した比率の枠で同じ学年の最近の練習を優先します。残りと履歴が足りない分は通常出題のため、復習の漢字が比率を超える場合もあります。
+            </p>
+          )}
+          <label className="flex items-center gap-3 text-sm mt-2">
+            復習の比率
+            <select
+              aria-label="復習の比率"
+              value={settings.reviewRatio}
+              disabled={!reviewSupported || !settings.reviewEnabled}
+              onChange={(e) =>
+                onSettingsChange({ reviewRatio: Number(e.target.value) as ReviewRatio })
+              }
+              className="p-2 rounded-lg"
+            >
+              {[10, 20, 30].map((ratio) => (
+                <option key={ratio} value={ratio}>
+                  {ratio}%
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
         <div>
           <label className="flex items-center gap-3 cursor-pointer">
             <input

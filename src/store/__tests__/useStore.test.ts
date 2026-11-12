@@ -153,6 +153,95 @@ describe('useStore - practice history', () => {
     useStore.getState().clearPracticeHistory();
   });
 
+  it('records deduplicated kanji without retaining the caller array', async () => {
+    const chars = ['一', '二', '一'];
+    useStore.getState().addPracticeHistory(3, chars);
+    chars.push('三');
+    await useStore.persist.rehydrate();
+    expect(useStore.getState().practiceHistory[0]).toMatchObject({
+      questionCount: 3,
+      kanjiChars: ['一', '二'],
+    });
+  });
+
+  it('records the exported settings snapshot even if current settings change before completion', () => {
+    const snapshot = { ...useStore.getState().settings };
+    useStore.getState().setSettings({ grade: 2, mode: 'reading', pageCount: 3 });
+    useStore.getState().addPracticeHistory(2, ['一', '二'], snapshot);
+    snapshot.title = '変更後';
+    expect(useStore.getState().practiceHistory[0]).toMatchObject({
+      grade: 1,
+      mode: 'writing',
+      pageCount: 1,
+      questionCount: 2,
+      kanjiChars: ['一', '二'],
+      settings: { grade: 1, mode: 'writing', pageCount: 1, title: '漢字練習プリント' },
+    });
+    expect(useStore.getState().settings).toMatchObject({ grade: 2, mode: 'reading', pageCount: 3 });
+  });
+
+  it('defaults review off at 20% and persists and restores its settings', async () => {
+    expect(useStore.getState().settings).toMatchObject({ reviewEnabled: false, reviewRatio: 20 });
+    useStore.getState().setSettings({ reviewEnabled: true, reviewRatio: 30 });
+    useStore.getState().addPracticeHistory(3, ['一']);
+    const entry = useStore.getState().practiceHistory[0];
+    await useStore.persist.rehydrate();
+    expect(useStore.getState().settings).toMatchObject({ reviewEnabled: true, reviewRatio: 30 });
+    useStore.getState().resetSettings();
+    useStore.getState().restorePracticeHistory(entry);
+    expect(useStore.getState().settings).toMatchObject({ reviewEnabled: true, reviewRatio: 30 });
+  });
+
+  it.each([
+    0, 4, 5, 6, 7,
+  ])('fills legacy version %s history and snapshot review defaults', async (version) => {
+    useStore.getState().addPracticeHistory(8, ['一']);
+    const {
+      reviewEnabled: _enabled,
+      reviewRatio: _ratio,
+      ...settings
+    } = useStore.getState().settings;
+    const { kanjiChars: _chars, ...entry } = useStore.getState().practiceHistory[0];
+    const legacyEntry = { ...entry, settings };
+    localStorage.setItem(
+      'kanji-practice-settings',
+      JSON.stringify({
+        version,
+        state: {
+          settings,
+          practiceHistory: [legacyEntry],
+          excludedKanji: { 1: ['二'] },
+          focusKanji: { 1: ['一'] },
+        },
+      }),
+    );
+    await useStore.persist.rehydrate();
+    expect(useStore.getState().practiceHistory[0]).toEqual({
+      ...legacyEntry,
+      kanjiChars: [],
+      settings: { ...settings, reviewEnabled: false, reviewRatio: 20 },
+    });
+    expect(useStore.getState().settings).toMatchObject({ reviewEnabled: false, reviewRatio: 20 });
+    expect(useStore.getState().excludedKanji).toEqual({ 1: ['二'] });
+    expect(useStore.getState().focusKanji).toEqual({ 1: ['一'] });
+    useStore.getState().setSettings({ reviewEnabled: true, reviewRatio: 30 });
+    useStore.getState().restorePracticeHistory(legacyEntry as PracticeHistoryEntry);
+    expect(useStore.getState().settings).toMatchObject({ reviewEnabled: false, reviewRatio: 20 });
+  });
+
+  it('preserves recorded kanji and explicitly enabled review settings during migration', async () => {
+    useStore.getState().setSettings({ reviewEnabled: true, reviewRatio: 10 });
+    useStore.getState().addPracticeHistory(2, ['一', '二']);
+    const { settings, practiceHistory } = useStore.getState();
+    localStorage.setItem(
+      'kanji-practice-settings',
+      JSON.stringify({ version: 7, state: { settings, practiceHistory } }),
+    );
+    await useStore.persist.rehydrate();
+    expect(useStore.getState().practiceHistory).toEqual(practiceHistory);
+    expect(useStore.getState().settings).toEqual(settings);
+  });
+
   it('stores a settings snapshot and trims history to the latest 20 entries', () => {
     useStore.getState().setSettings({ grade: 2, mode: 'reading', pageCount: 2 });
 
@@ -224,7 +313,7 @@ describe('useStore - answer sheet settings', () => {
     useStore.getState().setSettings({ showAnswerSheet: true });
     await useStore.persist.rehydrate();
     expect(useStore.getState().settings.showAnswerSheet).toBe(true);
-    expect(JSON.parse(localStorage.getItem('kanji-practice-settings') || '{}').version).toBe(7);
+    expect(JSON.parse(localStorage.getItem('kanji-practice-settings') || '{}').version).toBe(8);
     useStore.getState().resetSettings();
     expect(useStore.getState().settings.showAnswerSheet).toBe(false);
   });

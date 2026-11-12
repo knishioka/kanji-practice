@@ -13,6 +13,8 @@ const baseSettings: Settings = {
   mode: 'antonym',
   pageCount: 4,
   random: false,
+  reviewEnabled: false,
+  reviewRatio: 20,
   gridStyle: 'none',
   cellSize: 25,
   practiceColumns: 3,
