@@ -4,7 +4,8 @@
  */
 
 import { allKanji, getKanjiByGradeFiltered } from '../data/kanji';
-import type { Grade, Kanji, Question } from '../types';
+import type { Grade, Kanji, PracticeHistoryEntry, Question, ReviewRatio } from '../types';
+import { selectReviewKanji } from './reviewKanji';
 import { getSentencePlainText, isKanjiChar } from './sentenceRuby';
 
 /**
@@ -302,6 +303,11 @@ export function generateQuestions(
   random: boolean,
   excludedChars: string[] = [],
   focusChars: string[] = [],
+  review?: {
+    ratio: ReviewRatio;
+    history: readonly PracticeHistoryEntry[];
+    rng?: () => number;
+  },
 ): Question[] {
   const kanjiPool = getKanjiByGradeFiltered(
     [grade],
@@ -314,7 +320,27 @@ export function generateQuestions(
 
   const allowedKanji = createAllowedKanjiSet(grade);
   const questionPool = createQuestionPool(kanjiPool, allowedKanji);
-  const selected = selectCandidates(questionPool, count, random);
+  const reviewChars = review
+    ? selectReviewKanji(
+        grade,
+        count,
+        review.ratio,
+        review.history,
+        kanjiPool.map((kanji) => kanji.char),
+        review.rng,
+      )
+    : [];
+  const reviewCandidates = reviewChars.flatMap((char) =>
+    selectCandidates(
+      questionPool.filter((candidate) => candidate.kanji.char === char),
+      1,
+      random,
+    ),
+  );
+  const selected = [
+    ...reviewCandidates,
+    ...selectCandidates(questionPool, count - reviewCandidates.length, random),
+  ];
 
   return candidatesToQuestions(selected);
 }

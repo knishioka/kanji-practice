@@ -1,6 +1,7 @@
 import { forwardRef, useCallback, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useStore } from '../store/useStore';
+import type { Settings } from '../types';
 import { generateFilename, generatePDF } from '../utils/pdf';
 import { runAndRecordOnSuccess } from '../utils/practiceHistory';
 import { PrintablePages } from './PrintablePages';
@@ -16,10 +17,20 @@ export const PrintPreview = forwardRef<HTMLDivElement, Props>(function PrintPrev
   const contentRef = useRef<HTMLDivElement>(null);
   const { settings, questions, addPracticeHistory } = useStore();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const printSnapshotRef = useRef<{
+    settings: Settings;
+    questionCount: number;
+    kanjiChars: string[];
+  } | null>(null);
 
   const handlePrint = useReactToPrint({
     contentRef,
-    onAfterPrint: () => addPracticeHistory(questions.length),
+    onAfterPrint: () => {
+      const snapshot = printSnapshotRef.current;
+      if (!snapshot) return;
+      addPracticeHistory(snapshot.questionCount, snapshot.kanjiChars, snapshot.settings);
+      printSnapshotRef.current = null;
+    },
   });
 
   // forwardRefとローカルrefを統合するコールバック
@@ -38,11 +49,13 @@ export const PrintPreview = forwardRef<HTMLDivElement, Props>(function PrintPrev
   const handlePDFDownload = async () => {
     if (!contentRef.current) return;
 
+    const exportedSettings = { ...settings };
+    const kanjiChars = questions.map((q) => q.kanji.char);
     setIsGeneratingPDF(true);
     try {
       await runAndRecordOnSuccess(
-        () => generatePDF(contentRef.current!, generateFilename(settings.title)),
-        () => addPracticeHistory(questions.length),
+        () => generatePDF(contentRef.current!, generateFilename(exportedSettings.title)),
+        () => addPracticeHistory(questions.length, kanjiChars, exportedSettings),
       );
     } catch (error) {
       console.error('PDF生成エラー:', error);
@@ -72,7 +85,14 @@ export const PrintPreview = forwardRef<HTMLDivElement, Props>(function PrintPrev
           問題を生成
         </button>
         <button
-          onClick={handlePrint}
+          onClick={() => {
+            printSnapshotRef.current = {
+              settings: { ...settings },
+              questionCount: questions.length,
+              kanjiChars: questions.map((q) => q.kanji.char),
+            };
+            handlePrint();
+          }}
           disabled={questions.length === 0}
           className="px-5 py-2.5 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
           style={{

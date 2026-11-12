@@ -14,6 +14,9 @@ import {
   calculateMaxSentencePracticeRows,
   calculateRecommendedPracticeColumns,
 } from '../utils/layout';
+import { MAX_PRACTICE_HISTORY } from '../utils/practiceHistory';
+
+export { MAX_PRACTICE_HISTORY } from '../utils/practiceHistory';
 
 export interface Store {
   settings: Settings;
@@ -33,7 +36,7 @@ export interface Store {
   setExcludedKanji: (grade: Grade, chars: string[]) => void;
   toggleExcludedKanji: (grade: Grade, char: string) => void;
   clearExcludedKanji: (grade: Grade) => void;
-  addPracticeHistory: (questionCount: number) => void;
+  addPracticeHistory: (questionCount: number, kanjiChars?: string[], settings?: Settings) => void;
   clearPracticeHistory: () => void;
   restorePracticeHistory: (entry: PracticeHistoryEntry) => void;
 }
@@ -54,6 +57,8 @@ const defaultSettings: Settings = {
   mode: 'writing',
   pageCount: 1,
   random: true,
+  reviewEnabled: false,
+  reviewRatio: 20,
   gridStyle: 'cross',
   cellSize: CELL_SIZE.DEFAULT,
   practiceColumns: calculateRecommendedPracticeColumns(CELL_SIZE.DEFAULT),
@@ -67,11 +72,10 @@ const defaultSettings: Settings = {
   dateLabel: 'ひづけ',
 };
 
-export const MAX_PRACTICE_HISTORY = 20;
-
 function createPracticeHistoryEntry(
   settings: Settings,
   questionCount: number,
+  kanjiChars: string[],
 ): PracticeHistoryEntry {
   const executedAt = new Date().toISOString();
   return {
@@ -81,6 +85,7 @@ function createPracticeHistoryEntry(
     mode: settings.mode,
     pageCount: settings.pageCount,
     questionCount,
+    kanjiChars: [...new Set(kanjiChars)],
     settings: { ...settings },
   };
 }
@@ -163,17 +168,22 @@ export const useStore = create<Store>()(
         set((state) => ({
           excludedKanji: { ...state.excludedKanji, [grade]: [] },
         })),
-      addPracticeHistory: (questionCount) =>
+      addPracticeHistory: (questionCount, kanjiChars = [], settings) =>
         set((state) => ({
           practiceHistory: [
-            createPracticeHistoryEntry(state.settings, questionCount),
+            createPracticeHistoryEntry(settings ?? state.settings, questionCount, kanjiChars),
             ...state.practiceHistory,
           ].slice(0, MAX_PRACTICE_HISTORY),
         })),
       clearPracticeHistory: () => set({ practiceHistory: [] }),
       restorePracticeHistory: (entry) =>
         set((state) => ({
-          settings: { ...entry.settings, showAnswerSheet: entry.settings.showAnswerSheet ?? false },
+          settings: {
+            ...entry.settings,
+            showAnswerSheet: entry.settings.showAnswerSheet ?? false,
+            reviewEnabled: entry.settings.reviewEnabled ?? false,
+            reviewRatio: entry.settings.reviewRatio ?? 20,
+          },
           generationCounter: state.generationCounter + 1,
         })),
     }),
@@ -209,6 +219,9 @@ export const useStore = create<Store>()(
           if (!('showAnswerSheet' in state.settings)) {
             state.settings.showAnswerSheet = false;
           }
+          // v7 → v8: 復習は明示的に有効にした場合のみ混ぜる
+          state.settings.reviewEnabled ??= false;
+          state.settings.reviewRatio ??= 20;
         }
         // excludedKanjiがない場合は空オブジェクトを設定
         if (!state?.excludedKanji) {
@@ -220,7 +233,13 @@ export const useStore = create<Store>()(
         }
         state.practiceHistory = state.practiceHistory.map((entry) => ({
           ...entry,
-          settings: { ...entry.settings, showAnswerSheet: entry.settings.showAnswerSheet ?? false },
+          kanjiChars: [...new Set(entry.kanjiChars ?? [])],
+          settings: {
+            ...entry.settings,
+            showAnswerSheet: entry.settings.showAnswerSheet ?? false,
+            reviewEnabled: entry.settings.reviewEnabled ?? false,
+            reviewRatio: entry.settings.reviewRatio ?? 20,
+          },
         }));
         // v5 → v6: 未選択なら従来どおり学年全体から出題
         if (!state.focusKanji) {
@@ -228,7 +247,7 @@ export const useStore = create<Store>()(
         }
         return state;
       },
-      version: 7,
+      version: 8,
     },
   ),
 );

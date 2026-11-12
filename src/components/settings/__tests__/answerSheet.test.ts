@@ -10,6 +10,8 @@ const baseSettings: Settings = {
   mode: 'reading',
   pageCount: 1,
   random: true,
+  reviewEnabled: false,
+  reviewRatio: 20,
   gridStyle: 'cross',
   cellSize: 15,
   practiceColumns: 6,

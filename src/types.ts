@@ -49,12 +49,16 @@ export type PrintMode =
 // グリッド種類
 export type GridStyle = 'cross' | 'dots' | 'none';
 
+export type ReviewRatio = 10 | 20 | 30;
+
 // 設定
 export interface Settings {
   grade: Grade;
   mode: PrintMode;
   pageCount: number;
   random: boolean;
+  reviewEnabled: boolean;
+  reviewRatio: ReviewRatio;
   gridStyle: GridStyle;
   cellSize: number;
   practiceColumns: number;
@@ -80,6 +84,7 @@ export interface PracticeHistoryEntry {
   mode: PrintMode;
   pageCount: number;
   questionCount: number;
+  kanjiChars: string[];
   settings: PracticeSettingsSnapshot;
 }
 

@@ -27,6 +27,7 @@ import {
   canGenerateRadicalQuestions,
   generateRadicalQuestions,
 } from '../utils/radicalQuestionGenerator';
+import { supportsReview } from '../utils/reviewKanji';
 import { ExcludeKanjiModal } from './modals/ExcludeKanjiModal';
 import {
   GradeSelector,
@@ -115,10 +116,19 @@ export function SettingsPanel() {
           return generateAntonymQuestions(grade, count, random, excluded);
         default:
           if (!canGenerateQuestions(grade, excluded)) return [];
-          return generateQuestions(grade, count, random, excluded);
+          return generateQuestions(
+            grade,
+            count,
+            random,
+            excluded,
+            [],
+            settings.reviewEnabled && supportsReview(mode)
+              ? { ratio: settings.reviewRatio, history: useStore.getState().practiceHistory }
+              : undefined,
+          );
       }
     },
-    [],
+    [settings.reviewEnabled, settings.reviewRatio],
   );
 
   // 初期ロード時・設定変更時・再生成トリガー時に問題を生成
