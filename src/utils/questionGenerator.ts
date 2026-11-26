@@ -161,6 +161,7 @@ function createGradeAppropriateSentence(
   sentence: string,
   kanji: Kanji,
   allowedKanji: Set<string>,
+  { allowNounPhrase = false } = {},
 ): string | undefined {
   let losesTargetKanji = false;
   let simplifiesRuby = false;
@@ -187,6 +188,7 @@ function createGradeAppropriateSentence(
   const plainText = getSentencePlainText(simplified);
   const textWithoutPunctuation = plainText.slice(0, -1);
   if (
+    !allowNounPhrase &&
     simplifiesRuby &&
     FINAL_RUBY_PHRASE_PATTERN.test(sentence) &&
     !NOMINAL_PREDICATE_PARTICLE_PATTERN.test(textOutsideRuby) &&
@@ -358,7 +360,11 @@ function findAmbiguousWritingPrompts(allowedKanji: Set<string>): Set<string> {
   const ambiguous = new Set<string>();
   for (const kanji of allKanji) {
     if (!allowedKanji.has(kanji.char)) continue;
-    const examples = [...getLearnedExamples(kanji, allowedKanji), createFallbackExample(kanji)];
+    const examples = getLearnedExamples(kanji, allowedKanji);
+    for (const reading of [...kanji.readings.on, ...kanji.readings.kun]) {
+      const normalized = normalizeReadingForRuby(reading);
+      if (normalized) examples.push({ word: kanji.char, reading: normalized });
+    }
     for (const example of examples) {
       const key = writingPromptKey(kanji, example);
       const answer = answers.get(key);
@@ -375,7 +381,9 @@ function getContextExample(
   usedWords: Set<string>,
 ): QuestionCandidate['example'] | undefined {
   const examples = kanji.sentences.flatMap((source) => {
-    const sentence = createGradeAppropriateSentence(source, kanji, allowedKanji);
+    const sentence = createGradeAppropriateSentence(source, kanji, allowedKanji, {
+      allowNounPhrase: true,
+    });
     if (!sentence) return [];
     const reading = sentence.replace(RUBY_ANNOTATION_PATTERN, '$2').replace(/。$/, '');
     if (Array.from(reading).some(isKanjiChar)) return [];

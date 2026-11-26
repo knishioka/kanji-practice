@@ -89,6 +89,31 @@ describe('questionGenerator utilities', () => {
       expect(writing.example).toEqual({ word: '一丁目', reading: 'いっちょうめ' });
     });
 
+    it('「口」の音読みと重なる「校」は、読み問題で「学校」を使った後も文脈を添える', () => {
+      const excluded = getEffectiveExcludedChars(1, [], ['一', '学', '校']);
+      const [, reading, writing] = generateMiniTestQuestions(1, false, excluded);
+      expect(reading.example?.word).toBe('学校');
+      expect(writing.kanji.char).toBe('校');
+      expect(writing.miniTest).toEqual({ section: 'writing', points: 33 });
+      expect(writing.example).toEqual({
+        word: '校ちょう先生にあう',
+        reading: 'こうちょうせんせいにあう',
+      });
+    });
+
+    it('「状態」を使い切っても「状」を単独で出さず、既習漢字の名詞句を使う', () => {
+      const excluded = getEffectiveExcludedChars(5, [], ['態', '状']);
+      const random = vi.spyOn(Math, 'random').mockReturnValue(0.1);
+      try {
+        const [reading, writing] = generateMiniTestQuestions(5, true, excluded);
+        expect(reading.example?.word).toBe('状態');
+        expect(writing.kanji.char).toBe('状');
+        expect(writing.example).toEqual({ word: '状きょう判断', reading: 'じょうきょうはんだん' });
+      } finally {
+        random.mockRestore();
+      }
+    });
+
     it('対象が1字なら1問100点、対象がなければ空配列を返す', () => {
       const excluded = getEffectiveExcludedChars(1, [], ['一']);
       expect(generateMiniTestQuestions(1, true, excluded).map((q) => q.miniTest)).toEqual([
