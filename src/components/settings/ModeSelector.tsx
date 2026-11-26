@@ -17,6 +17,7 @@ const modeIcons: Record<string, string> = {
   radical: '部',
   okurigana: '送',
   antonym: '対',
+  miniTest: '試',
 };
 
 export function ModeSelector({ value, onChange }: Props) {

@@ -44,7 +44,8 @@ export type PrintMode =
   | 'okurigana'
   | 'antonym'
   | 'strokeOrder'
-  | 'readingWriting';
+  | 'readingWriting'
+  | 'miniTest';
 
 // グリッド種類
 export type GridStyle = 'cross' | 'dots' | 'none';
@@ -95,6 +96,10 @@ export interface Question {
   example?: { word: string; reading: string };
   sentence?: string;
   // 漢検対策用
+  miniTest?: {
+    section: 'reading' | 'writing';
+    points: number;
+  };
   homophoneQuestion?: {
     reading: string;
     options: { kanji: string; context: string }[];

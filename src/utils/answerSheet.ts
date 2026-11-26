@@ -5,6 +5,7 @@ export interface AnswerRow {
   questionPage: number;
   prompt: string;
   answer: string;
+  miniTest?: NonNullable<Question['miniTest']> & { promptReading?: string };
 }
 
 export function supportsAnswerSheet(mode: PrintMode): boolean {
@@ -15,6 +16,7 @@ export function supportsAnswerSheet(mode: PrintMode): boolean {
     case 'okurigana':
     case 'homophone':
     case 'antonym':
+    case 'miniTest':
       return true;
     case 'writing':
     case 'sentence':
@@ -28,9 +30,24 @@ export function supportsAnswerSheet(mode: PrintMode): boolean {
   }
 }
 
-function getAnswer(question: Question, mode: PrintMode): Pick<AnswerRow, 'prompt' | 'answer'> {
+function getAnswer(
+  question: Question,
+  mode: PrintMode,
+): Omit<AnswerRow, 'questionNumber' | 'questionPage'> {
   const missing = { prompt: question.kanji.char, answer: '—' };
   switch (mode) {
+    case 'miniTest': {
+      if (!question.miniTest) return missing;
+      const word = question.example?.word || question.kanji.char;
+      if (question.miniTest.section === 'writing') {
+        return {
+          prompt: word.replaceAll(question.kanji.char, '□'),
+          answer: question.kanji.char,
+          miniTest: { ...question.miniTest, promptReading: question.reading },
+        };
+      }
+      return { prompt: word, answer: question.reading, miniTest: question.miniTest };
+    }
     case 'reading':
       return { prompt: question.example?.word || question.kanji.char, answer: question.reading };
     case 'strokeCount':

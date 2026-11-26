@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
+import { A4 } from '../src/constants/print';
 import type { PrintMode } from '../src/types';
+import { mmToPx } from '../src/utils/units';
 
 // PrintMode に値を追加したとき、ここでコンパイルエラーになる（単一の定義源）
 const modeDetails: Record<PrintMode, { name: string; selector: string }> = {
@@ -13,6 +15,7 @@ const modeDetails: Record<PrintMode, { name: string; selector: string }> = {
   okurigana: { name: '送りがな', selector: '送りがな' },
   antonym: { name: '対義語・類義語', selector: '対義語・類義語' },
   readingWriting: { name: '読み・書き練習', selector: '読み・書き練習' },
+  miniTest: { name: '漢検風ミニテスト', selector: '漢検風ミニテスト' },
 };
 
 test.describe('全モードA4レイアウト確認', () => {
@@ -60,7 +63,7 @@ test.describe('全モードA4レイアウト確認', () => {
     // 漢字サイズスライダーを探す（min=12, max=25）
     const cellSizeSlider = page.locator('input[type="range"][min="12"][max="25"]');
 
-    for (const mode of modes) {
+    for (const mode of modes.filter(({ mode }) => mode !== 'miniTest')) {
       await page.getByTestId(`mode-selector-${mode.mode}`).click();
       await page.waitForTimeout(200);
       await cellSizeSlider.fill('12');
@@ -81,7 +84,7 @@ test.describe('全モードA4レイアウト確認', () => {
   test('セルサイズ25mmで全モードがA4に収まる', async ({ page }) => {
     const cellSizeSlider = page.locator('input[type="range"][min="12"][max="25"]');
 
-    for (const mode of modes) {
+    for (const mode of modes.filter(({ mode }) => mode !== 'miniTest')) {
       await page.getByTestId(`mode-selector-${mode.mode}`).click();
       await page.waitForTimeout(200);
       await cellSizeSlider.fill('25');
@@ -98,6 +101,72 @@ test.describe('全モードA4レイアウト確認', () => {
       }
     }
   });
+});
+
+test('漢検風ミニテストは全50問と配点付き解答がA4各1枚に収まる', async ({ page }, testInfo) => {
+  await page.clock.setFixedTime(new Date('2026-01-01T12:00:00Z'));
+  await page.goto('/');
+  await page.getByRole('button', { name: '2 2年生 (9級)', exact: true }).click();
+  await page.getByLabel('ランダム出題').uncheck();
+  await page.getByLabel('ページ数', { exact: true }).fill('3');
+  await page.getByTestId('mode-selector-miniTest').click();
+  const exam = page.getByTestId('mini-test');
+  await expect(page.locator('.a4-page')).toHaveCount(1);
+  await expect(exam).toContainText(/合計\s*\/100点/);
+  await expect(exam).toContainText('合格ライン 70点');
+  await expect(page.getByLabel('ページ数', { exact: true })).toHaveCount(0);
+  await page.getByLabel('解答ページをつける').check();
+  const key = page.getByTestId('answer-sheet');
+  await expect(page.locator('.a4-page')).toHaveCount(2);
+  for (const sheet of [exam, key]) {
+    await expect(sheet.locator('section h2')).toHaveText(['読み', '書き']);
+    for (const section of ['reading', 'writing']) {
+      await expect(sheet.locator(`[data-section="${section}"] li`)).toHaveCount(25);
+    }
+    const rows = sheet.locator('[data-question-number]');
+    const numbers = await rows.evaluateAll((items) =>
+      items.map((li) => Number(li.getAttribute('data-question-number'))),
+    );
+    expect(numbers).toEqual(Array.from({ length: 50 }, (_, i) => i + 1));
+    await expect(rows.filter({ hasText: /2点$/ })).toHaveCount(50);
+  }
+  await expect(key.locator('li strong')).toHaveCount(50);
+
+  for (const media of ['screen', 'print'] as const) {
+    await page.emulateMedia({ media });
+    for (const sheet of [exam, key]) {
+      const bounds = await sheet.evaluate((el) => {
+        const page = el.getBoundingClientRect();
+        const style = getComputedStyle(el);
+        const left = page.left + parseFloat(style.paddingLeft);
+        const right = page.right - parseFloat(style.paddingRight);
+        const bottom = page.bottom - parseFloat(style.paddingBottom);
+        return {
+          height: page.height,
+          width: page.width,
+          fits: Array.from(el.querySelectorAll('li, li > *, h1, h2')).every((child) => {
+            const rect = child.getBoundingClientRect();
+            return rect.left >= left - 1 && rect.right <= right + 1 && rect.bottom <= bottom + 1;
+          }),
+        };
+      });
+      expect(Math.abs(bounds.width - mmToPx(A4.WIDTH_MM))).toBeLessThan(2);
+      expect(Math.abs(bounds.height - mmToPx(A4.HEIGHT_MM))).toBeLessThan(2);
+      expect(bounds.fits).toBe(true);
+    }
+  }
+  const sheets = { questions: exam, answers: key };
+  for (const [name, sheet] of Object.entries(sheets)) {
+    await testInfo.attach(`mini-test-${name}`, {
+      body: await sheet.screenshot(),
+      contentType: 'image/png',
+    });
+  }
+  const printed = await page.pdf({ preferCSSPageSize: true });
+  expect(printed.toString('latin1').match(/\/Type \/Page\b/g)).toHaveLength(2);
+  await page.emulateMedia({ media: 'screen' });
+  await page.getByTestId('mode-selector-reading').click();
+  await expect(page.getByLabel('ページ数', { exact: true })).toHaveValue('3');
 });
 
 test.describe('例文写経モード - 練習行数のA4収まり', () => {

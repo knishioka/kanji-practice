@@ -3,9 +3,11 @@
  * A4印刷レイアウトに関する全ての計算を集約
  */
 
+import { MINI_TEST_QUESTION_COUNT } from '../constants/miniTest';
 import {
   A4,
   ANSWER_SHEET_LAYOUT,
+  MINI_TEST_LAYOUT,
   PRACTICE_COLUMNS,
   SENTENCE_LAYOUT,
   WRITING_MODE_SAFE_WIDTH_MM,
@@ -49,6 +51,8 @@ function getSentenceRowHeight(cellSize: number, practiceRows: number): number {
  */
 export function getRowHeight(cellSize: number, mode: PrintMode, options?: LayoutOptions): number {
   switch (mode) {
+    case 'miniTest':
+      return MINI_TEST_LAYOUT.ROW_HEIGHT_MM / MINI_TEST_LAYOUT.COLUMNS;
     case 'sentence': {
       // 例文写経: ふりがなパディング + お手本行 + 練習行(N) + 問題間マージン
       const practiceRows = options?.sentencePracticeRows ?? SENTENCE_LAYOUT.MIN_PRACTICE_ROWS;
@@ -88,6 +92,7 @@ export function calculateRowsPerPage(
   mode: PrintMode,
   options?: LayoutOptions,
 ): number {
+  if (mode === 'miniTest') return MINI_TEST_QUESTION_COUNT;
   const availableHeight = A4.SAFE_CONTENT_HEIGHT_MM - A4.HEADER_HEIGHT_MM - A4.FOOTER_HEIGHT_MM;
   return Math.max(1, Math.floor(availableHeight / getRowHeight(cellSize, mode, options)));
 }

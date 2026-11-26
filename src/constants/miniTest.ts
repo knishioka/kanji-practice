@@ -1,0 +1,2 @@
+export const MINI_TEST_QUESTION_COUNT = 50;
+export const MINI_TEST_TOTAL_POINTS = 100;

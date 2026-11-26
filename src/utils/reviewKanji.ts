@@ -14,6 +14,7 @@ export function supportsReview(mode: PrintMode): boolean {
     case 'radical':
     case 'okurigana':
     case 'antonym':
+    case 'miniTest':
       return false;
     default: {
       const exhaustive: never = mode;

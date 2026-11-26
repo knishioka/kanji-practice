@@ -23,6 +23,7 @@ describe('answerSheet', () => {
     'okurigana',
     'homophone',
     'antonym',
+    'miniTest',
   ])('supports %s', (mode) => expect(supportsAnswerSheet(mode)).toBe(true));
 
   it.each<PrintMode>([
@@ -52,6 +53,29 @@ describe('answerSheet', () => {
     expect(generateAnswerRows([{ ...question, reading: 'しょう' }], 'reading', 10)[0].answer).toBe(
       'しょう',
     );
+  });
+
+  it('matches mini test prompts, answers and apportioned scores to both sections', () => {
+    const questions: Question[] = [
+      { ...question, miniTest: { section: 'reading', points: 34 } },
+      { ...question, miniTest: { section: 'writing', points: 33 } },
+    ];
+    expect(generateAnswerRows(questions, 'miniTest', 50)).toEqual([
+      {
+        questionNumber: 1,
+        questionPage: 1,
+        prompt: '生活',
+        answer: 'せいかつ',
+        miniTest: { section: 'reading', points: 34 },
+      },
+      {
+        questionNumber: 2,
+        questionPage: 1,
+        prompt: '□活',
+        answer: '生',
+        miniTest: { section: 'writing', points: 33, promptReading: 'せいかつ' },
+      },
+    ]);
   });
 
   it('returns the stroke count from the question kanji', () => {

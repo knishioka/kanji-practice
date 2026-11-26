@@ -22,6 +22,7 @@ const modeDescriptions: Record<PrintMode, string> = {
   okurigana: '正しい送りがなを書きましょう',
   antonym: '対義語・類義語を答えましょう',
   readingWriting: '漢字の読み方と書き方を練習しましょう',
+  miniTest: '漢検風ミニテスト',
 };
 
 export function PageHeader({
@@ -39,12 +40,18 @@ export function PageHeader({
 
     return (
       <div className="flex justify-between items-start mb-4 border-b pb-3">
-        <div>
-          <h1 className="text-xl font-bold">{title}</h1>
+        <div className={mode === 'miniTest' ? 'min-w-0' : undefined}>
+          <h1
+            className={`text-xl font-bold${mode === 'miniTest' ? ' line-clamp-2 break-all' : ''}`}
+          >
+            {title}
+          </h1>
           <p className="text-sm text-gray-600 mt-1">{modeDescriptions[mode]}</p>
         </div>
         {hasHeaderFields && (
-          <div className="text-right text-sm">
+          <div
+            className={`text-right text-sm${mode === 'miniTest' ? ' max-w-48 shrink-0 truncate' : ''}`}
+          >
             {showDateField && (
               <div className="text-gray-500">
                 {dateLabel && <span className="text-xs text-gray-400 mr-2">{dateLabel}</span>}
@@ -52,7 +59,9 @@ export function PageHeader({
               </div>
             )}
             {showNameField && (
-              <div className="mt-2 border-b border-gray-400 w-32">
+              <div
+                className={`mt-2 border-b border-gray-400 w-32${mode === 'miniTest' ? ' truncate' : ''}`}
+              >
                 {nameLabel && <span className="text-xs text-gray-400">{nameLabel}</span>}
               </div>
             )}

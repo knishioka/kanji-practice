@@ -28,30 +28,38 @@ export function PrintOptions({
   return (
     <div className="space-y-5">
       {/* ページ数 */}
-      <div className="p-4 rounded-xl" style={{ background: 'var(--color-bg-warm)' }}>
-        <label className="section-title">ページ数</label>
-        <div className="flex items-center gap-4">
-          <input
-            type="range"
-            min="1"
-            max="20"
-            value={settings.pageCount}
-            onChange={(e) => onSettingsChange({ pageCount: Number(e.target.value) })}
-            className="flex-1 h-2 rounded-lg cursor-pointer"
-            style={{ background: 'var(--color-border)' }}
-            aria-label="ページ数"
-          />
-          <div
-            className="px-3 py-1 rounded-lg text-sm font-bold min-w-[80px] text-center"
-            style={{ background: 'var(--color-primary)', color: 'white' }}
-          >
-            {settings.pageCount}枚
+      {settings.mode === 'miniTest' ? (
+        totalQuestions > 0 && (
+          <p className="text-sm">
+            問題用紙 1枚（{totalQuestions}問）{settings.showAnswerSheet && ' ＋ 解答 1枚'}
+          </p>
+        )
+      ) : (
+        <div className="p-4 rounded-xl" style={{ background: 'var(--color-bg-warm)' }}>
+          <label className="section-title">ページ数</label>
+          <div className="flex items-center gap-4">
+            <input
+              type="range"
+              min="1"
+              max="20"
+              value={settings.pageCount}
+              onChange={(e) => onSettingsChange({ pageCount: Number(e.target.value) })}
+              className="flex-1 h-2 rounded-lg cursor-pointer"
+              style={{ background: 'var(--color-border)' }}
+              aria-label="ページ数"
+            />
+            <div
+              className="px-3 py-1 rounded-lg text-sm font-bold min-w-[80px] text-center"
+              style={{ background: 'var(--color-primary)', color: 'white' }}
+            >
+              {settings.pageCount}枚
+            </div>
+          </div>
+          <div className="text-xs mt-2 text-center" style={{ color: 'var(--color-text-muted)' }}>
+            {rowsPerPage}問/ページ × {settings.pageCount}枚 = 計<strong>{totalQuestions}問</strong>
           </div>
         </div>
-        <div className="text-xs mt-2 text-center" style={{ color: 'var(--color-text-muted)' }}>
-          {rowsPerPage}問/ページ × {settings.pageCount}枚 = 計<strong>{totalQuestions}問</strong>
-        </div>
-      </div>
+      )}
 
       {/* 練習マス数 - 書き練習のみ */}
       {currentModeSettings.practiceColumns && (
@@ -106,28 +114,30 @@ export function PrintOptions({
       )}
 
       {/* マスサイズ / 漢字サイズ */}
-      <div>
-        <label className="section-title">
-          {currentModeSettings.cellSizeLabel}: {settings.cellSize}mm
-        </label>
-        <input
-          type="range"
-          min={CELL_SIZE.MIN}
-          max={CELL_SIZE.MAX}
-          value={settings.cellSize}
-          onChange={(e) => onSettingsChange({ cellSize: Number(e.target.value) })}
-          className="w-full h-2 rounded-lg cursor-pointer"
-          style={{ background: 'var(--color-border)' }}
-          aria-label={`${currentModeSettings.cellSizeLabel}`}
-        />
-        <div
-          className="flex justify-between text-xs mt-1"
-          style={{ color: 'var(--color-text-muted)' }}
-        >
-          <span>{CELL_SIZE.MIN}mm（小さい）</span>
-          <span>{CELL_SIZE.MAX}mm（大きい）</span>
+      {currentModeSettings.cellSizeLabel && (
+        <div>
+          <label className="section-title">
+            {currentModeSettings.cellSizeLabel}: {settings.cellSize}mm
+          </label>
+          <input
+            type="range"
+            min={CELL_SIZE.MIN}
+            max={CELL_SIZE.MAX}
+            value={settings.cellSize}
+            onChange={(e) => onSettingsChange({ cellSize: Number(e.target.value) })}
+            className="w-full h-2 rounded-lg cursor-pointer"
+            style={{ background: 'var(--color-border)' }}
+            aria-label={currentModeSettings.cellSizeLabel}
+          />
+          <div
+            className="flex justify-between text-xs mt-1"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
+            <span>{CELL_SIZE.MIN}mm（小さい）</span>
+            <span>{CELL_SIZE.MAX}mm（大きい）</span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ガイドライン - 書き練習・例文写経のみ */}
       {currentModeSettings.gridStyle && (
