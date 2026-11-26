@@ -13,6 +13,7 @@ import {
   calculateMaxPracticeColumns,
   calculateMaxSentencePracticeRows,
   calculateRecommendedPracticeColumns,
+  calculateRowsPerPage,
 } from '../utils/layout';
 import { MAX_PRACTICE_HISTORY } from '../utils/practiceHistory';
 
@@ -83,7 +84,10 @@ function createPracticeHistoryEntry(
     executedAt,
     grade: settings.grade,
     mode: settings.mode,
-    pageCount: settings.pageCount,
+    pageCount:
+      settings.mode === 'miniTest'
+        ? Math.ceil(questionCount / calculateRowsPerPage(settings.cellSize, settings.mode))
+        : settings.pageCount,
     questionCount,
     kanjiChars: [...new Set(kanjiChars)],
     settings: { ...settings },

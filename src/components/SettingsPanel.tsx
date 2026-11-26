@@ -20,6 +20,7 @@ import {
 } from '../utils/okuriganaQuestionGenerator';
 import {
   canGenerateQuestions,
+  generateMiniTestQuestions,
   generateQuestions,
   getEffectiveExcludedChars,
 } from '../utils/questionGenerator';
@@ -41,6 +42,7 @@ import {
 export function SettingsPanel() {
   const {
     settings,
+    questions,
     setSettings,
     setQuestions,
     excludedKanji,
@@ -78,7 +80,8 @@ export function SettingsPanel() {
   );
 
   // 合計問題数
-  const totalQuestions = settings.pageCount * rowsPerPage;
+  const totalQuestions =
+    settings.mode === 'miniTest' ? rowsPerPage : settings.pageCount * rowsPerPage;
 
   // 最大練習マス数
   const maxPracticeColumns = useMemo(
@@ -102,6 +105,8 @@ export function SettingsPanel() {
       excluded: string[],
     ): Question[] => {
       switch (mode) {
+        case 'miniTest':
+          return generateMiniTestQuestions(grade, random, excluded);
         case 'homophone':
           if (!canGenerateHomophoneQuestions(grade, excluded)) return [];
           return generateHomophoneQuestions(grade, count, random, excluded);
@@ -217,7 +222,7 @@ export function SettingsPanel() {
       <PrintOptions
         settings={settings}
         rowsPerPage={rowsPerPage}
-        totalQuestions={totalQuestions}
+        totalQuestions={settings.mode === 'miniTest' ? questions.length : totalQuestions}
         maxPracticeColumns={maxPracticeColumns}
         maxSentencePracticeRows={maxSentencePracticeRows}
         onSettingsChange={setSettings}

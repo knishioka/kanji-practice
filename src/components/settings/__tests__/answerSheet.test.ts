@@ -65,6 +65,7 @@ describe('PrintOptions answer sheet checkbox', () => {
     'okurigana',
     'homophone',
     'antonym',
+    'miniTest',
   ])('%s', (mode) => {
     it.each([false, true])('enables the checkbox and reflects showAnswerSheet=%s', (enabled) => {
       const { html, checkbox } = renderOptions(mode, enabled);

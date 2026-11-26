@@ -3,6 +3,7 @@
  * 漢字問題の生成ロジックを集約
  */
 
+import { MINI_TEST_QUESTION_COUNT, MINI_TEST_TOTAL_POINTS } from '../constants/miniTest';
 import { allKanji, getKanjiByGradeFiltered } from '../data/kanji';
 import type { Grade, Kanji, PracticeHistoryEntry, Question, ReviewRatio } from '../types';
 import { selectReviewKanji } from './reviewKanji';
@@ -148,6 +149,10 @@ function createFallbackExample(kanji: Kanji): QuestionCandidate['example'] {
   return { word: kanji.char, reading: getFallbackReading(kanji) ?? '' };
 }
 
+function getLearnedExamples(kanji: Kanji, allowedKanji: Set<string>) {
+  return kanji.examples.filter((example) => containsOnlyAllowedKanji(example.word, allowedKanji));
+}
+
 /**
  * 未習漢字を含むルビをひらがなに置き換え、元の自然な例文を活用する。
  * 対象漢字と未習漢字が同じルビグループの場合は、対象漢字まで消えるため採用しない。
@@ -215,9 +220,7 @@ function createQuestionPool(kanjiPool: Kanji[], allowedKanji: Set<string>): Ques
   const pool: QuestionCandidate[] = [];
 
   for (const kanji of kanjiPool) {
-    const safeExamples = kanji.examples.filter((example) =>
-      containsOnlyAllowedKanji(example.word, allowedKanji),
-    );
+    const safeExamples = getLearnedExamples(kanji, allowedKanji);
     const examples = safeExamples.length > 0 ? safeExamples : [createFallbackExample(kanji)];
     const safeSentences = kanji.sentences
       .map((sentence) => createGradeAppropriateSentence(sentence, kanji, allowedKanji))
@@ -343,6 +346,95 @@ export function generateQuestions(
   ];
 
   return candidatesToQuestions(selected);
+}
+
+function writingPromptKey(kanji: Kanji, example: QuestionCandidate['example']): string {
+  return `${example.word.replaceAll(kanji.char, '□')}:${example.reading}`;
+}
+
+/** 重点・除外の設定に関わらず、同じ印字で別解になる学年内の例語を検出する。 */
+function findAmbiguousWritingPrompts(grade: Grade, allowedKanji: Set<string>): Set<string> {
+  const answers = new Map<string, string>();
+  const ambiguous = new Set<string>();
+  for (const kanji of getKanjiByGradeFiltered([grade])) {
+    const examples = [...getLearnedExamples(kanji, allowedKanji), createFallbackExample(kanji)];
+    for (const example of examples) {
+      const key = writingPromptKey(kanji, example);
+      const answer = answers.get(key);
+      if (answer && answer !== kanji.char) ambiguous.add(key);
+      answers.set(key, kanji.char);
+    }
+  }
+  return ambiguous;
+}
+
+function getContextExample(
+  kanji: Kanji,
+  allowedKanji: Set<string>,
+  usedWords: Set<string>,
+): QuestionCandidate['example'] | undefined {
+  const examples = kanji.sentences.flatMap((source) => {
+    const sentence = createGradeAppropriateSentence(source, kanji, allowedKanji);
+    if (!sentence) return [];
+    const reading = sentence.replace(RUBY_ANNOTATION_PATTERN, '$2').replace(/。$/, '');
+    if (Array.from(reading).some(isKanjiChar)) return [];
+    const word = getSentencePlainText(sentence).replace(/。$/, '');
+    if (usedWords.has(word)) return [];
+    return [{ example: { word, reading }, simplified: sentence !== source }];
+  });
+  examples.sort(
+    (a, b) =>
+      Number(a.simplified) - Number(b.simplified) || a.example.word.length - b.example.word.length,
+  );
+  return examples[0]?.example;
+}
+
+/** 読み・書きを通して対象漢字と例語を一度ずつ使い、合計100点に配分する。 */
+export function generateMiniTestQuestions(
+  grade: Grade,
+  random: boolean,
+  excludedChars: string[] = [],
+): Question[] {
+  const pool = getKanjiByGradeFiltered([grade], excludedChars);
+  const selected = (random ? shuffleArray(pool) : pool).slice(0, MINI_TEST_QUESTION_COUNT);
+  if (selected.length === 0) return [];
+
+  const readingCount = Math.ceil(selected.length / 2);
+  const basePoints = Math.floor(MINI_TEST_TOTAL_POINTS / selected.length);
+  const extraPoints = MINI_TEST_TOTAL_POINTS % selected.length;
+  const allowedKanji = createAllowedKanjiSet(grade);
+  const ambiguous = findAmbiguousWritingPrompts(grade, allowedKanji);
+  const usedWords = new Set<string>();
+
+  return selected.map((kanji, index) => {
+    const section = index < readingCount ? 'reading' : 'writing';
+    const available = getLearnedExamples(kanji, allowedKanji).filter(
+      ({ word }) => word.includes(kanji.char) && !usedWords.has(word),
+    );
+    if (!available.length) available.push(createFallbackExample(kanji));
+    const examples = random ? shuffleArray(available) : available;
+    let example = examples[0];
+    if (section === 'writing') {
+      const fallback = createFallbackExample(kanji);
+      const unique = examples.filter((ex) => !ambiguous.has(writingPromptKey(kanji, ex)));
+      example =
+        unique.find((ex) => ex.word !== kanji.char) ??
+        unique[0] ??
+        (!ambiguous.has(writingPromptKey(kanji, fallback)) ? fallback : undefined) ??
+        getContextExample(kanji, allowedKanji, usedWords) ??
+        example;
+    }
+    usedWords.add(example.word);
+    return {
+      kanji,
+      example,
+      reading: example.reading,
+      miniTest: {
+        section,
+        points: basePoints + (index < extraPoints ? 1 : 0),
+      },
+    };
+  });
 }
 
 /**

@@ -33,6 +33,9 @@ export const PRACTICE_COLUMNS = {
 // お手本1マス + 間隔を考慮した値
 export const WRITING_MODE_SAFE_WIDTH_MM = 175;
 
+// ミニテストは読み・書きを左右に並べ、各列に最大25問を印刷する。
+export const MINI_TEST_LAYOUT = { COLUMNS: 2, ROW_HEIGHT_MM: 8 } as const;
+
 // 解答一覧は折り返し用の行高と表見出しの領域を確保する。
 export const ANSWER_SHEET_LAYOUT = {
   ROW_HEIGHT_MM: 16,

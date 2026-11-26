@@ -180,6 +180,17 @@ describe('useStore - practice history', () => {
     expect(useStore.getState().settings).toMatchObject({ grade: 2, mode: 'reading', pageCount: 3 });
   });
 
+  it('records the actual mini test page count while preserving the page slider setting', () => {
+    useStore.getState().setSettings({ mode: 'miniTest', pageCount: 7 });
+    useStore.getState().addPracticeHistory(3, ['一', '二', '三']);
+    expect(useStore.getState().practiceHistory[0]).toMatchObject({
+      mode: 'miniTest',
+      pageCount: 1,
+      questionCount: 3,
+      settings: { pageCount: 7 },
+    });
+  });
+
   it('defaults review off at 20% and persists and restores its settings', async () => {
     expect(useStore.getState().settings).toMatchObject({ reviewEnabled: false, reviewRatio: 20 });
     useStore.getState().setSettings({ reviewEnabled: true, reviewRatio: 30 });

@@ -1,7 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import { allKanji } from '../../data/kanji';
 import type { Grade } from '../../types';
-import { canGenerateQuestions, generateQuestions } from '../questionGenerator';
+import {
+  canGenerateQuestions,
+  generateMiniTestQuestions,
+  generateQuestions,
+  getEffectiveExcludedChars,
+} from '../questionGenerator';
 import { getSentencePlainText, isKanjiChar, parseRubySentence } from '../sentenceRuby';
 
 function expectOnlyLearnedKanji(text: string, grade: Grade) {
@@ -24,6 +29,63 @@ describe('questionGenerator utilities', () => {
       expect(canGenerateQuestions(4)).toBe(true);
       expect(canGenerateQuestions(5)).toBe(true);
       expect(canGenerateQuestions(6)).toBe(true);
+    });
+  });
+
+  describe('generateMiniTestQuestions', () => {
+    it.each([1, 2, 3, 4, 5, 6] as const)('%i年生の範囲で読み25問・書き25問を生成する', (grade) => {
+      for (const random of [false, true]) {
+        const questions = generateMiniTestQuestions(grade, random);
+        expect(questions).toHaveLength(50);
+        expect(new Set(questions.map((q) => q.kanji.char)).size).toBe(50);
+        expect(new Set(questions.map((q) => q.example?.word)).size).toBe(50);
+        for (const [i, q] of questions.entries()) {
+          expect(q.kanji.grade).toBe(grade);
+          expect(q.example?.word).toContain(q.kanji.char);
+          expect(q.reading).not.toBe('');
+          expectOnlyLearnedKanji(q.example?.word ?? '', grade);
+          expect(q.miniTest).toEqual({ section: i < 25 ? 'reading' : 'writing', points: 2 });
+        }
+      }
+    });
+
+    it('重点漢字と除外を反映し、不足時は各漢字を一度だけ出題して100点を按分する', () => {
+      const excluded = getEffectiveExcludedChars(1, ['四'], ['一', '二', '三', '四', '海']);
+      const questions = generateMiniTestQuestions(1, false, excluded);
+      expect(questions.map((q) => q.kanji.char)).toEqual(['一', '二', '三']);
+      expect(questions.map((q) => q.miniTest)).toEqual([
+        { section: 'reading', points: 34 },
+        { section: 'reading', points: 33 },
+        { section: 'writing', points: 33 },
+      ]);
+    });
+
+    it.each([
+      { focus: ['引', '羽', '会', '合'], words: ['会社', '合計'] },
+      { focus: ['引', '会'], words: ['会社'] },
+      { focus: ['引', '合'], words: ['合計'] },
+    ])(
+      '書き問題は対象外の漢字も含めて「□う（あう）」の別解を避ける（$focus）',
+      ({ focus, words }) => {
+        const excluded = getEffectiveExcludedChars(2, [], focus);
+        const questions = generateMiniTestQuestions(2, false, excluded);
+        const writing = questions.filter((q) => q.miniTest?.section === 'writing');
+        expect(writing.map((q) => q.example?.word)).toEqual(words);
+      },
+    );
+
+    it('短い例語だけでは区別できない場合は学年内の文脈を使う', () => {
+      const excluded = getEffectiveExcludedChars(3, [], ['県', '丁']);
+      const [, writing] = generateMiniTestQuestions(3, false, excluded);
+      expect(writing.example).toEqual({ word: '一丁目', reading: 'いっちょうめ' });
+    });
+
+    it('対象が1字なら1問100点、対象がなければ空配列を返す', () => {
+      const excluded = getEffectiveExcludedChars(1, [], ['一']);
+      expect(generateMiniTestQuestions(1, true, excluded).map((q) => q.miniTest)).toEqual([
+        { section: 'reading', points: 100 },
+      ]);
+      expect(generateMiniTestQuestions(1, true, [...excluded, '一'])).toEqual([]);
     });
   });
 

@@ -105,7 +105,7 @@ describe('review selection', () => {
     ] as const) {
       expect(supportsReview(mode)).toBe(true);
     }
-    for (const mode of ['homophone', 'radical', 'okurigana', 'antonym'] as const) {
+    for (const mode of ['homophone', 'radical', 'okurigana', 'antonym', 'miniTest'] as const) {
       expect(supportsReview(mode)).toBe(false);
     }
   });

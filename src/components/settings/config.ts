@@ -36,6 +36,7 @@ export const modes: { value: PrintMode; label: string; desc: string }[] = [
     label: '読み・書き練習',
     desc: '読みと書きを同時に練習する',
   },
+  { value: 'miniTest', label: '漢検風ミニテスト', desc: '読みと書きを100点満点で採点する' },
 ];
 
 // グリッドスタイルオプション
@@ -168,7 +169,7 @@ export interface ModeSettingsConfig {
   sentencePracticeRows: boolean;
   gridStyle: boolean;
   showHint: boolean;
-  cellSizeLabel: string;
+  cellSizeLabel?: string;
 }
 
 export const modeSettings: Record<PrintMode, ModeSettingsConfig> = {
@@ -241,5 +242,11 @@ export const modeSettings: Record<PrintMode, ModeSettingsConfig> = {
     gridStyle: true,
     showHint: true,
     cellSizeLabel: 'マスサイズ',
+  },
+  miniTest: {
+    practiceColumns: false,
+    sentencePracticeRows: false,
+    gridStyle: false,
+    showHint: false,
   },
 };

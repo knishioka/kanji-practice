@@ -23,6 +23,7 @@ import {
   WritingQuestion,
 } from './print';
 import { AnswerSheet } from './print/AnswerSheet';
+import { MiniTestPage } from './print/MiniTestPage';
 
 interface Props {
   questions: Question[];
@@ -60,7 +61,7 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
 
   const answerPages = useMemo(
     () =>
-      settings.showAnswerSheet
+      settings.showAnswerSheet && settings.mode !== 'miniTest'
         ? chunkArray(
             generateAnswerRows(questions, settings.mode, rowsPerPage),
             calculateAnswerRowsPerPage(settings.title),
@@ -94,10 +95,23 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
     );
   }
 
+  const mode = settings.mode;
+  if (mode === 'miniTest') {
+    const rows = generateAnswerRows(questions, mode, rowsPerPage);
+    return (
+      <div ref={ref}>
+        <MiniTestPage rows={rows} settings={settings} date={today} />
+        {settings.showAnswerSheet && (
+          <MiniTestPage rows={rows} settings={settings} date={today} showAnswers />
+        )}
+      </div>
+    );
+  }
+
   const renderQuestion = (question: Question, index: number, pageIndex: number) => {
     const questionNumber = pageIndex * rowsPerPage + index + 1;
 
-    switch (settings.mode) {
+    switch (mode) {
       case 'sentence':
         return (
           <SentenceQuestion
@@ -203,7 +217,7 @@ export const PrintablePages = forwardRef<HTMLDivElement, Props>(function Printab
           />
         );
       default: {
-        const _exhaustive: never = settings.mode;
+        const _exhaustive: never = mode;
         console.error(`未対応のモード: ${_exhaustive}`);
         return null;
       }
