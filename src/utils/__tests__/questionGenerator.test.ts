@@ -74,6 +74,15 @@ describe('questionGenerator utilities', () => {
       expect(writing.map((q) => q.example?.word)).toEqual(words);
     });
 
+    it('5年生の「厚」は既習の「暑い」「熱い」と区別できる例語で出題する', () => {
+      const questions = generateMiniTestQuestions(5, false);
+      const writing = questions.find(
+        (q) => q.kanji.char === '厚' && q.miniTest?.section === 'writing',
+      );
+      expect(writing?.example).toEqual({ word: '温厚', reading: 'おんこう' });
+      expect(questions.every((q) => q.kanji.grade === 5)).toBe(true);
+    });
+
     it('短い例語だけでは区別できない場合は学年内の文脈を使う', () => {
       const excluded = getEffectiveExcludedChars(3, [], ['県', '丁']);
       const [, writing] = generateMiniTestQuestions(3, false, excluded);

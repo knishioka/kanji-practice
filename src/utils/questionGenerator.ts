@@ -352,11 +352,12 @@ function writingPromptKey(kanji: Kanji, example: QuestionCandidate['example']): 
   return `${example.word.replaceAll(kanji.char, '□')}:${example.reading}`;
 }
 
-/** 重点・除外の設定に関わらず、同じ印字で別解になる学年内の例語を検出する。 */
-function findAmbiguousWritingPrompts(grade: Grade, allowedKanji: Set<string>): Set<string> {
+/** 出題対象に関わらず、既習漢字で同じ印字・読みになる書き問題を検出する。 */
+function findAmbiguousWritingPrompts(allowedKanji: Set<string>): Set<string> {
   const answers = new Map<string, string>();
   const ambiguous = new Set<string>();
-  for (const kanji of getKanjiByGradeFiltered([grade])) {
+  for (const kanji of allKanji) {
+    if (!allowedKanji.has(kanji.char)) continue;
     const examples = [...getLearnedExamples(kanji, allowedKanji), createFallbackExample(kanji)];
     for (const example of examples) {
       const key = writingPromptKey(kanji, example);
@@ -403,7 +404,7 @@ export function generateMiniTestQuestions(
   const basePoints = Math.floor(MINI_TEST_TOTAL_POINTS / selected.length);
   const extraPoints = MINI_TEST_TOTAL_POINTS % selected.length;
   const allowedKanji = createAllowedKanjiSet(grade);
-  const ambiguous = findAmbiguousWritingPrompts(grade, allowedKanji);
+  const ambiguous = findAmbiguousWritingPrompts(allowedKanji);
   const usedWords = new Set<string>();
 
   return selected.map((kanji, index) => {
