@@ -64,15 +64,15 @@ describe('questionGenerator utilities', () => {
       { focus: ['引', '羽', '会', '合'], words: ['会社', '合計'] },
       { focus: ['引', '会'], words: ['会社'] },
       { focus: ['引', '合'], words: ['合計'] },
-    ])(
-      '書き問題は対象外の漢字も含めて「□う（あう）」の別解を避ける（$focus）',
-      ({ focus, words }) => {
-        const excluded = getEffectiveExcludedChars(2, [], focus);
-        const questions = generateMiniTestQuestions(2, false, excluded);
-        const writing = questions.filter((q) => q.miniTest?.section === 'writing');
-        expect(writing.map((q) => q.example?.word)).toEqual(words);
-      },
-    );
+    ])('書き問題は対象外の漢字も含めて「□う（あう）」の別解を避ける（$focus）', ({
+      focus,
+      words,
+    }) => {
+      const excluded = getEffectiveExcludedChars(2, [], focus);
+      const questions = generateMiniTestQuestions(2, false, excluded);
+      const writing = questions.filter((q) => q.miniTest?.section === 'writing');
+      expect(writing.map((q) => q.example?.word)).toEqual(words);
+    });
 
     it('短い例語だけでは区別できない場合は学年内の文脈を使う', () => {
       const excluded = getEffectiveExcludedChars(3, [], ['県', '丁']);

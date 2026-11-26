@@ -35,8 +35,7 @@ export function MiniTestPage({ rows, settings, date, showAnswers = false }: Prop
       />
       <div className="mb-2 flex items-baseline gap-6 text-sm">
         <p className="font-bold">
-          合計{' '}
-          {!showAnswers && <span className="inline-block w-14 border-b border-current" />}
+          合計 {!showAnswers && <span className="inline-block w-14 border-b border-current" />}
           {!showAnswers && ' /'}
           {MINI_TEST_TOTAL_POINTS}点
         </p>
